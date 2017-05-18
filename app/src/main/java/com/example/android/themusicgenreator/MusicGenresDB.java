@@ -7,6 +7,8 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.util.Arrays;
+
 /**
  * Class for handling all interactions with the Music Genres Database
  */
@@ -94,6 +96,42 @@ public class MusicGenresDB extends SQLiteAssetHelper {
         String cityName = c.getString(c.getColumnIndex(CITY_CITY_NAME));
         c.close();
         return new City(cityID, cityName);
+    }
+
+    /**
+     * A method for getting the total number of genres that have originated in or
+     * been heavily influenced by a particular city
+     * @param cityID the unique ID of the City
+     * @return returns the total number of genres as an int
+     */
+    public int getNumGenresByCity(int cityID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " +
+                        CITY_CITY_ID + " = " + cityID + ";";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        int numGenres = c.getInt(c.getCount());
+        c.close();
+        return numGenres;
+    }
+
+    /**
+     * A method for getting the total number of genres that have originated in or
+     * been heavily influenced by a particular country.
+     * @param countryID the unique ID of the Country
+     * @return returns the total number of genres as an int
+     */
+    public int getNumGenresByCountry(int countryID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
+                        COUNTRY_COUNTRY_ID + " = " + countryID + ";";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        int numGenres = c.getInt(c.getCount());
+        c.close();
+        return numGenres;
     }
 
     /**
@@ -249,6 +287,149 @@ public class MusicGenresDB extends SQLiteAssetHelper {
             return genres;
         }
         return null;
+    }
+
+    /**
+     * A method for getting an array of Cities which influenced a particular genre
+     * or where the genre had roots
+     * @param genreID the unique ID of the genre we are searching with
+     * @return returns an array of City objects
+     */
+    public City[] getCitiesOfInfluence(int genreID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT " + GENRE_CITY_CITY_ID + " FROM " + GENRE_CITY_TABLE_NAME +
+                        " WHERE " + GENRE_CITY_GENRE_ID + " = " + genreID + ";";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            City[] cities = new City[c.getCount()];
+            for (int i = 0; i < cities.length; i++) {
+                int cityID = c.getInt(c.getColumnIndex(GENRE_CITY_CITY_ID));
+                cities[i] = getCity(cityID);
+                c.moveToNext();
+            }
+            c.close();
+            return cities;
+        }
+        return null;
+    }
+
+    /**
+     * A method for getting an array of Countries which influenced a particular genre
+     * or where the genre had roots
+     * @param genreID the unique ID of the genre we are searching with
+     * @return returns an array of Country objects
+     */
+    public Country[] getCountriesOfInfluence(int genreID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT " + GENRE_COUNTRY_COUNTRY_ID + " FROM " + GENRE_COUNTRY_TABLE_NAME +
+                        " WHERE " + GENRE_COUNTRY_GENRE_ID + " = " + genreID + ";";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            Country[] countries = new Country[c.getCount()];
+            for (int i = 0; i < countries.length; i++) {
+                int countryID = c.getInt(c.getColumnIndex(GENRE_COUNTRY_COUNTRY_ID));
+                countries[i] = getCountry(countryID);
+                c.moveToNext();
+            }
+            c.close();
+            return countries;
+        }
+        return null;
+    }
+
+    /**
+     * A method for getting an array of Genres based on the search term the user entered
+     * @param searchTerm the search term the user entered
+     * @return returns an array of Genres
+     */
+    public Genre[] getGenreBySearchTerm(String searchTerm){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " + GENRE_GENRE_NAME +
+                        " LIKE %" + searchTerm + "%;";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            Genre[] genres = new Genre[c.getCount()];
+            for (int i = 0; i < genres.length; i++) {
+                int genreID = c.getInt(c.getColumnIndex(GENRE_GENRE_ID));
+                String genreName = c.getString(c.getColumnIndex(GENRE_GENRE_NAME));
+                genres[i] = new Genre(genreID, genreName);
+                c.moveToNext();
+            }
+            c.close();
+            return genres;
+        }
+        return null;
+    }
+
+    /**
+     * A method for getting an array of Playlist based on the search term the user entered
+     * @param searchTerm the search term the user entered
+     * @return returns an array of Playlist
+     */
+    public Playlist[] getPlaylistBySearchTerm(String searchTerm){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + PLAYLIST_TABLE_NAME + " WHERE " + PLAYLIST_PLAYLIST_NAME +
+                        " LIKE %" + searchTerm + "%;";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            Playlist[] playlists = new Playlist[c.getCount()];
+            for (int i = 0; i < playlists.length; i++) {
+                int playlistID = c.getInt(c.getColumnIndex(PLAYLIST_PLAYLIST_ID));
+                String playlistName = c.getString(c.getColumnIndex(PLAYLIST_PLAYLIST_NAME));
+                String link = c.getString(c.getColumnIndex(PLAYLIST_LINK));
+                int streamingServiceID = c.getInt(c.getColumnIndex(PLAYLIST_STREAMING_SERVICE_ID));
+                playlists[i] = new Playlist(playlistID, playlistName, link, streamingServiceID);
+                c.moveToNext();
+            }
+            c.close();
+            return playlists;
+        }
+        return null;
+    }
+
+
+    /**
+     * A method for sorting an array of Genres alphabetically.
+     * Create an String Array of the genre names. Use the Arrays.sort() method to sort them.
+     * Then create a new array of Genres. Loop through the original Genre Array and insert the
+     * genres in alphabetical order.
+     * @param genresArray a array of genres
+     * @return returns the sorted array
+     */
+    public Genre[] sortGenresAtoZ(Genre[] genresArray){
+
+        String[] namesArray = new String[genresArray.length];
+        for (int i = 0; i < genresArray.length; i++) {
+            namesArray[i] = genresArray[i].getmGenreName();
+        }
+        Arrays.sort(namesArray);
+
+        Genre[] sortedGenresArray = new Genre[genresArray.length];
+        for (int i = 0; i < genresArray.length; i++) {
+            int count = 0;
+            while(!namesArray[count].equals(genresArray[i].getmGenreName())){
+                count++;
+            }
+            sortedGenresArray[i] = genresArray[count];
+        }
+
+        return sortedGenresArray;
+    }
+
+    public void addGenre(Genre genre){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String insert = "INSERT INTO Genre (GenreName) VALUES (" + genre.getmGenreName() + ");";
+
+        db.execSQL(insert);
+
     }
 
 
