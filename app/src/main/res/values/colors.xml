@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#FF4081</color>
+    <color name="colorPrimary">#8b0000</color>
+    <color name="colorPrimaryDark">#000000</color>
+    <color name="colorAccent">#ea1723</color>
+
+    <color name="background_color">#ddeaea</color>
+
+    <color name="browse_genre_button_color">#0d19ff</color>
+    <color name="browse_cities_button_color">#076400</color>
+    <color name="browse_countries_button_color">#ea1913</color>
+    <color name="browse_playlists_button_color">#ea7e00</color>
+
+
+
+    <color name="welcome_message_text_color">#000000</color>
+    <color name="browse_buttons_text_color">#ffffff</color>
 </resources>

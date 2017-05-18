@@ -16,6 +16,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".GenreBrowserActvity" />
+        <activity android:name=".CityBrowserActivity" />
+        <activity android:name=".CountryBrowserActivity" />
+        <activity android:name=".PlaylistBrowserActivity"></activity>
     </application>
 
 </manifest>
