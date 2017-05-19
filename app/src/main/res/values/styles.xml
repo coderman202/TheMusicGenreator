@@ -36,5 +36,15 @@
     <style name="BrowseButtonsSubtextStyle" parent="BrowseButtonsStyle">
         <item name="android:textSize">@dimen/browse_button_subtext_size</item>
     </style>
+    
+    <style name="ListItemStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textSize">@dimen/list_item_text_size</item>
+        <item name="android:textColor">@color/welcome_message_text_color</item>
+        <item name="android:paddingBottom">@dimen/list_item_padding_bottom</item>
+        <item name="android:paddingEnd">@dimen/list_item_padding</item>
+        <item name="android:paddingStart">@dimen/list_item_padding</item>
+    </style>
 
 </resources>

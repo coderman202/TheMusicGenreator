@@ -7,16 +7,21 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import static com.example.android.themusicgenreator.MainActivity.letters;
+import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
+import static com.example.android.themusicgenreator.R.drawable.city;
 
 public class CountryBrowserActivity extends AppCompatActivity {
-
-    char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -109,6 +114,18 @@ public class CountryBrowserActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.country_browser_fragment, container, false);
 
+            Country[] countriesArray = musicGenresDB.getCountryByLetter(letters[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
+            LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.countries_scroller);
+
+            for (Country country:countriesArray) {
+                TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+                tv.setText(country.getmCountryName());
+                tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.countries_more, 0);
+                scroller.addView(tv);
+            }
+
+            TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+            scroller.addView(tv);
             return rootView;
         }
     }

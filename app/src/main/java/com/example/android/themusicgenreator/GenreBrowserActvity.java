@@ -7,16 +7,20 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import static com.example.android.themusicgenreator.MainActivity.letters;
+import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
 public class GenreBrowserActvity extends AppCompatActivity {
-
-    char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -38,6 +42,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_browser);
 
+        //Set a custom title for the ActionBar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.browse_genres_title);
@@ -108,6 +113,20 @@ public class GenreBrowserActvity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.genre_browser_fragment, container, false);
+
+            Genre[] genresArray = musicGenresDB.getGenreByLetter(letters[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
+            LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.genres_scroller);
+
+            for (Genre genre:genresArray) {
+                TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+                tv.setText(genre.getmGenreName());
+                tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
+                scroller.addView(tv);
+            }
+
+            TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+            scroller.addView(tv);
+
 
             return rootView;
         }

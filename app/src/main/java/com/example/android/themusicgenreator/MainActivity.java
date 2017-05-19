@@ -11,10 +11,19 @@ public class MainActivity extends AppCompatActivity {
     //Declare the 4 LinearLayouts in the activity_main.xml
     LinearLayout genreBrowseButton, cityBrowseButton, countryBrowseButton, playlistBrowseButton;
 
+    //My db of musical genres. Accessing it to print all the genres to the screen
+    public static MusicGenresDB musicGenresDB;
+
+    //A Char Array of letters to be used for the titles of each tab
+    public static char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Initialise a single instance of the MusicGenres Database to be used across all activities
+        musicGenresDB = MusicGenresDB.getInstance(this);
 
         //Initialise all 4 LinearLayouts and set OnClickListeners on each one with explicit
         // Intents to take to the relevant Activity.

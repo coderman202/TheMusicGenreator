@@ -14,9 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class PlaylistBrowserActivity extends AppCompatActivity {
+import static com.example.android.themusicgenreator.MainActivity.letters;
 
-    char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+public class PlaylistBrowserActivity extends AppCompatActivity {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

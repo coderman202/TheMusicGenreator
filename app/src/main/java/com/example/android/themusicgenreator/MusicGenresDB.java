@@ -4,9 +4,11 @@ package com.example.android.themusicgenreator;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.readystatesoftware.sqliteasset.SQLiteAssetHelper;
 
+import java.io.File;
 import java.util.Arrays;
 
 /**
@@ -17,6 +19,10 @@ public class MusicGenresDB extends SQLiteAssetHelper {
 
     private static final String DATABASE_NAME = "MusicGenresDB.db";
     private static final int DATABASE_VERSION = 1;
+    private static final String DB_STORAGE_DIR = "TheMusicGenreator";
+
+    //Declaring an instance of the DB
+    private static MusicGenresDB instance;
 
     //Declaring all the table names in the DB
     private static final String CITY_TABLE_NAME = "City";
@@ -64,6 +70,28 @@ public class MusicGenresDB extends SQLiteAssetHelper {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
+    //Quick check to initialise a storage directory for the database
+    static {
+        File dir = new File(DB_STORAGE_DIR);
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) {
+                Log.e("BEEP", "Create database folder failed! BANG!");
+            }
+        }
+    }
+
+    /**
+     * Creates an instance of the DB
+     * @param context passing context as the param
+     * @return returns an instance of the DB
+     */
+    public static MusicGenresDB getInstance(Context context){
+        if(instance == null){
+            instance = new MusicGenresDB(context);
+        }
+        return instance;
+    }
+
     /**
      * A method for getting a Genre from the DB based on the genreID
      * @param genreID the unique ID of the Genre
@@ -82,6 +110,32 @@ public class MusicGenresDB extends SQLiteAssetHelper {
     }
 
     /**
+     * A method for getting every Genre beginning with a particular letter
+     * @param letter a letter of type char
+     * @return returns an array of Genres beginning with @param letter
+     */
+    public Genre[] getGenreByLetter(char letter){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " +
+                        GENRE_GENRE_NAME + " LIKE '" + letter + "%';";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            Genre[] genres = new Genre[c.getCount()];
+            for (int i = 0; i < genres.length; i++) {
+                int genreID = c.getInt(c.getColumnIndex(GENRE_GENRE_ID));
+                String genreName = c.getString(c.getColumnIndex(GENRE_GENRE_NAME));
+                genres[i] = new Genre(genreID, genreName);
+                c.moveToNext();
+            }
+            c.close();
+            return genres;
+        }
+        return null;
+    }
+
+    /**
      * A method for getting a City from the DB based on the cityID
      * @param cityID the unique ID of the City
      * @return returns an object of type City
@@ -96,6 +150,32 @@ public class MusicGenresDB extends SQLiteAssetHelper {
         String cityName = c.getString(c.getColumnIndex(CITY_CITY_NAME));
         c.close();
         return new City(cityID, cityName);
+    }
+
+    /**
+     * A method for getting every City beginning with a particular letter
+     * @param letter a letter of type char
+     * @return returns an array of Cities beginning with @param letter
+     */
+    public City[] getCityByLetter(char letter){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " +
+                        CITY_CITY_NAME + " LIKE '" + letter + "%';";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            City[] cities = new City[c.getCount()];
+            for (int i = 0; i < cities.length; i++) {
+                int cityID = c.getInt(c.getColumnIndex(CITY_CITY_ID));
+                String cityName = c.getString(c.getColumnIndex(CITY_CITY_NAME));
+                cities[i] = new City(cityID, cityName);
+                c.moveToNext();
+            }
+            c.close();
+            return cities;
+        }
+        return null;
     }
 
     /**
@@ -149,6 +229,32 @@ public class MusicGenresDB extends SQLiteAssetHelper {
         String countryName = c.getString(c.getColumnIndex(COUNTRY_COUNTRY_NAME));
         c.close();
         return new Country(countryID, countryName);
+    }
+
+    /**
+     * A method for getting every City beginning with a particular letter
+     * @param letter a letter of type char
+     * @return returns an array of Cities beginning with @param letter
+     */
+    public Country[] getCountryByLetter(char letter){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
+                        COUNTRY_COUNTRY_NAME + " LIKE '" + letter + "%';";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            Country[] countries = new Country[c.getCount()];
+            for (int i = 0; i < countries.length; i++) {
+                int countryID = c.getInt(c.getColumnIndex(COUNTRY_COUNTRY_ID));
+                String countryName = c.getString(c.getColumnIndex(COUNTRY_COUNTRY_NAME));
+                countries[i] = new Country(countryID, countryName);
+                c.moveToNext();
+            }
+            c.close();
+            return countries;
+        }
+        return null;
     }
 
     /**
