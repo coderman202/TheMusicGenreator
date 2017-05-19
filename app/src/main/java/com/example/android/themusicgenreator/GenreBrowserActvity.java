@@ -16,7 +16,7 @@ import android.view.ViewGroup;
 
 public class GenreBrowserActvity extends AppCompatActivity {
 
-    char[] letters = getString(R.string.alphabet).toCharArray();
+    char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide

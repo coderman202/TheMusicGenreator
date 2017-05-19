@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
+
     <android.support.constraint.ConstraintLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,15 +21,18 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside"/>
+            app:layout_constraintVertical_chainStyle="spread_inside"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"/>
 
         <LinearLayout style="@style/BrowseLayoutStyle"
             android:id="@+id/browse_genres"
             android:background="@color/browse_genre_button_color"
             app:layout_constraintTop_toBottomOf="@id/welcome_message"
-            app:layout_constraintBottom_toTopOf="@+id/browse_cities"
+            app:layout_constraintBottom_toTopOf="@+id/browse_countries"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toStartOf="@+id/browse_cities"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintVertical_weight="1">
 
             <TextView style="@style/BrowseButtonsStyle"
                 android:text="@string/browse_genres"
@@ -42,10 +46,12 @@
         <LinearLayout style="@style/BrowseLayoutStyle"
             android:id="@+id/browse_cities"
             android:background="@color/browse_cities_button_color"
-            app:layout_constraintTop_toBottomOf="@id/browse_genres"
+            app:layout_constraintTop_toBottomOf="@id/welcome_message"
             app:layout_constraintBottom_toTopOf="@+id/browse_countries"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintStart_toEndOf="@id/browse_genres"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintVertical_weight="1">
 
             <TextView style="@style/BrowseButtonsStyle"
                 android:text="@string/browse_cities"
@@ -60,9 +66,11 @@
             android:id="@+id/browse_countries"
             android:background="@color/browse_countries_button_color"
             app:layout_constraintTop_toBottomOf="@id/browse_cities"
-            app:layout_constraintBottom_toTopOf="@+id/browse_playlists"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintEnd_toStartOf="@+id/browse_playlists"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintVertical_weight="1">
 
             <TextView style="@style/BrowseButtonsStyle"
                 android:text="@string/browse_countries"
@@ -76,10 +84,12 @@
         <LinearLayout style="@style/BrowseLayoutStyle"
             android:id="@+id/browse_playlists"
             android:background="@color/browse_playlists_button_color"
-            app:layout_constraintTop_toBottomOf="@id/browse_countries"
+            app:layout_constraintTop_toBottomOf="@id/browse_cities"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+            app:layout_constraintStart_toEndOf="@id/browse_countries"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintVertical_weight="1">
 
             <TextView style="@style/BrowseButtonsStyle"
                 android:text="@string/browse_playlists"
@@ -89,5 +99,28 @@
             <TextView style="@style/BrowseButtonsSubtextStyle"
                 android:text="@string/browse_playlists_subtext"/>
         </LinearLayout>
+
+        <android.support.constraint.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideline"
+            app:layout_constraintGuide_begin="20dp"
+            android:orientation="vertical" />
+
+        <android.support.constraint.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideline2"
+            app:layout_constraintGuide_begin="20dp"
+            android:orientation="horizontal" />
+
+        <android.support.constraint.Guideline
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/guideline3"
+            app:layout_constraintGuide_begin="20dp"
+            android:orientation="vertical" />
+
+
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

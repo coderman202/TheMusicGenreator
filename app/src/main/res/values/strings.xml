@@ -13,11 +13,11 @@
     </string>
 
     <string name="browse_genres">Explore By Genre</string>
-    <string name="browse_genres_subtext">An A to Z list of every genre.</string>
+    <string name="browse_genres_subtext">An A to Z list of every genre throughout the world.</string>
     <string name="browse_genres_title">Genres A-Z</string>
 
     <string name="browse_cities">Explore By City</string>
-    <string name="browse_cities_subtext">See the what genres each city has influenced.</string>
+    <string name="browse_cities_subtext">See the origin and influence of each genre by city.</string>
     <string name="browse_cities_title">Cities A-Z</string>
 
     <string name="browse_countries">Explore By Country</string>
