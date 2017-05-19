@@ -2,14 +2,16 @@
 <resources>
     <color name="colorPrimary">#8b0000</color>
     <color name="colorPrimaryDark">#000000</color>
-    <color name="colorAccent">#ea1723</color>
+    <color name="colorAccent">#ffffff</color>
 
     <color name="background_color">#ddeaea</color>
 
     <color name="browse_genre_button_color">#0d19ff</color>
-    <color name="browse_cities_button_color">#076400</color>
-    <color name="browse_countries_button_color">#ea1913</color>
-    <color name="browse_playlists_button_color">#ea7e00</color>
+    <color name="browse_cities_button_color">#ea7e00</color>
+    <color name="browse_countries_button_color">#076400</color>
+    <color name="browse_playlists_button_color">#ea1913</color>
+    <color name="purple">#6f00cb</color>
+
 
 
 

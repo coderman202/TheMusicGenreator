@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">The Music Genreator</string>
 
+    <string name="action_settings">Settings</string>
+
+    <string name="alphabet">ABCDEFGHIJKLMNOPQRSTUVWXYZ</string>
+
 
     <string name="welcome_message">
         Welcome to the music genre generator, the Music Genreator!
@@ -10,13 +14,17 @@
 
     <string name="browse_genres">Explore By Genre</string>
     <string name="browse_genres_subtext">An A to Z list of every genre.</string>
+    <string name="browse_genres_title">Genres A-Z</string>
 
     <string name="browse_cities">Explore By City</string>
     <string name="browse_cities_subtext">See the what genres each city has influenced.</string>
+    <string name="browse_cities_title">Cities A-Z</string>
 
     <string name="browse_countries">Explore By Country</string>
     <string name="browse_countries_subtext">See the origin and influence of genres by country.</string>
+    <string name="browse_countries_title">Countries A-Z</string>
 
     <string name="browse_playlists">Browse Playlists</string>
     <string name="browse_playlists_subtext">Check out all the playlists, or even add your own!</string>
+    <string name="browse_playlists_title">Playlists Browser</string>
 </resources>
