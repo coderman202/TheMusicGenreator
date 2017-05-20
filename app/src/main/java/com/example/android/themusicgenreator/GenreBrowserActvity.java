@@ -1,10 +1,12 @@
 package com.example.android.themusicgenreator;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,10 +45,12 @@ public class GenreBrowserActvity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_browser);
 
-        //Set a custom title for the ActionBar
+        //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.browse_genres_title);
+        Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
+        toolbar.setOverflowIcon(searchIcon);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -76,9 +81,16 @@ public class GenreBrowserActvity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        //Check which menu item is clicked
+        switch (id){
+            case R.id.search_genres:
+                return true;
+            case R.id.search_cities:
+                return true;
+            case R.id.search_countries:
+                return true;
+            case R.id.search_playlists:
+                return true;
         }
 
         return super.onOptionsItemSelected(item);
@@ -114,7 +126,10 @@ public class GenreBrowserActvity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.genre_browser_fragment, container, false);
 
-            Genre[] genresArray = musicGenresDB.getGenreByLetter(letters[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
+            //Get the letter from the charArray to search by to match the letter heading of the tab
+            char searchLetter = letters[getArguments().getInt(ARG_SECTION_NUMBER) - 1];
+
+            Genre[] genresArray = musicGenresDB.getGenreByLetter(searchLetter);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.genres_scroller);
 
             for (Genre genre:genresArray) {
@@ -124,9 +139,23 @@ public class GenreBrowserActvity extends AppCompatActivity {
                 scroller.addView(tv);
             }
 
+            if(genresArray.length == 0){
+                TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+                tv.setText(getString(R.string.browse_genres_none, Character.toLowerCase(searchLetter)));
+                scroller.addView(tv);
+            }
+
+            //Create and add a button for adding new genres to the database.
+            //Set the colors and add drawables to the left and right
+            Button addButton = new Button(new ContextThemeWrapper(getActivity(), R.style.AddItemButtonStyle));
+            addButton.setText(getString(R.string.add_genres));
+            addButton.setBackgroundResource(R.color.browse_genre_button_color);
+            addButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.music, 0, R.drawable.add, 0);
+            scroller.addView(addButton);
+
+            //A blank text view to ensure no views are cut off the end of the screen
             TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
             scroller.addView(tv);
-
 
             return rootView;
         }

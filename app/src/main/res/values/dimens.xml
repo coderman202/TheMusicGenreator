@@ -14,6 +14,8 @@
     <dimen name="list_item_padding_bottom">20dp</dimen>
     <dimen name="list_item_border_width">3dip</dimen>
 
+    <dimen name="add_button_side_padding">10dp</dimen>
+
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>

@@ -1,18 +1,23 @@
 package com.example.android.themusicgenreator;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import static com.example.android.themusicgenreator.MainActivity.letters;
 
@@ -38,9 +43,12 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playlist_browser);
 
+        //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.browse_playlists_title);
+        Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
+        toolbar.setOverflowIcon(searchIcon);
 
 
         // Create the adapter that will return a fragment for each of the three
@@ -73,7 +81,7 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.search_genres) {
             return true;
         }
 
@@ -109,6 +117,12 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.playlist_browser_fragment, container, false);
+
+            LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.playlists_scroller);
+
+            //A blank text view to ensure no views are cut off the end of the screen
+            TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+            scroller.addView(tv);
 
             return rootView;
         }

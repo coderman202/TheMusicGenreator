@@ -1,10 +1,12 @@
 package com.example.android.themusicgenreator;
 
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
@@ -14,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,9 +45,12 @@ public class CityBrowserActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_browser);
 
+        //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.browse_cities_title);
+        Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
+        toolbar.setOverflowIcon(searchIcon);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -76,7 +82,7 @@ public class CityBrowserActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.search_genres) {
             return true;
         }
 
@@ -113,7 +119,10 @@ public class CityBrowserActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.city_browser_fragment, container, false);
 
-            City[] citiesArray = musicGenresDB.getCityByLetter(letters[getArguments().getInt(ARG_SECTION_NUMBER) - 1]);
+            //Get the letter from the charArray to search by to match the letter heading of the tab
+            char searchLetter = letters[getArguments().getInt(ARG_SECTION_NUMBER) - 1];
+
+            City[] citiesArray = musicGenresDB.getCityByLetter(searchLetter);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.cities_scroller);
 
             for (City city:citiesArray) {
@@ -123,6 +132,21 @@ public class CityBrowserActivity extends AppCompatActivity {
                 scroller.addView(tv);
             }
 
+            if(citiesArray.length == 0){
+                TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+                tv.setText(getString(R.string.browse_cities_none, Character.toLowerCase(searchLetter)));
+                scroller.addView(tv);
+            }
+
+            //Create and add a button for adding new cities to the database.
+            //Set the colors and add drawables to the left and right
+            Button addButton = new Button(new ContextThemeWrapper(getActivity(), R.style.AddItemButtonStyle));
+            addButton.setText(getString(R.string.add_cities));
+            addButton.setBackgroundResource(R.color.browse_cities_button_color);
+            addButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.city, 0, R.drawable.add, 0);
+            scroller.addView(addButton);
+
+            //A blank text view to ensure no views are cut off the end of the screen
             TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
             scroller.addView(tv);
 
