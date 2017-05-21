@@ -19,6 +19,11 @@
     <string name="browse_genres_none">No genres beginning with %1$c</string>
     <string name="add_genres">Add a new genre</string>
 
+    <string name="genres_header">Genres</string>
+    <string name="playlists_header">Playlists</string>
+    <string name="countries_header">Countries</string>
+    <string name="cities_header">Cities</string>
+
     <string name="browse_cities">Explore By City</string>
     <string name="browse_cities_subtext">See the origin and influence of each genre by city.</string>
     <string name="browse_cities_title">Cities A-Z</string>
@@ -34,4 +39,7 @@
     <string name="browse_playlists">Browse Playlists</string>
     <string name="browse_playlists_subtext">Check out all the playlists, or even add your own!</string>
     <string name="browse_playlists_title">Playlists Browser</string>
+
+    <string name="title_activity_genre_info_actvity">GenreInfoActvity</string>
+    <string name="action_settings">Settings</string>
 </resources>

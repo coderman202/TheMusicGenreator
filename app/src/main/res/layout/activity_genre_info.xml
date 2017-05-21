@@ -2,23 +2,22 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main_content_cities"
+    android:id="@+id/main_content_genre_info"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-
-    tools:context="com.example.android.themusicgenreator.GenreBrowserActvity">
+    tools:context="com.example.android.themusicgenreator.GenreInfoActvity">
 
     <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar_cities"
+        android:id="@+id/appbar_genre_info"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/browse_cities_button_color"
         android:paddingTop="@dimen/appbar_padding_top"
+        android:background="@color/browse_genre_button_color"
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar_cities"
+            android:id="@+id/toolbar_genre_info"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:layout_scrollFlags="scroll|enterAlways"
@@ -27,19 +26,17 @@
         </android.support.v7.widget.Toolbar>
 
         <android.support.design.widget.TabLayout
-            android:id="@+id/tabs_cities"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:tabMode="scrollable"/>
+            android:id="@+id/tabs_genre_info"
+            app:tabMode="scrollable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </android.support.design.widget.AppBarLayout>
 
     <android.support.v4.view.ViewPager
-        android:id="@+id/container_cities"
+        android:id="@+id/container_genre_info"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-
 
 </android.support.design.widget.CoordinatorLayout>

@@ -46,7 +46,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_country_browser);
 
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_countries);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.browse_countries_title);
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
@@ -57,10 +57,10 @@ public class CountryBrowserActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.container_countries);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_countries);
         tabLayout.setupWithViewPager(mViewPager);
 
 

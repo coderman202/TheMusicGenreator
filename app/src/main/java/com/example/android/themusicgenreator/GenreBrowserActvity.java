@@ -1,5 +1,6 @@
 package com.example.android.themusicgenreator;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -46,7 +47,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
         setContentView(R.layout.activity_genre_browser);
 
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_genres);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(R.string.browse_genres_title);
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
@@ -57,10 +58,10 @@ public class GenreBrowserActvity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.container_genres);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_genres);
         tabLayout.setupWithViewPager(mViewPager);
 
 
@@ -132,10 +133,18 @@ public class GenreBrowserActvity extends AppCompatActivity {
             Genre[] genresArray = musicGenresDB.getGenreByLetter(searchLetter);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.genres_scroller);
 
-            for (Genre genre:genresArray) {
+            for (final Genre genre:genresArray) {
                 TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
                 tv.setText(genre.getmGenreName());
                 tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
+                        i.putExtra("APPBAR_TITLE", genre.getmGenreName());
+                        startActivity(i);
+                    }
+                });
                 scroller.addView(tv);
             }
 
