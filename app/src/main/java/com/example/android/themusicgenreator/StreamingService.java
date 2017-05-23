@@ -39,7 +39,7 @@ public class StreamingService {
      * get() method for the name
      * @return returns the String name of the Streaming Service
      */
-    public String getmCountryName() {
+    public String getmServiceName() {
         return mServiceName;
     }
 

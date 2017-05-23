@@ -46,6 +46,7 @@
     <string name="browse_playlists_title">Playlists Browser</string>
     <string name="browse_playlists_none">No playlists of this genre yet.</string>
     <string name="add_playlist">Add a new playlist</string>
+    <string name="no_playlists_by_service">No playlists here yet.</string>
 
     <string name="title_activity_genre_info_actvity">GenreInfoActvity</string>
     <string name="action_settings">Settings</string>

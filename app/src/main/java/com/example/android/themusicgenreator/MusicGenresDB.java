@@ -211,11 +211,11 @@ public class MusicGenresDB extends SQLiteAssetHelper {
     public int getNumGenresByCity(int cityID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
-                "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " +
-                        CITY_CITY_ID + " = " + cityID + ";";
+                "SELECT * FROM " + GENRE_CITY_TABLE_NAME + " WHERE " +
+                        GENRE_CITY_CITY_ID + " = " + cityID + ";";
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
-        int numGenres = c.getInt(c.getCount());
+        int numGenres = c.getCount();
         c.close();
         return numGenres;
     }
@@ -229,13 +229,25 @@ public class MusicGenresDB extends SQLiteAssetHelper {
     public int getNumGenresByCountry(int countryID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
-                "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
-                        COUNTRY_COUNTRY_ID + " = " + countryID + ";";
+                "SELECT * FROM " + GENRE_COUNTRY_TABLE_NAME + " WHERE " +
+                        GENRE_COUNTRY_COUNTRY_ID + " = " + countryID + ";";
         Cursor c = db.rawQuery(query, null);
         c.moveToFirst();
-        int numGenres = c.getInt(c.getCount());
+        int numGenres = c.getCount();
         c.close();
         return numGenres;
+    }
+
+    public int getNumPlaylistsByStreamingService(int serviceID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + PLAYLIST_TABLE_NAME + " WHERE " +
+                        PLAYLIST_STREAMING_SERVICE_ID + " = " + serviceID + ";";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        int numPlaylists = c.getCount();
+        c.close();
+        return numPlaylists;
     }
 
     /**
@@ -342,6 +354,30 @@ public class MusicGenresDB extends SQLiteAssetHelper {
     }
 
     /**
+     * A method for getting all Streaming Services
+     * @return returns an array of type StreamingService
+     */
+    public StreamingService[] getAllStreamingServices(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + STREAMING_SERVICE_TABLE_NAME  + ";";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            StreamingService[] services = new StreamingService[c.getCount()];
+            for (int i = 0; i < services.length; i++) {
+                String serviceName = c.getString(c.getColumnIndex(STREAMING_SERVICE_SERVICE_NAME));
+                int streamingServiceID = c.getInt(c.getColumnIndex(STREAMING_SERVICE_STREAMING_SERVICE_ID));
+                services[i] = new StreamingService(streamingServiceID, serviceName);
+                c.moveToNext();
+            }
+            c.close();
+            return services;
+        }
+        return null;
+    }
+
+    /**
      * A method for getting an array of Playlists based on the genre of music they contain
      * @param genreID the unique ID of the Genre we are searching with
      * @return returns an array of Playlists
@@ -358,6 +394,34 @@ public class MusicGenresDB extends SQLiteAssetHelper {
             for (int i = 0; i < playlists.length; i++) {
                 int playlistID = c.getInt(c.getColumnIndex(GENRE_PLAYLIST_PLAYLIST_ID));
                 playlists[i] = getPlaylist(playlistID);
+                c.moveToNext();
+            }
+            c.close();
+            return playlists;
+        }
+        return null;
+    }
+
+    /**
+     * A method for getting an array of Playlists based on the Streaming Service
+     * they were created/stored with.
+     * @param serviceID the unique ID of the Streaming Service we are searching with
+     * @return returns an array of Playlists
+     */
+    public Playlist[] getPlaylistByStreamingService(int serviceID){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + PLAYLIST_TABLE_NAME +
+                        " WHERE " + PLAYLIST_STREAMING_SERVICE_ID + " = " + serviceID + ";";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            Playlist[] playlists = new Playlist[c.getCount()];
+            for (int i = 0; i < playlists.length; i++) {
+                int playlistID = c.getInt(c.getColumnIndex(PLAYLIST_PLAYLIST_ID));
+                String playlistName = c.getString(c.getColumnIndex(PLAYLIST_PLAYLIST_NAME));
+                String link  = c.getString(c.getColumnIndex(PLAYLIST_LINK));
+                playlists[i] = new Playlist(playlistID, playlistName, link, serviceID);
                 c.moveToNext();
             }
             c.close();

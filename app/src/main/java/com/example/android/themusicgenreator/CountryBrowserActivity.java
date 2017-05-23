@@ -29,11 +29,14 @@ import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
 public class CountryBrowserActivity extends AppCompatActivity {
 
+    public static Country inCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_country_browser);
+
+        inCountry = getIntent().getParcelableExtra("PASSED_COUNTRY");
 
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_countries);
@@ -47,6 +50,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
 
         for (int i = 0; i < countriesArray.length; i++) {
             countryNames[i] = countriesArray[i].getmCountryName();
+            countryNames[i] += (" (" + musicGenresDB.getNumGenresByCountry(countriesArray[i].getmCountryID()) + ")");
         }
 
         // Setup spinner
@@ -65,13 +69,12 @@ public class CountryBrowserActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // When no dropdown item is selected, show the first item's contents in the
-                // container view.
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container_countries, PlaceholderFragment.newInstance(0))
-                        .commit();
             }
         });
+
+        if(inCountry != null){
+            spinner.setSelection(inCountry.getmCountryID()-1);
+        }
     }
 
 

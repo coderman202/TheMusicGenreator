@@ -30,10 +30,15 @@ import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 public class CityBrowserActivity extends AppCompatActivity {
 
 
+    public static City inCity;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_city_browser);
+
+        inCity = getIntent().getParcelableExtra("PASSED_CITY");
+
 
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_cities);
@@ -42,11 +47,13 @@ public class CityBrowserActivity extends AppCompatActivity {
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
         toolbar.setOverflowIcon(searchIcon);
 
+
         City[] citiesArray = musicGenresDB.getAllCities();
         String [] cityNames = new String[citiesArray.length];
 
         for (int i = 0; i < citiesArray.length; i++) {
             cityNames[i] = citiesArray[i].getmCityName();
+            cityNames[i] += (" (" + musicGenresDB.getNumGenresByCity(citiesArray[i].getmCityID()) + ")");
         }
 
         // Setup spinner
@@ -65,13 +72,12 @@ public class CityBrowserActivity extends AppCompatActivity {
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // When no dropdown item is selected, show the first item's contents in the
-                // container view.
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.container_cities, PlaceholderFragment.newInstance(0))
-                        .commit();
             }
         });
+
+        if(inCity != null){
+            spinner.setSelection(inCity.getmCityID()-1);
+        }
     }
 
 

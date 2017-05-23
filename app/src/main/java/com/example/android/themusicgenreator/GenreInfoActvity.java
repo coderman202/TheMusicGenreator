@@ -1,5 +1,7 @@
 package com.example.android.themusicgenreator;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
@@ -10,7 +12,6 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class GenreInfoActvity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    //A Genre variable to store the genre object passed via the Intent.
     public static Genre inGenre;
 
     @Override
@@ -43,11 +45,8 @@ public class GenreInfoActvity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_info);
 
-        Log.d("Beforeingenre", "Yes");
-
+        //Getting the genre object from the Intent. Use it to set the title of the ActionBar.
         inGenre = getIntent().getParcelableExtra("PASSED_GENRE");
-
-        Log.d("Afteringenre", inGenre.getmGenreName());
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_genre_info);
         setSupportActionBar(toolbar);
@@ -57,13 +56,12 @@ public class GenreInfoActvity extends AppCompatActivity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
-        // Set up the ViewPager with the sections adapter.
+        // Set up the ViewPager with the sections adapter and the TabLayout with the ViewPager.
         mViewPager = (ViewPager) findViewById(R.id.container_genre_info);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_genre_info);
         tabLayout.setupWithViewPager(mViewPager);
-
     }
 
     /**
@@ -115,13 +113,23 @@ public class GenreInfoActvity extends AppCompatActivity {
                     new ContextThemeWrapper(getActivity(), R.style.ListHeaderStyle);
 
             //For checking which tab we are in and getting the right list for each one.
-            //Using the appropriate array to generate the lists for each tab
+            //Using the appropriate array to generate the lists for each tab.
             switch(getArguments().getInt(ARG_SECTION_NUMBER)-1){
                 case 0:
                     for (final Playlist playlist:playlistsArray) {
                         TextView tv = new TextView(listItemStyle);
                         tv.setText(playlist.getmPlaylistName());
                         tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.spotify_icon, 0);
+                        //OnClickListener for opening the streaming service with
+                        // the correct playlist link.
+                        tv.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i = new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse(playlist.getmLink()));
+                                startActivity(i);
+                            }
+                        });
                         scroller.addView(tv);
                     }
 
@@ -131,12 +139,12 @@ public class GenreInfoActvity extends AppCompatActivity {
                         scroller.addView(tv);
                     }
 
-                    fab.setOnClickListener(new View.OnClickListener() {
+                    /*fab.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                         }
-                    });
+                    });*/
 
                     //A blank text view to ensure no views are cut off the end of the screen
                     TextView tv = new TextView(listItemStyle);
@@ -152,6 +160,14 @@ public class GenreInfoActvity extends AppCompatActivity {
                         TextView tv1 = new TextView(listItemStyle);
                         tv1.setText(city.getmCityName());
                         tv1.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
+                        tv1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i  = new Intent(getActivity(), CityBrowserActivity.class);
+                                i.putExtra("PASSED_CITY", city);
+                                startActivity(i);
+                            }
+                        });
                         scroller.addView(tv1);
                     }
 
@@ -161,12 +177,12 @@ public class GenreInfoActvity extends AppCompatActivity {
                         scroller.addView(tv1);
                     }
 
-                    fab.setOnClickListener(new View.OnClickListener() {
+                    /*fab.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                         }
-                    });
+                    });*/
 
                     //A blank text view to ensure no views are cut off the end of the screen
                     TextView tv1 = new TextView(listItemStyle);
@@ -182,6 +198,14 @@ public class GenreInfoActvity extends AppCompatActivity {
                         TextView tv2 = new TextView(listItemStyle);
                         tv2.setText(country.getmCountryName());
                         tv2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
+                        tv2.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent i  = new Intent(getActivity(), CountryBrowserActivity.class);
+                                i.putExtra("PASSED_COUNTRY", country);
+                                startActivity(i);
+                            }
+                        });
                         scroller.addView(tv2);
                     }
 
@@ -191,12 +215,12 @@ public class GenreInfoActvity extends AppCompatActivity {
                         scroller.addView(tv2);
                     }
 
-                    fab.setOnClickListener(new View.OnClickListener() {
+                    /*fab.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
 
                         }
-                    });
+                    });*/
 
                     //A blank text view to ensure no views are cut off the end of the screen
                     TextView tv2 = new TextView(listItemStyle);

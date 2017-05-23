@@ -1,7 +1,10 @@
 package com.example.android.themusicgenreator;
 
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -19,7 +22,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import static com.example.android.themusicgenreator.MainActivity.letters;
+import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
 public class PlaylistBrowserActivity extends AppCompatActivity {
 
@@ -37,6 +40,8 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+
+    private int NUM_TABS = 7;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -118,10 +123,42 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.playlist_browser_fragment, container, false);
 
+            int serviceID = getArguments().getInt(ARG_SECTION_NUMBER);
+
+            Playlist[] playlistsArray = musicGenresDB.getPlaylistByStreamingService(serviceID);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.playlists_scroller);
 
+            //Get the floating action button that we will use to add records to the database.
+            //The appropriate onClickListeners will be set below in each tab.
+            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_playlists);
+
+            //Get the style for styling the textviews that will be added like lists.
+            ContextThemeWrapper listItemStyle =
+                    new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
+
+            for (final Playlist playlist:playlistsArray) {
+                TextView tv = new TextView(listItemStyle);
+                tv.setText(playlist.getmPlaylistName());
+                tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.spotify_icon, 0);
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i = new Intent(Intent.ACTION_VIEW,
+                                Uri.parse(playlist.getmLink()));
+                        startActivity(i);
+                    }
+                });
+                scroller.addView(tv);
+            }
+
+            if(playlistsArray.length == 0){
+                TextView tv = new TextView(listItemStyle);
+                tv.setText(getString(R.string.no_playlists_by_service));
+                scroller.addView(tv);
+            }
+
             //A blank text view to ensure no views are cut off the end of the screen
-            TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+            TextView tv = new TextView(listItemStyle);
             scroller.addView(tv);
 
             return rootView;
@@ -148,13 +185,16 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         @Override
         public int getCount() {
             // Show 1 page for each letter.
-            return letters.length;
+            return NUM_TABS;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position < letters.length){
-                return String.valueOf(letters[position]);
+            if(position < NUM_TABS){
+                String pageTitle = musicGenresDB.getStreamingService(position + 1).getmServiceName();
+                pageTitle += " ( " +
+                        musicGenresDB.getNumPlaylistsByStreamingService(position + 1) + ")";
+                return pageTitle;
             }
             return null;
         }
