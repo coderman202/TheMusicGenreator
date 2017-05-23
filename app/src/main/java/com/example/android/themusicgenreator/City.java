@@ -1,10 +1,13 @@
 package com.example.android.themusicgenreator;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * A class for Cities
  */
 
-public class City {
+public class City implements Parcelable {
 
     private int mCityID;
     private String mCityName;
@@ -58,4 +61,33 @@ public class City {
     public void setmCityName(String mCityName) {
         this.mCityName = mCityName;
     }
+
+    //Parcelable methods below....
+    public City(Parcel in){
+        this.mCityID = in.readInt();
+        this.mCityName = in.readString();
+    }
+
+    @Override
+    public int describeContents(){
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags){
+        dest.writeInt(mCityID);
+        dest.writeString(mCityName);
+    }
+
+    public static final Creator<City> CREATOR = new Creator<City>() {
+        @Override
+        public City createFromParcel(Parcel in) {
+            return new City(in);
+        }
+
+        @Override
+        public City[] newArray(int size) {
+            return new City[size];
+        }
+    };
 }

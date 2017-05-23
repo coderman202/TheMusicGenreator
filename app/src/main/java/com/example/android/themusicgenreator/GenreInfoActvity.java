@@ -1,16 +1,23 @@
 package com.example.android.themusicgenreator;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
 public class GenreInfoActvity extends AppCompatActivity {
 
@@ -29,14 +36,22 @@ public class GenreInfoActvity extends AppCompatActivity {
      */
     private ViewPager mViewPager;
 
+    public static Genre inGenre;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_info);
 
+        Log.d("Beforeingenre", "Yes");
+
+        inGenre = getIntent().getParcelableExtra("PASSED_GENRE");
+
+        Log.d("Afteringenre", inGenre.getmGenreName());
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_genre_info);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(getIntent().getExtras().getString("APPBAR_TITLE"));
+        getSupportActionBar().setTitle(inGenre.getmGenreName());
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -80,6 +95,114 @@ public class GenreInfoActvity extends AppCompatActivity {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.genre_info_fragment, container, false);
+
+            //Create array lists of each related playlist, city and country to the genre.
+            Playlist[] playlistsArray = musicGenresDB.getPlaylistByGenre(inGenre.getmGenreID());
+            City[] citiesArray = musicGenresDB.getCitiesOfInfluence(inGenre.getmGenreID());
+            Country[] countriesArray = musicGenresDB.getCountriesOfInfluence(inGenre.getmGenreID());
+
+            //Get the LinearLayout inside the scrollview for adding all the lists.
+            LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.genre_info_scroller);
+
+            //Get the floating action button that we will use to add records to the database.
+            //The appropriate onClickListeners will be set below in each tab.
+            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_genres_info);
+
+            //Get the two styles for styling the textviews that will be added like lists.
+            ContextThemeWrapper listItemStyle =
+                    new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
+            ContextThemeWrapper listHeaderStyle =
+                    new ContextThemeWrapper(getActivity(), R.style.ListHeaderStyle);
+
+            //For checking which tab we are in and getting the right list for each one.
+            //Using the appropriate array to generate the lists for each tab
+            switch(getArguments().getInt(ARG_SECTION_NUMBER)-1){
+                case 0:
+                    for (final Playlist playlist:playlistsArray) {
+                        TextView tv = new TextView(listItemStyle);
+                        tv.setText(playlist.getmPlaylistName());
+                        tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.spotify_icon, 0);
+                        scroller.addView(tv);
+                    }
+
+                    if(playlistsArray.length == 0){
+                        TextView tv = new TextView(listItemStyle);
+                        tv.setText(getString(R.string.browse_playlists_none));
+                        scroller.addView(tv);
+                    }
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+
+                    //A blank text view to ensure no views are cut off the end of the screen
+                    TextView tv = new TextView(listItemStyle);
+                    scroller.addView(tv);
+                    break;
+                case 1:
+                    //Set a header for the cities list
+                    TextView cityHeader = new TextView(listHeaderStyle);
+                    cityHeader.setText(R.string.country_city_header);
+                    scroller.addView(cityHeader);
+
+                    for (final City city:citiesArray) {
+                        TextView tv1 = new TextView(listItemStyle);
+                        tv1.setText(city.getmCityName());
+                        tv1.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
+                        scroller.addView(tv1);
+                    }
+
+                    if(citiesArray.length == 0){
+                        TextView tv1 = new TextView(listItemStyle);
+                        tv1.setText(getString(R.string.genre_info_none));
+                        scroller.addView(tv1);
+                    }
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+
+                    //A blank text view to ensure no views are cut off the end of the screen
+                    TextView tv1 = new TextView(listItemStyle);
+                    scroller.addView(tv1);
+                    break;
+                case 2:
+                    //Set a header for the countries list
+                    TextView countryHeader = new TextView(listHeaderStyle);
+                    countryHeader.setText(R.string.country_city_header);
+                    scroller.addView(countryHeader);
+
+                    for (final Country country:countriesArray) {
+                        TextView tv2 = new TextView(listItemStyle);
+                        tv2.setText(country.getmCountryName());
+                        tv2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
+                        scroller.addView(tv2);
+                    }
+
+                    if(countriesArray.length == 0){
+                        TextView tv2 = new TextView(listItemStyle);
+                        tv2.setText(getString(R.string.genre_info_none));
+                        scroller.addView(tv2);
+                    }
+
+                    fab.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+
+                        }
+                    });
+
+                    //A blank text view to ensure no views are cut off the end of the screen
+                    TextView tv2 = new TextView(listItemStyle);
+                    scroller.addView(tv2);
+                    break;
+            }
             return rootView;
         }
     }

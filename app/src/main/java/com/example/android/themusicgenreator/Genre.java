@@ -1,10 +1,13 @@
 package com.example.android.themusicgenreator;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * A class for Genres
  */
 
-public class Genre {
+public class Genre implements Parcelable {
 
     private int mGenreID;
     private String mGenreName;
@@ -58,4 +61,33 @@ public class Genre {
     public void setmGenreName(String mGenreName) {
         this.mGenreName = mGenreName;
     }
+
+    //Parcelable methods below....
+    public Genre(Parcel in){
+        this.mGenreID = in.readInt();
+        this.mGenreName = in.readString();
+    }
+
+    @Override
+    public int describeContents(){
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags){
+        dest.writeInt(mGenreID);
+        dest.writeString(mGenreName);
+    }
+
+    public static final Creator<Genre> CREATOR = new Creator<Genre>() {
+        @Override
+        public Genre createFromParcel(Parcel in) {
+            return new Genre(in);
+        }
+
+        @Override
+        public Genre[] newArray(int size) {
+            return new Genre[size];
+        }
+    };
 }

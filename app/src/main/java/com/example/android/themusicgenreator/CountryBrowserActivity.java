@@ -1,44 +1,34 @@
 package com.example.android.themusicgenreator;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.res.Resources.Theme;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.TabLayout;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
+import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 
-import static com.example.android.themusicgenreator.MainActivity.letters;
 import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
 public class CountryBrowserActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,18 +42,36 @@ public class CountryBrowserActivity extends AppCompatActivity {
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
         toolbar.setOverflowIcon(searchIcon);
 
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        Country[] countriesArray = musicGenresDB.getAllCountries();
+        String [] countryNames = new String[countriesArray.length];
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container_countries);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        for (int i = 0; i < countriesArray.length; i++) {
+            countryNames[i] = countriesArray[i].getmCountryName();
+        }
 
-        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_countries);
-        tabLayout.setupWithViewPager(mViewPager);
+        // Setup spinner
+        Spinner spinner = (Spinner) findViewById(R.id.spinner_countries);
+        spinner.setAdapter(new MyAdapter(toolbar.getContext(),countryNames));
 
+        spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                // When the given dropdown item is selected, show its contents in the
+                // container view.
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container_countries, PlaceholderFragment.newInstance(position + 1))
+                        .commit();
+            }
 
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // When no dropdown item is selected, show the first item's contents in the
+                // container view.
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.container_countries, PlaceholderFragment.newInstance(0))
+                        .commit();
+            }
+        });
     }
 
 
@@ -88,6 +96,44 @@ public class CountryBrowserActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
+    private final ThemedSpinnerAdapter.Helper mDropDownHelper;
+
+    public MyAdapter(Context context, String[] objects) {
+        super(context, android.R.layout.simple_list_item_1, objects);
+        mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
+    }
+
+    @Override
+    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        View view;
+
+        if (convertView == null) {
+            // Inflate the drop down using the helper's LayoutInflater
+            LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
+            view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+        } else {
+            view = convertView;
+        }
+
+        TextView textView = (TextView) view.findViewById(android.R.id.text1);
+        textView.setMaxLines(1);
+        textView.setText(getItem(position));
+
+        return view;
+    }
+
+    @Override
+    public Theme getDropDownViewTheme() {
+        return mDropDownHelper.getDropDownViewTheme();
+    }
+
+    @Override
+    public void setDropDownViewTheme(Theme theme) {
+        mDropDownHelper.setDropDownViewTheme(theme);
+    }
+}
 
     /**
      * A placeholder fragment containing a simple view.
@@ -119,70 +165,49 @@ public class CountryBrowserActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.country_browser_fragment, container, false);
 
-            //Get the letter from the charArray to search by to match the letter heading of the tab
-            char searchLetter = letters[getArguments().getInt(ARG_SECTION_NUMBER) - 1];
+            //Get the countryID by taking the section number minus one, as it should be
+            // equivalent to the countryID
+            int countryID = getArguments().getInt(ARG_SECTION_NUMBER);
 
-            Country[] countriesArray = musicGenresDB.getCountryByLetter(searchLetter);
+            Genre[] genresArray = musicGenresDB.getGenreByCountry(countryID);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.countries_scroller);
 
-            for (Country country:countriesArray) {
-                TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
-                tv.setText(country.getmCountryName());
+            //Get the floating action button that we will use to add records to the database.
+            //The appropriate onClickListeners will be set below in each tab.
+            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_countries);
+
+            //Get the style for styling the textviews that will be added like lists.
+            ContextThemeWrapper listItemStyle =
+                    new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
+
+            for (final Genre genre:genresArray) {
+                TextView tv = new TextView(listItemStyle);
+                tv.setText(genre.getmGenreName());
                 tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.countries_more, 0);
+                tv.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
+                        Log.d("name", genre.getmGenreName());
+                        Log.d("id", genre.getmGenreID() + "");
+                        i.putExtra("PASSED_GENRE", genre);
+                        startActivity(i);
+                    }
+                });
                 scroller.addView(tv);
             }
 
-            if(countriesArray.length == 0){
-                TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
-                tv.setText(getString(R.string.browse_countries_none, Character.toLowerCase(searchLetter)));
+            if(genresArray.length == 0){
+                TextView tv = new TextView(listItemStyle);
                 scroller.addView(tv);
             }
 
-            //Create and add a button for adding new countries to the database.
-            //Set the colors and add drawables to the left and right
-            Button addButton = new Button(new ContextThemeWrapper(getActivity(), R.style.AddItemButtonStyle));
-            addButton.setText(getString(R.string.add_country));
-            addButton.setBackgroundResource(R.color.browse_countries_button_color);
-            addButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.earth, 0, R.drawable.add, 0);
-            scroller.addView(addButton);
 
             //A blank text view to ensure no views are cut off the end of the screen
-            TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+            TextView tv = new TextView(listItemStyle);
             scroller.addView(tv);
 
             return rootView;
-        }
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
-
-        public SectionsPagerAdapter(FragmentManager fm) {
-            super(fm);
-        }
-
-        @Override
-        public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
-        }
-
-        @Override
-        public int getCount() {
-            // Show 1 page for each letter.
-            return letters.length;
-        }
-
-        @Override
-        public CharSequence getPageTitle(int position) {
-            if(position < letters.length){
-                return String.valueOf(letters[position]);
-            }
-            return null;
         }
     }
 }

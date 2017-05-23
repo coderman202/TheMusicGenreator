@@ -1,5 +1,6 @@
 <RelativeLayout style="@style/FragmentLayoutStyle"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.themusicgenreator.GenreInfoActvity$PlaceholderFragment">
     <TextView
@@ -15,7 +16,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
         </LinearLayout>
     </ScrollView>
 </RelativeLayout>

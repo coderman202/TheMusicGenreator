@@ -54,6 +54,10 @@
         <item name="android:paddingStart">@dimen/list_item_padding</item>
     </style>
 
+    <style name="ListHeaderStyle" parent="WelcomeMessageStyle">
+        <item name="android:textSize">@dimen/list_header_text_size</item>
+    </style>
+
     <style name="AddItemButtonStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

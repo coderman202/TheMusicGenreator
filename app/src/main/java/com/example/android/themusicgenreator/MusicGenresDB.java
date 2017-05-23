@@ -179,6 +179,30 @@ public class MusicGenresDB extends SQLiteAssetHelper {
     }
 
     /**
+     * A method for getting every city in the DB
+     * @return returns an array of type City
+     */
+    public City[] getAllCities(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + CITY_TABLE_NAME + ";";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            City[] cities = new City[c.getCount()];
+            for (int i = 0; i < cities.length; i++) {
+                int cityID = c.getInt(c.getColumnIndex(CITY_CITY_ID));
+                String cityName = c.getString(c.getColumnIndex(CITY_CITY_NAME));
+                cities[i] = new City(cityID, cityName);
+                c.moveToNext();
+            }
+            c.close();
+            return cities;
+        }
+        return null;
+    }
+
+    /**
      * A method for getting the total number of genres that have originated in or
      * been heavily influenced by a particular city
      * @param cityID the unique ID of the City
@@ -241,6 +265,30 @@ public class MusicGenresDB extends SQLiteAssetHelper {
         String query =
                 "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
                         COUNTRY_COUNTRY_NAME + " LIKE '" + letter + "%';";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            Country[] countries = new Country[c.getCount()];
+            for (int i = 0; i < countries.length; i++) {
+                int countryID = c.getInt(c.getColumnIndex(COUNTRY_COUNTRY_ID));
+                String countryName = c.getString(c.getColumnIndex(COUNTRY_COUNTRY_NAME));
+                countries[i] = new Country(countryID, countryName);
+                c.moveToNext();
+            }
+            c.close();
+            return countries;
+        }
+        return null;
+    }
+
+    /**
+     * A method for getting every country in the DB
+     * @return returns an array of type Country
+     */
+    public Country[] getAllCountries(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + COUNTRY_TABLE_NAME + ";";
         Cursor c = db.rawQuery(query, null);
         if(c != null){
             c.moveToFirst();

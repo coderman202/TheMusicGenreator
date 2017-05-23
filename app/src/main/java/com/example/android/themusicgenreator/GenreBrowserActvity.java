@@ -3,6 +3,7 @@ package com.example.android.themusicgenreator;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -12,12 +13,12 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -133,15 +134,25 @@ public class GenreBrowserActvity extends AppCompatActivity {
             Genre[] genresArray = musicGenresDB.getGenreByLetter(searchLetter);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.genres_scroller);
 
+            //Get the floating action button that we will use to add records to the database.
+            //The appropriate onClickListeners will be set below in each tab.
+            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_genres);
+
+            //Get the style for styling the textviews that will be added like lists.
+            ContextThemeWrapper listItemStyle =
+                    new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
+
             for (final Genre genre:genresArray) {
-                TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+                TextView tv = new TextView(listItemStyle);
                 tv.setText(genre.getmGenreName());
                 tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
                 tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
-                        i.putExtra("APPBAR_TITLE", genre.getmGenreName());
+                        Log.d("name", genre.getmGenreName());
+                        Log.d("id", genre.getmGenreID() + "");
+                        i.putExtra("PASSED_GENRE", genre);
                         startActivity(i);
                     }
                 });
@@ -149,21 +160,13 @@ public class GenreBrowserActvity extends AppCompatActivity {
             }
 
             if(genresArray.length == 0){
-                TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+                TextView tv = new TextView(listItemStyle);
                 tv.setText(getString(R.string.browse_genres_none, Character.toLowerCase(searchLetter)));
                 scroller.addView(tv);
             }
 
-            //Create and add a button for adding new genres to the database.
-            //Set the colors and add drawables to the left and right
-            Button addButton = new Button(new ContextThemeWrapper(getActivity(), R.style.AddItemButtonStyle));
-            addButton.setText(getString(R.string.add_genres));
-            addButton.setBackgroundResource(R.color.browse_genre_button_color);
-            addButton.setCompoundDrawablesWithIntrinsicBounds(R.drawable.music, 0, R.drawable.add, 0);
-            scroller.addView(addButton);
-
             //A blank text view to ensure no views are cut off the end of the screen
-            TextView tv = new TextView(new ContextThemeWrapper(getActivity(), R.style.ListItemStyle));
+            TextView tv = new TextView(listItemStyle);
             scroller.addView(tv);
 
             return rootView;

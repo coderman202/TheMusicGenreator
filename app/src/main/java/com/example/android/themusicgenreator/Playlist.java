@@ -1,10 +1,13 @@
 package com.example.android.themusicgenreator;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * A class for Playlists
  */
 
-public class Playlist {
+public class Playlist implements Parcelable{
 
     private int mPlaylistID;
     private String mPlaylistName;
@@ -101,4 +104,37 @@ public class Playlist {
     public void setmStreamingServiceID(int mStreamingServiceID) {
         this.mStreamingServiceID = mStreamingServiceID;
     }
+
+    //Parcelable methods below....
+    public Playlist(Parcel in){
+        this.mPlaylistID = in.readInt();
+        this.mPlaylistName = in.readString();
+        this.mLink = in.readString();
+        this.mStreamingServiceID = in.readInt();
+    }
+
+    @Override
+    public int describeContents(){
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags){
+        dest.writeInt(mPlaylistID);
+        dest.writeString(mPlaylistName);
+        dest.writeString(mLink);
+        dest.writeInt(mStreamingServiceID);
+    }
+
+    public static final Creator<Playlist> CREATOR = new Creator<Playlist>() {
+        @Override
+        public Playlist createFromParcel(Parcel in) {
+            return new Playlist(in);
+        }
+
+        @Override
+        public Playlist[] newArray(int size) {
+            return new Playlist[size];
+        }
+    };
 }

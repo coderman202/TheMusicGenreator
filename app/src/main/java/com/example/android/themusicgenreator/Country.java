@@ -1,10 +1,13 @@
 package com.example.android.themusicgenreator;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * A class for Countries
  */
 
-public class Country {
+public class Country implements Parcelable {
 
     private int mCountryID;
     private String mCountryName;
@@ -58,4 +61,33 @@ public class Country {
     public void setmCountryName(String mCountryName) {
         this.mCountryName = mCountryName;
     }
+
+    //Parcelable methods below....
+    public Country(Parcel in){
+        this.mCountryID = in.readInt();
+        this.mCountryName = in.readString();
+    }
+
+    @Override
+    public int describeContents(){
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags){
+        dest.writeInt(mCountryID);
+        dest.writeString(mCountryName);
+    }
+
+    public static final Creator<Country> CREATOR = new Creator<Country>() {
+        @Override
+        public Country createFromParcel(Parcel in) {
+            return new Country(in);
+        }
+
+        @Override
+        public Country[] newArray(int size) {
+            return new Country[size];
+        }
+    };
 }
