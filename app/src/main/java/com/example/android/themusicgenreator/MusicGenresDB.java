@@ -15,7 +15,7 @@ import java.util.Arrays;
  * Class for handling all interactions with the Music Genres Database
  */
 
-public class MusicGenresDB extends SQLiteAssetHelper {
+class MusicGenresDB extends SQLiteAssetHelper {
 
     private static final String DATABASE_NAME = "MusicGenresDB.db";
     private static final int DATABASE_VERSION = 1;
@@ -66,7 +66,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
 
 
     //The constructor for the DB
-    public MusicGenresDB(Context context){
+    private MusicGenresDB(Context context){
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -85,7 +85,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param context passing context as the param
      * @return returns an instance of the DB
      */
-    public static MusicGenresDB getInstance(Context context){
+    static MusicGenresDB getInstance(Context context){
         if(instance == null){
             instance = new MusicGenresDB(context);
         }
@@ -97,7 +97,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param genreID the unique ID of the Genre
      * @return returns an object of type Genre
      */
-    public Genre getGenre(int genreID){
+    Genre getGenre(int genreID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " +
@@ -110,11 +110,52 @@ public class MusicGenresDB extends SQLiteAssetHelper {
     }
 
     /**
+     * A method for getting a Genre from the DB based on the genreName
+     * @param genreName a String name of the Genre
+     * @return returns an object of type Genre
+     */
+    Genre getGenreByName(String genreName){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " +
+                        GENRE_GENRE_NAME + " = '" + genreName + "';";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        int genreID  = c.getInt(c.getColumnIndex(GENRE_GENRE_ID));
+        c.close();
+        return new Genre(genreID, genreName);
+    }
+
+    /**
+     * A method for getting every genre in the DB
+     * @return returns an array of type Genre
+     */
+    Genre[] getAllGenres(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + GENRE_TABLE_NAME + ";";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null){
+            c.moveToFirst();
+            Genre[] genres = new Genre[c.getCount()];
+            for (int i = 0; i < genres.length; i++) {
+                int genreID = c.getInt(c.getColumnIndex(GENRE_GENRE_ID));
+                String genreName = c.getString(c.getColumnIndex(GENRE_GENRE_NAME));
+                genres[i] = new Genre(genreID, genreName);
+                c.moveToNext();
+            }
+            c.close();
+            return genres;
+        }
+        return null;
+    }
+
+    /**
      * A method for getting every Genre beginning with a particular letter
      * @param letter a letter of type char
      * @return returns an array of Genres beginning with @param letter
      */
-    public Genre[] getGenreByLetter(char letter){
+    Genre[] getGenreByLetter(char letter){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " +
@@ -140,7 +181,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param cityID the unique ID of the City
      * @return returns an object of type City
      */
-    public City getCity(int cityID){
+    City getCity(int cityID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " +
@@ -153,11 +194,28 @@ public class MusicGenresDB extends SQLiteAssetHelper {
     }
 
     /**
+     * A method for getting a City from the DB based on the city name
+     * @param cityName the name of the City
+     * @return returns an object of type City
+     */
+    City getCityByName(String cityName){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " +
+                        CITY_CITY_NAME + " = '" + cityName + "';";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        int cityID = c.getInt(c.getColumnIndex(CITY_CITY_ID));
+        c.close();
+        return new City(cityID, cityName);
+    }
+
+    /**
      * A method for getting every City beginning with a particular letter
      * @param letter a letter of type char
      * @return returns an array of Cities beginning with @param letter
      */
-    public City[] getCityByLetter(char letter){
+    City[] getCityByLetter(char letter){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " +
@@ -182,7 +240,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * A method for getting every city in the DB
      * @return returns an array of type City
      */
-    public City[] getAllCities(){
+    City[] getAllCities(){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + CITY_TABLE_NAME + ";";
@@ -208,7 +266,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param cityID the unique ID of the City
      * @return returns the total number of genres as an int
      */
-    public int getNumGenresByCity(int cityID){
+    int getNumGenresByCity(int cityID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + GENRE_CITY_TABLE_NAME + " WHERE " +
@@ -226,7 +284,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param countryID the unique ID of the Country
      * @return returns the total number of genres as an int
      */
-    public int getNumGenresByCountry(int countryID){
+    int getNumGenresByCountry(int countryID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + GENRE_COUNTRY_TABLE_NAME + " WHERE " +
@@ -238,7 +296,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
         return numGenres;
     }
 
-    public int getNumPlaylistsByStreamingService(int serviceID){
+    int getNumPlaylistsByStreamingService(int serviceID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + PLAYLIST_TABLE_NAME + " WHERE " +
@@ -255,7 +313,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param countryID the unique ID of the Country
      * @return returns an object of type Country
      */
-    public Country getCountry(int countryID){
+    Country getCountry(int countryID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
@@ -268,11 +326,28 @@ public class MusicGenresDB extends SQLiteAssetHelper {
     }
 
     /**
+     * A method for getting a Country from the DB based on the countryID
+     * @param countryName the unique ID of the Country
+     * @return returns an object of type Country
+     */
+    Country getCountryByName(String countryName){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
+                        COUNTRY_COUNTRY_NAME + " = '" + countryName + "';";
+        Cursor c = db.rawQuery(query, null);
+        c.moveToFirst();
+        int countryID = c.getInt(c.getColumnIndex(COUNTRY_COUNTRY_ID));
+        c.close();
+        return new Country(countryID, countryName);
+    }
+
+    /**
      * A method for getting every City beginning with a particular letter
      * @param letter a letter of type char
      * @return returns an array of Cities beginning with @param letter
      */
-    public Country[] getCountryByLetter(char letter){
+    Country[] getCountryByLetter(char letter){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
@@ -297,7 +372,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * A method for getting every country in the DB
      * @return returns an array of type Country
      */
-    public Country[] getAllCountries(){
+    Country[] getAllCountries(){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + COUNTRY_TABLE_NAME + ";";
@@ -322,7 +397,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param playlistID the unique ID of the Playlist
      * @return returns an object of type Playlist
      */
-    public Playlist getPlaylist(int playlistID){
+    Playlist getPlaylist(int playlistID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + PLAYLIST_TABLE_NAME + " WHERE " +
@@ -341,7 +416,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param streamingServiceID the unique ID of the StreamingService
      * @return returns an object of type StreamingService
      */
-    public StreamingService getStreamingService(int streamingServiceID){
+    StreamingService getStreamingService(int streamingServiceID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + STREAMING_SERVICE_TABLE_NAME + " WHERE " +
@@ -357,7 +432,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * A method for getting all Streaming Services
      * @return returns an array of type StreamingService
      */
-    public StreamingService[] getAllStreamingServices(){
+    StreamingService[] getAllStreamingServices(){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + STREAMING_SERVICE_TABLE_NAME  + ";";
@@ -382,7 +457,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param genreID the unique ID of the Genre we are searching with
      * @return returns an array of Playlists
      */
-    public Playlist[] getPlaylistByGenre(int genreID){
+    Playlist[] getPlaylistByGenre(int genreID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT " + GENRE_PLAYLIST_PLAYLIST_ID + " FROM " + GENRE_PLAYLIST_TABLE_NAME +
@@ -408,7 +483,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param serviceID the unique ID of the Streaming Service we are searching with
      * @return returns an array of Playlists
      */
-    public Playlist[] getPlaylistByStreamingService(int serviceID){
+    Playlist[] getPlaylistByStreamingService(int serviceID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + PLAYLIST_TABLE_NAME +
@@ -435,7 +510,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param playlistID the unique ID of the Playlist we are searching with
      * @return returns an array of Genres
      */
-    public Genre[] getGenreByPlaylist(int playlistID){
+    Genre[] getGenreByPlaylist(int playlistID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT " + GENRE_PLAYLIST_GENRE_ID + " FROM " + GENRE_PLAYLIST_TABLE_NAME +
@@ -461,7 +536,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param cityID the unique ID of the City we are searching with
      * @return returns an array of Genres
      */
-    public Genre[] getGenreByCity(int cityID){
+    Genre[] getGenreByCity(int cityID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT " + GENRE_CITY_GENRE_ID + " FROM " + GENRE_CITY_TABLE_NAME +
@@ -487,7 +562,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param countryID the unique ID of the Country we are searching with
      * @return returns an array of Genres
      */
-    public Genre[] getGenreByCountry(int countryID){
+    Genre[] getGenreByCountry(int countryID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT " + GENRE_COUNTRY_GENRE_ID + " FROM " + GENRE_COUNTRY_TABLE_NAME +
@@ -513,7 +588,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param genreID the unique ID of the genre we are searching with
      * @return returns an array of City objects
      */
-    public City[] getCitiesOfInfluence(int genreID){
+    City[] getCitiesOfInfluence(int genreID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT " + GENRE_CITY_CITY_ID + " FROM " + GENRE_CITY_TABLE_NAME +
@@ -539,7 +614,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param genreID the unique ID of the genre we are searching with
      * @return returns an array of Country objects
      */
-    public Country[] getCountriesOfInfluence(int genreID){
+    Country[] getCountriesOfInfluence(int genreID){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT " + GENRE_COUNTRY_COUNTRY_ID + " FROM " + GENRE_COUNTRY_TABLE_NAME +
@@ -564,7 +639,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param searchTerm the search term the user entered
      * @return returns an array of Genres
      */
-    public Genre[] getGenreBySearchTerm(String searchTerm){
+    Genre[] getGenreBySearchTerm(String searchTerm){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " + GENRE_GENRE_NAME +
@@ -590,7 +665,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param searchTerm the search term the user entered
      * @return returns an array of Playlist
      */
-    public Playlist[] getPlaylistBySearchTerm(String searchTerm){
+    Playlist[] getPlaylistBySearchTerm(String searchTerm){
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + PLAYLIST_TABLE_NAME + " WHERE " + PLAYLIST_PLAYLIST_NAME +
@@ -622,7 +697,7 @@ public class MusicGenresDB extends SQLiteAssetHelper {
      * @param genresArray a array of genres
      * @return returns the sorted array
      */
-    public Genre[] sortGenresAtoZ(Genre[] genresArray){
+    Genre[] sortGenresAtoZ(Genre[] genresArray){
 
         String[] namesArray = new String[genresArray.length];
         for (int i = 0; i < genresArray.length; i++) {
@@ -638,16 +713,99 @@ public class MusicGenresDB extends SQLiteAssetHelper {
             }
             sortedGenresArray[i] = genresArray[count];
         }
-
         return sortedGenresArray;
     }
 
-    public void addGenre(Genre genre){
+    /**
+     * A method for adding a new Genre to the database
+     * @param genre A Genre object parameter
+     */
+    void addGenre(Genre genre){
         SQLiteDatabase db = this.getWritableDatabase();
-        String insert = "INSERT INTO Genre (GenreName) VALUES (" + genre.getmGenreName() + ");";
-
+        String insert = "INSERT INTO "+ GENRE_TABLE_NAME + " (" + GENRE_GENRE_NAME +
+                ") VALUES ('" + genre.getmGenreName() + "');";
         db.execSQL(insert);
+        db.close();
+    }
 
+    /**
+     * A method for adding a new City to the database
+     * @param city A City object parameter
+     */
+    void addCity(City city){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String insert = "INSERT INTO "+ CITY_TABLE_NAME + " (" + CITY_CITY_NAME +
+                ") VALUES ('" + city.getmCityName() + "');";
+        db.execSQL(insert);
+        db.close();
+    }
+
+    /**
+     * A method for adding a new Country to the database
+     * @param country A Country object parameter
+     */
+    void addCountry(Country country){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String insert = "INSERT INTO "+ COUNTRY_TABLE_NAME + " (" + COUNTRY_COUNTRY_NAME +
+                ") VALUES ('" + country.getmCountryName() + "');";
+        db.execSQL(insert);
+        db.close();
+    }
+
+    /**
+     * A method for adding a new Playlist to the database
+     * @param playlist A Playlist object parameter
+     */
+    void addPlaylist(Playlist playlist){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String insert = "INSERT INTO "+ PLAYLIST_TABLE_NAME + " (" + PLAYLIST_PLAYLIST_NAME +
+                ", " + PLAYLIST_STREAMING_SERVICE_ID + ", " + PLAYLIST_LINK + ") VALUES ('" +
+                playlist.getmPlaylistName() + "', " + playlist.getmStreamingServiceID() + ", '" +
+                playlist.getmLink() + "');";
+        db.execSQL(insert);
+        db.close();
+    }
+
+    /**
+     * A method for adding a genre to a playlist
+     * @param genre A Genre object parameter
+     * @param playlist A playlist object parameter
+     */
+    void addGenreToPlaylist(Genre genre, Playlist playlist){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String insert = "INSERT INTO "+ GENRE_PLAYLIST_TABLE_NAME + " (" + GENRE_PLAYLIST_GENRE_ID +
+                ", " + GENRE_PLAYLIST_PLAYLIST_ID + ") VALUES (" +
+                genre.getmGenreID() + ", " + playlist.getmPlaylistID() + ");";
+        db.execSQL(insert);
+        db.close();
+    }
+
+    /**
+     * A method for adding a genre to a city
+     * @param genre A Genre object parameter
+     * @param city A City object parameter
+     */
+    void addGenreToCity(Genre genre, City city){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String insert = "INSERT INTO "+ GENRE_CITY_TABLE_NAME + " (" + GENRE_CITY_GENRE_ID +
+                ", " + GENRE_CITY_CITY_ID + ") VALUES (" +
+                genre.getmGenreID() + ", " + city.getmCityID() + ");";
+        db.execSQL(insert);
+        db.close();
+    }
+
+    /**
+     * A method for adding a genre to a Country
+     * @param genre A Genre object parameter
+     * @param country A Country object parameter
+     */
+    void addGenreToCountry(Genre genre, Country country){
+        SQLiteDatabase db = this.getWritableDatabase();
+        String insert = "INSERT INTO "+ GENRE_COUNTRY_TABLE_NAME + " (" + GENRE_COUNTRY_GENRE_ID +
+                ", " + GENRE_COUNTRY_COUNTRY_ID + ") VALUES (" +
+                genre.getmGenreID() + ", " + country.getmCountryID() + ");";
+        db.execSQL(insert);
+        db.close();
     }
 
 

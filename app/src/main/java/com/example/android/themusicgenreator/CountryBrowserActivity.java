@@ -73,7 +73,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
         });
 
         if(inCountry != null){
-            spinner.setSelection(inCountry.getmCountryID()-1);
+            spinner.setSelection(inCountry.getmCountryID() - 1);
         }
     }
 
@@ -103,7 +103,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
 private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
     private final ThemedSpinnerAdapter.Helper mDropDownHelper;
 
-    public MyAdapter(Context context, String[] objects) {
+    MyAdapter(Context context, String[] objects) {
         super(context, android.R.layout.simple_list_item_1, objects);
         mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
     }

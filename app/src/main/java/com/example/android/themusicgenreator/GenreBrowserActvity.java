@@ -137,6 +137,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
             //The appropriate onClickListeners will be set below in each tab.
             FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_genres);
 
+
             //Get the style for styling the textviews that will be added like lists.
             ContextThemeWrapper listItemStyle =
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
@@ -174,9 +175,9 @@ public class GenreBrowserActvity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

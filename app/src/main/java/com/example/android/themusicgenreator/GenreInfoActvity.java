@@ -1,5 +1,7 @@
 package com.example.android.themusicgenreator;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -8,13 +10,21 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -51,6 +61,7 @@ public class GenreInfoActvity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_genre_info);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle(inGenre.getmGenreName());
+        getSupportActionBar().setHomeButtonEnabled(true);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -95,16 +106,78 @@ public class GenreInfoActvity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.genre_info_fragment, container, false);
 
             //Create array lists of each related playlist, city and country to the genre.
-            Playlist[] playlistsArray = musicGenresDB.getPlaylistByGenre(inGenre.getmGenreID());
+            final Playlist[] playlistsArray = musicGenresDB.getPlaylistByGenre(inGenre.getmGenreID());
             City[] citiesArray = musicGenresDB.getCitiesOfInfluence(inGenre.getmGenreID());
-            Country[] countriesArray = musicGenresDB.getCountriesOfInfluence(inGenre.getmGenreID());
+            final Country[] countriesArray = musicGenresDB.getCountriesOfInfluence(inGenre.getmGenreID());
 
             //Get the LinearLayout inside the scrollview for adding all the lists.
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.genre_info_scroller);
 
             //Get the floating action button that we will use to add records to the database.
-            //The appropriate onClickListeners will be set below in each tab.
-            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_genres_info);
+            //Use onClickListener to open a custom Dialog
+            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_genres_info);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.add_items_to_genres_dialog);
+                    String str = getResources().getString(R.string.add_items_dialog_title);
+                    SpannableString dialogTitle = new SpannableString(str);
+                    dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
+                            R.color.browse_buttons_text_color)), 0, str.length(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    dialog.setTitle(dialogTitle);
+                    dialog.getWindow().setBackgroundDrawableResource(R.color.browse_genre_button_color);
+                    TextView headerText = (TextView) dialog.findViewById(R.id.add_items_to_genres_dialog_header);
+                    headerText.setText(getString(R.string.add_items_dialog_header, inGenre.getmGenreName()));
+
+                    //Set an adapter for the AutoCompleteTextView, displaying all the cities
+                    final City[] allCities = musicGenresDB.getAllCities();
+                    String[] cityNames = new String[allCities.length];
+                    for (int i = 0; i < allCities.length; i++) {
+                        cityNames[i] = allCities[i].getmCityName();
+                    }
+                    ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, cityNames);
+                    final AutoCompleteTextView addCityAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_city);
+                    addCityAutoComplete.setThreshold(1);
+                    addCityAutoComplete.setAdapter(cityAdapter);
+
+                    addCityAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            City addedCity = musicGenresDB.getCityByName(addCityAutoComplete.getText().toString());
+                            musicGenresDB.addGenreToCity(inGenre, addedCity);
+                            InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+
+                        }
+                    });
+
+                    //Set an adapter for the AutoCompleteTextView, displaying all the cities
+                    Country[] allCountries = musicGenresDB.getAllCountries();
+                    String[] countryNames = new String[allCountries.length];
+                    for (int i = 0; i < allCountries.length; i++) {
+                        countryNames[i] = allCountries[i].getmCountryName();
+                    }
+                    ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, countryNames);
+                    final AutoCompleteTextView addCountryAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_country);
+                    addCountryAutoComplete.setThreshold(1);
+                    addCountryAutoComplete.setAdapter(countryAdapter);
+
+                    addCountryAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Country addedCountry = musicGenresDB.getCountryByName(addCountryAutoComplete.getText().toString());
+                            musicGenresDB.addGenreToCountry(inGenre, addedCountry);
+                            InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+
+                        }
+                    });
+
+                    dialog.show();
+                }
+            });
 
             //Get the two styles for styling the textviews that will be added like lists.
             ContextThemeWrapper listItemStyle =
@@ -133,18 +206,11 @@ public class GenreInfoActvity extends AppCompatActivity {
                         scroller.addView(tv);
                     }
 
-                    if(playlistsArray.length == 0){
+                    if(playlistsArray.length == 0) {
                         TextView tv = new TextView(listItemStyle);
                         tv.setText(getString(R.string.browse_playlists_none));
                         scroller.addView(tv);
                     }
-
-                    /*fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    });*/
 
                     //A blank text view to ensure no views are cut off the end of the screen
                     TextView tv = new TextView(listItemStyle);
@@ -177,13 +243,6 @@ public class GenreInfoActvity extends AppCompatActivity {
                         scroller.addView(tv1);
                     }
 
-                    /*fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    });*/
-
                     //A blank text view to ensure no views are cut off the end of the screen
                     TextView tv1 = new TextView(listItemStyle);
                     scroller.addView(tv1);
@@ -215,13 +274,6 @@ public class GenreInfoActvity extends AppCompatActivity {
                         scroller.addView(tv2);
                     }
 
-                    /*fab.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    });*/
-
                     //A blank text view to ensure no views are cut off the end of the screen
                     TextView tv2 = new TextView(listItemStyle);
                     scroller.addView(tv2);
@@ -235,9 +287,9 @@ public class GenreInfoActvity extends AppCompatActivity {
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
-    public class SectionsPagerAdapter extends FragmentPagerAdapter {
+    private class SectionsPagerAdapter extends FragmentPagerAdapter {
 
-        public SectionsPagerAdapter(FragmentManager fm) {
+        SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }
 

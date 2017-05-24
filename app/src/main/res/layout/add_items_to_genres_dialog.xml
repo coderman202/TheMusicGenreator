@@ -1,0 +1,25 @@
+<LinearLayout style="@style/FragmentLayoutStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/add_items_dialog"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <TextView style="@style/WelcomeMessageStyle"
+        android:id="@+id/add_items_to_genres_dialog_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top|center"/>
+
+    <AutoCompleteTextView style="@style/WelcomeMessageStyle"
+        android:id="@+id/add_city"
+        android:hint="@string/add_cities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <AutoCompleteTextView style="@style/WelcomeMessageStyle"
+        android:id="@+id/add_country"
+        android:hint="@string/add_country"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

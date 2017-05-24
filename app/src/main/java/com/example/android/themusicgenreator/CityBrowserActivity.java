@@ -47,7 +47,6 @@ public class CityBrowserActivity extends AppCompatActivity {
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
         toolbar.setOverflowIcon(searchIcon);
 
-
         City[] citiesArray = musicGenresDB.getAllCities();
         String [] cityNames = new String[citiesArray.length];
 
@@ -76,7 +75,7 @@ public class CityBrowserActivity extends AppCompatActivity {
         });
 
         if(inCity != null){
-            spinner.setSelection(inCity.getmCityID()-1);
+            spinner.setSelection(inCity.getmCityID() - 1);
         }
     }
 
@@ -106,7 +105,7 @@ public class CityBrowserActivity extends AppCompatActivity {
     private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
         private final ThemedSpinnerAdapter.Helper mDropDownHelper;
 
-        public MyAdapter(Context context, String[] objects) {
+        MyAdapter(Context context, String[] objects) {
             super(context, android.R.layout.simple_list_item_1, objects);
             mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
         }
@@ -181,6 +180,48 @@ public class CityBrowserActivity extends AppCompatActivity {
             //Get the floating action button that we will use to add records to the database.
             //The appropriate onClickListeners will be set below in each tab.
             FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_cities);
+
+            /*fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Dialog dialog = new Dialog(getContext());
+                    dialog.setContentView(R.layout.add_items_to_cities_dialog);
+                    String str = getResources().getString(R.string.add_items_dialog_title);
+                    SpannableString dialogTitle = new SpannableString(str);
+                    dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
+                            R.color.browse_buttons_text_color)), 0, str.length(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    dialog.setTitle(dialogTitle);
+                    dialog.getWindow().setBackgroundDrawableResource(R.color.browse_cities_button_color);
+                    TextView headerText = (TextView) dialog.findViewById(R.id.add_items_to_cities_dialog_header);
+                    headerText.setText(getString(R.string.add_items_dialog_header, inCity.getmCityName()));
+
+                    //Set an adapter for the AutoCompleteTextView, displaying all the cities
+                    final Genre[] allGenres = musicGenresDB.getAllGenres();
+                    String[] genreNames = new String[allGenres.length];
+                    for (int i = 0; i < allGenres.length; i++) {
+                        genreNames[i] = allGenres[i].getmGenreName();
+                    }
+                    ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, genreNames);
+                    final AutoCompleteTextView addGenreAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_genre);
+                    addGenreAutoComplete.setThreshold(1);
+                    addGenreAutoComplete.setAdapter(genreAdapter);
+
+                    addGenreAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Genre addedGenre = musicGenresDB.getGenreByName(addGenreAutoComplete.getText().toString());
+                            musicGenresDB.addGenreToCity(addedGenre, inCity);
+                            InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+
+                        }
+                    });
+
+
+                    dialog.show();
+                }
+            });*/
 
             //Get the style for styling the textviews that will be added like lists.
             ContextThemeWrapper listItemStyle =
