@@ -1,5 +1,6 @@
 package com.example.android.themusicgenreator;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources.Theme;
@@ -9,18 +10,23 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.view.ContextThemeWrapper;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -181,7 +187,7 @@ public class CityBrowserActivity extends AppCompatActivity {
             //The appropriate onClickListeners will be set below in each tab.
             FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_cities);
 
-            /*fab.setOnClickListener(new View.OnClickListener() {
+            fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     final Dialog dialog = new Dialog(getContext());
@@ -221,7 +227,7 @@ public class CityBrowserActivity extends AppCompatActivity {
 
                     dialog.show();
                 }
-            });*/
+            });
 
             //Get the style for styling the textviews that will be added like lists.
             ContextThemeWrapper listItemStyle =
