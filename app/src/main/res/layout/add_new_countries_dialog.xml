@@ -1,19 +1,21 @@
 <LinearLayout style="@style/FragmentLayoutStyle"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/add_items_to_cities_dialog"
+    android:id="@+id/add_new_countries_dialog"
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <TextView style="@style/WelcomeMessageStyle"
-        android:id="@+id/add_items_to_cities_dialog_header"
+        android:id="@+id/add_new_countries_dialog_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center"/>
 
-    <AutoCompleteTextView style="@style/WelcomeMessageStyle"
-        android:id="@+id/add_item_to_city"
-        android:hint="@string/add_genres"
+    <EditText style="@style/WelcomeMessageStyle"
+        android:id="@+id/add_country"
+        android:hint="@string/add_country"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionDone"/>
 
 </LinearLayout>

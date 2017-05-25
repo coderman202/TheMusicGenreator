@@ -1,5 +1,6 @@
 package com.example.android.themusicgenreator;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources.Theme;
@@ -12,18 +13,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.ThemedSpinnerAdapter;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.method.TextKeyListener;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
@@ -177,7 +188,92 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
 
             //Get the floating action button that we will use to add records to the database.
             //The appropriate onClickListeners will be set below in each tab.
-            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_countries);
+            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_countries);
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    final Dialog dialog = new Dialog(getContext());
+                    if(inCountry == null){
+                        dialog.setContentView(R.layout.add_new_countries_dialog);
+                        String str = getResources().getString(R.string.add_country);
+                        SpannableString dialogTitle = new SpannableString(str);
+                        dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
+                                R.color.browse_buttons_text_color)), 0, str.length(),
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        dialog.setTitle(dialogTitle);
+                        dialog.getWindow().setBackgroundDrawableResource(R.color.browse_countries_button_color);
+
+                        EditText addGenre = (EditText) dialog.findViewById(R.id.add_country);
+
+                        addGenre.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                            @Override
+                            public boolean onEditorAction(TextView v, int actionId,
+                                                          KeyEvent event) {
+                                String message = "";
+                                if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                    String newCountry = v.getText().toString();
+                                    if(musicGenresDB.getCountryByName(newCountry) == null){
+                                        musicGenresDB.addCountry(new Country(newCountry));
+                                        message = getString(R.string.added_country, newCountry);
+                                    }
+                                    else{
+                                        message = getString(R.string.not_added_country, newCountry);
+                                    }
+                                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    in.hideSoftInputFromWindow(v.getRootView().getApplicationWindowToken(), 0);
+                                    Toast msg = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+                                    msg.show();
+                                    v.setText("");
+                                    return true;
+                                }
+                                return false;
+                            }
+                        });
+
+                        dialog.show();
+                    }
+                    else{
+                        dialog.setContentView(R.layout.add_items_to_countries_dialog);
+                        String str = getResources().getString(R.string.add_genres);
+                        SpannableString dialogTitle = new SpannableString(str);
+                        dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
+                                R.color.browse_buttons_text_color)), 0, str.length(),
+                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                        dialog.setTitle(dialogTitle);
+                        dialog.getWindow().setBackgroundDrawableResource(R.color.browse_countries_button_color);
+                        TextView headerText = (TextView) dialog.findViewById(R.id.add_items_to_countries_dialog_header);
+                        headerText.setText(getString(R.string.add_items_dialog_header, inCountry.getmCountryName()));
+
+                        //Set an adapter for the AutoCompleteTextView, displaying all the cities
+                        final Country[] allCountries = musicGenresDB.getAllCountries();
+                        String[] countryNames = new String[allCountries.length];
+                        for (int i = 0; i < allCountries.length; i++) {
+                            countryNames[i] = allCountries[i].getmCountryName();
+                        }
+                        ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, countryNames);
+                        final AutoCompleteTextView addCountryAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_item_to_country);
+                        addCountryAutoComplete.setThreshold(1);
+                        addCountryAutoComplete.setAdapter(genreAdapter);
+
+                        addCountryAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                                Genre addedGenre = musicGenresDB.getGenreByName(addCountryAutoComplete.getText().toString());
+                                musicGenresDB.addGenreToCountry(addedGenre, inCountry);
+                                InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+                                TextKeyListener.clear(addCountryAutoComplete.getText());
+
+                            }
+                        });
+
+
+                        dialog.show();
+                    }
+
+                }
+            });
 
             //Get the style for styling the textviews that will be added like lists.
             ContextThemeWrapper listItemStyle =

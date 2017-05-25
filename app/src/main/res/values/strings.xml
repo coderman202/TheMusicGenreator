@@ -57,4 +57,29 @@
     <string name="add_items_dialog_header">
         Add Items To <xliff:g id="city_country_playlist" example="Los Angeles">%1$s</xliff:g>
     </string>
+
+    <string name="added_items">
+        <xliff:g id="city_country_or_ playlist" example="Los Angeles">%1$s</xliff:g>
+        added as area of influence to: <xliff:g id="genre" example="Alternative Rock">%2$s</xliff:g>
+    </string>
+    <string name="added_genre">
+        <xliff:g id="genre" example="Alternative Rock">%1$s</xliff:g> has been added as a new genre
+    </string>
+    <string name="not_added_genre">
+        <xliff:g id="genre" example="Alternative Rock">%1$s</xliff:g> is already in this database
+    </string>
+
+    <string name="added_city">
+        <xliff:g id="city" example="Paris">%1$s</xliff:g> has been added as a new city
+    </string>
+    <string name="not_added_city">
+        <xliff:g id="city" example="London">%1$s</xliff:g> is already in this database
+    </string>
+
+    <string name="added_country">
+        <xliff:g id="country" example="Russia">%1$s</xliff:g> has been added as a new country
+    </string>
+    <string name="not_added_country">
+        <xliff:g id="country" example="Kenya">%1$s</xliff:g> is already in this database
+    </string>
 </resources>

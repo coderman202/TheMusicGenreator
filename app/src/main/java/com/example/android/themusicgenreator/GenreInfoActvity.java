@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,6 +18,7 @@ import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.method.TextKeyListener;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -103,7 +105,7 @@ public class GenreInfoActvity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.genre_info_fragment, container, false);
+            final View rootView = inflater.inflate(R.layout.genre_info_fragment, container, false);
 
             //Create array lists of each related playlist, city and country to the genre.
             final Playlist[] playlistsArray = musicGenresDB.getPlaylistByGenre(inGenre.getmGenreID());
@@ -149,6 +151,9 @@ public class GenreInfoActvity extends AppCompatActivity {
                             musicGenresDB.addGenreToCity(inGenre, addedCity);
                             InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                             in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+                            TextKeyListener.clear(addCityAutoComplete.getText());
+                            Snackbar.make(rootView, getString(R.string.added_items, addedCity.getmCityName(), inGenre.getmGenreName()), Snackbar.LENGTH_LONG).show();
+
 
                         }
                     });
@@ -171,9 +176,12 @@ public class GenreInfoActvity extends AppCompatActivity {
                             musicGenresDB.addGenreToCountry(inGenre, addedCountry);
                             InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                             in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+                            TextKeyListener.clear(addCountryAutoComplete.getText());
+                            Snackbar.make(rootView, getString(R.string.added_items, addedCountry.getmCountryName(), inGenre.getmGenreName()), Snackbar.LENGTH_LONG).show();
 
                         }
                     });
+
 
                     dialog.show();
                 }
