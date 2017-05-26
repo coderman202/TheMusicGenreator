@@ -193,7 +193,7 @@ public class GenreInfoActvity extends AppCompatActivity {
                     for (int i = 0; i < allCities.length; i++) {
                         cityNames[i] = allCities[i].getmCityName();
                     }
-                    ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, cityNames);
+                    ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_list_item_layout, R.id.drop_down_item, cityNames);
                     final AutoCompleteTextView addCityAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_city);
                     addCityAutoComplete.setThreshold(1);
                     addCityAutoComplete.setAdapter(cityAdapter);
@@ -216,7 +216,7 @@ public class GenreInfoActvity extends AppCompatActivity {
                     for (int i = 0; i < allCountries.length; i++) {
                         countryNames[i] = allCountries[i].getmCountryName();
                     }
-                    ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, countryNames);
+                    ArrayAdapter<String> countryAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_list_item_layout, R.id.drop_down_item, countryNames);
                     final AutoCompleteTextView addCountryAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_country);
                     addCountryAutoComplete.setThreshold(1);
                     addCountryAutoComplete.setAdapter(countryAdapter);

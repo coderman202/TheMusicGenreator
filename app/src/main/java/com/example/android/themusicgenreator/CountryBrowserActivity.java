@@ -232,13 +232,13 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
 
                     //First deal with adding a genre to the selected country.
                     // Use an AutocompleteTextView to take the chosen genre and add it to the country.
-                    //Set an adapter for the AutoCompleteTextView, displaying all the countries
-                    final Country[] allCountries = musicGenresDB.getAllCountries();
-                    String[] countryNames = new String[allCountries.length];
-                    for (int i = 0; i < allCountries.length; i++) {
-                        countryNames[i] = allCountries[i].getmCountryName();
+                    //Set an adapter for the AutoCompleteTextView, displaying all the genres
+                    final Genre[] allGenres = musicGenresDB.getAllGenres();
+                    String[] genresNames = new String[allGenres.length];
+                    for (int i = 0; i < allGenres.length; i++) {
+                        genresNames[i] = allGenres[i].getmGenreName();
                     }
-                    ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, countryNames);
+                    ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_list_item_layout, R.id.drop_down_item, genresNames);
                     final AutoCompleteTextView addGenreAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_genre_to_country);
                     addGenreAutoComplete.setThreshold(1);
                     addGenreAutoComplete.setAdapter(genreAdapter);

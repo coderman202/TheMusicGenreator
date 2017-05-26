@@ -238,13 +238,13 @@ public class CityBrowserActivity extends AppCompatActivity {
 
                     //First deal with adding a genre to the selected city.
                     // Use an AutocompleteTextView to take the chosen genre and add it to the city.
-                    //Set an adapter for the AutoCompleteTextView, displaying all the cities
-                    final City[] allCities = musicGenresDB.getAllCities();
-                    String[] cityNames = new String[allCities.length];
-                    for (int i = 0; i < allCities.length; i++) {
-                        cityNames[i] = allCities[i].getmCityName();
+                    //Set an adapter for the AutoCompleteTextView, displaying all the genres
+                    final Genre[] allGenres = musicGenresDB.getAllGenres();
+                    String[] genresNames = new String[allGenres.length];
+                    for (int i = 0; i < allGenres.length; i++) {
+                        genresNames[i] = allGenres[i].getmGenreName();
                     }
-                    ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, cityNames);
+                    ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_list_item_layout, R.id.drop_down_item, genresNames);
                     final AutoCompleteTextView addGenreAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_genre_to_city);
                     addGenreAutoComplete.setThreshold(1);
                     addGenreAutoComplete.setAdapter(genreAdapter);

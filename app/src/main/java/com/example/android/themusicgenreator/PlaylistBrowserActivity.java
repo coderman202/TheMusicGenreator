@@ -186,7 +186,7 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
                 for (int i = 0; i < playlistsArray.length; i++) {
                     playlistNames[i] = playlistsArray[i].getmPlaylistName();
                 }
-                ArrayAdapter<String> playlistsAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, playlistNames);
+                ArrayAdapter<String> playlistsAdapter = new ArrayAdapter<>(getContext(), R.layout.drop_down_list_item_layout, R.id.drop_down_item, playlistNames);
                 searcher.setThreshold(3);
                 searcher.setAdapter(playlistsAdapter);
 
