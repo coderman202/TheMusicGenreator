@@ -1,6 +1,9 @@
 package com.example.android.themusicgenreator;
 
+import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
@@ -14,11 +17,19 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.method.TextKeyListener;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -28,7 +39,9 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
 
 
 
-    private final int NUM_TABS = 7;
+    //Set the number of tabs to be equal to the number of streaming services in the DB, to ensure
+    // each one has their own tab.
+    private final int NUM_TABS = musicGenresDB.getNumStreamingServices();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +67,10 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null){
-            getSupportActionBar().setTitle(R.string.browse_playlists_title);
+            getSupportActionBar().setTitle(R.string.browse_genres_title);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
         }
 
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
@@ -88,13 +104,30 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.search_genres) {
-            return true;
+        switch(id) {
+            case R.id.search_db:
+                final Dialog dialog = new Dialog(getApplicationContext());
+                dialog.setContentView(R.layout.search_db_dialog);
+                //Setting the colour of the dialog title
+                String str = getResources().getString(R.string.search_db);
+                SpannableString dialogTitle = new SpannableString(str);
+                dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(),
+                        R.color.browse_buttons_text_color)), 0, str.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                dialog.setTitle(dialogTitle);
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawableResource
+                            (R.color.browse_genre_button_color);
+                }
+                dialog.show();
+                return true;
+            case android.R.id.home:
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 
@@ -124,9 +157,9 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         }
 
         @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.playlist_browser_fragment, container, false);
+        public View onCreateView(final LayoutInflater inflater, final ViewGroup container,
+                                 final Bundle savedInstanceState) {
+            final View rootView = inflater.inflate(R.layout.playlist_browser_fragment, container, false);
 
             int serviceID = getArguments().getInt(ARG_SECTION_NUMBER);
 
@@ -141,22 +174,49 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
             ContextThemeWrapper listItemStyle =
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
 
+            final AutoCompleteTextView searcher = (AutoCompleteTextView) rootView.findViewById(R.id.playlists_searcher);
             if(playlistsArray == null){
+                searcher.setVisibility(View.GONE);
                 TextView tv = new TextView(listItemStyle);
                 tv.setText(getString(R.string.no_playlists_by_service));
                 scroller.addView(tv);
             }
             else{
+                String[] playlistNames = new String[playlistsArray.length];
+                for (int i = 0; i < playlistsArray.length; i++) {
+                    playlistNames[i] = playlistsArray[i].getmPlaylistName();
+                }
+                ArrayAdapter<String> playlistsAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, playlistNames);
+                searcher.setThreshold(3);
+                searcher.setAdapter(playlistsAdapter);
+
+                searcher.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                        in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+                        TextKeyListener.clear(searcher.getText());
+                        //onCreateView(inflater, container, savedInstanceState);
+                    }
+                });
                 for (final Playlist playlist:playlistsArray) {
                     TextView tv = new TextView(listItemStyle);
                     tv.setText(playlist.getmPlaylistName());
-                    tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.spotify_icon, 0);
+                    tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, musicGenresDB.getStreamingService(playlist.getmStreamingServiceID()).getmIcon(), 0);
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
                             Intent i = new Intent(Intent.ACTION_VIEW,
                                     Uri.parse(playlist.getmLink()));
-                            startActivity(i);
+                            PackageManager pm = getContext().getPackageManager();
+                            if(i.resolveActivity(pm) != null){
+                                startActivity(i);
+                            }
+                            else{
+                                i = new Intent(Intent.ACTION_VIEW,
+                                        Uri.parse(musicGenresDB.getStreamingService(playlist.getmStreamingServiceID()).getmPlayStoreLink()));
+                                startActivity(i);
+                            }
                         }
                     });
                     scroller.addView(tv);

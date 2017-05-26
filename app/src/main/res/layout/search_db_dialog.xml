@@ -1,0 +1,19 @@
+<LinearLayout style="@style/DialogLayoutStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/search_db_dialog"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".GenreBrowserActvity">
+
+    <EditText style="@style/WelcomeMessageStyle"
+        android:id="@+id/search_db"
+        android:hint="@string/search_db"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:drawableStart="@drawable/city_coloured"
+        android:drawableEnd="@drawable/earth_coloured"
+        android:drawableBottom="@drawable/music_coloured"
+        android:drawableTop="@drawable/playlist_play_coloured"/>
+
+</LinearLayout>

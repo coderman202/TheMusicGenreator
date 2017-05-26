@@ -6,6 +6,8 @@
     <string name="search_countries">Search Countries</string>
     <string name="search_playlists">Search Playlists</string>
 
+    <string name="search_db">Search Database</string>
+
     <string name="welcome_message">
         Welcome to the music genre generator, the Music Genreator!
         Browse through over 1500 genres, explore them via playlists.

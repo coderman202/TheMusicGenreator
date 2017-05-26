@@ -46,6 +46,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
 
     private static final String STREAMING_SERVICE_STREAMING_SERVICE_ID = "StreamingServiceID";
     private static final String STREAMING_SERVICE_SERVICE_NAME = "ServiceName";
+    private static final String STREAMING_SERVICE_PLAY_STORE_LINK = "PlayStoreLink";
 
     private static final String PLAYLIST_PLAYLIST_ID = "PlaylistID";
     private static final String PLAYLIST_PLAYLIST_NAME = "PlaylistName";
@@ -78,6 +79,12 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 Log.e("BEEP", "Create database folder failed! BANG!");
             }
         }
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        super.onUpgrade(db, oldVersion, newVersion);
+
     }
 
     /**
@@ -457,8 +464,9 @@ class MusicGenresDB extends SQLiteAssetHelper {
         if(c != null && c.moveToFirst()){
             c.moveToFirst();
             String serviceName = c.getString(c.getColumnIndex(STREAMING_SERVICE_SERVICE_NAME));
+            String playStoreLink = c.getString(c.getColumnIndex(STREAMING_SERVICE_PLAY_STORE_LINK));
             c.close();
-            return new StreamingService(streamingServiceID, serviceName);
+            return new StreamingService(streamingServiceID, serviceName, playStoreLink);
         }
         return null;
     }
@@ -478,13 +486,32 @@ class MusicGenresDB extends SQLiteAssetHelper {
             for (int i = 0; i < services.length; i++) {
                 String serviceName = c.getString(c.getColumnIndex(STREAMING_SERVICE_SERVICE_NAME));
                 int streamingServiceID = c.getInt(c.getColumnIndex(STREAMING_SERVICE_STREAMING_SERVICE_ID));
-                services[i] = new StreamingService(streamingServiceID, serviceName);
+                String playStoreLink = c.getString(c.getColumnIndex(STREAMING_SERVICE_PLAY_STORE_LINK));
+                services[i] = new StreamingService(streamingServiceID, serviceName, playStoreLink);
                 c.moveToNext();
             }
             c.close();
             return services;
         }
         return null;
+    }
+
+    /**
+     * A method for getting the amount of Streaming Services
+     * @return returns an int count of the number of StreamingService
+     */
+    int getNumStreamingServices(){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + STREAMING_SERVICE_TABLE_NAME  + ";";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null && c.moveToFirst()) {
+            c.moveToFirst();
+            int numServices = c.getCount();
+            c.close();
+            return numServices;
+        }
+        return 0;
     }
 
     /**

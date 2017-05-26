@@ -54,13 +54,14 @@ public class CityBrowserActivity extends AppCompatActivity {
             inCity = musicGenresDB.getCity(1);
             Log.d("cityname", inCity.getmCityName());
         }
-
-
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_cities);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null){
-            getSupportActionBar().setTitle(R.string.browse_cities_title);
+            getSupportActionBar().setTitle(R.string.browse_genres_title);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
         }
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
         toolbar.setOverflowIcon(searchIcon);
@@ -113,13 +114,30 @@ public class CityBrowserActivity extends AppCompatActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.search_genres) {
-            return true;
+        switch(id) {
+            case R.id.search_db:
+                final Dialog dialog = new Dialog(getApplicationContext());
+                dialog.setContentView(R.layout.search_db_dialog);
+                //Setting the colour of the dialog title
+                String str = getResources().getString(R.string.search_db);
+                SpannableString dialogTitle = new SpannableString(str);
+                dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(),
+                        R.color.browse_buttons_text_color)), 0, str.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                dialog.setTitle(dialogTitle);
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawableResource
+                            (R.color.browse_genre_button_color);
+                }
+                dialog.show();
+                return true;
+            case android.R.id.home:
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+                return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

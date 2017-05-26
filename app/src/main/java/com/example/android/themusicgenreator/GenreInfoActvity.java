@@ -3,6 +3,7 @@ package com.example.android.themusicgenreator;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -20,6 +21,8 @@ import android.text.SpannableString;
 import android.text.method.TextKeyListener;
 import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -65,10 +68,13 @@ public class GenreInfoActvity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_genre_info);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null){
-            getSupportActionBar().setTitle(inGenre.getmGenreName());
+            getSupportActionBar().setTitle(R.string.browse_genres_title);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
         }
-
-        getSupportActionBar().setHomeButtonEnabled(true);
+        Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
+        toolbar.setOverflowIcon(searchIcon);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
@@ -80,6 +86,45 @@ public class GenreInfoActvity extends AppCompatActivity {
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs_genre_info);
         tabLayout.setupWithViewPager(mViewPager);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.browser_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+
+        int id = item.getItemId();
+        switch(id) {
+            case R.id.search_db:
+                final Dialog dialog = new Dialog(getApplicationContext());
+                dialog.setContentView(R.layout.search_db_dialog);
+                //Setting the colour of the dialog title
+                String str = getResources().getString(R.string.search_db);
+                SpannableString dialogTitle = new SpannableString(str);
+                dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(),
+                        R.color.browse_buttons_text_color)), 0, str.length(),
+                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                dialog.setTitle(dialogTitle);
+                if (dialog.getWindow() != null) {
+                    dialog.getWindow().setBackgroundDrawableResource
+                            (R.color.browse_genre_button_color);
+                }
+                dialog.show();
+                return true;
+            case android.R.id.home:
+                Intent i = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(i);
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /**
@@ -281,6 +326,7 @@ public class GenreInfoActvity extends AppCompatActivity {
                             scroller.addView(tv2);
                         }
                     }
+                    break;
             }
             //A blank text view to ensure no views are cut off the end of the screen
             TextView tv = new TextView(listItemStyle);
