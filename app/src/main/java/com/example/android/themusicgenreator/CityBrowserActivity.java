@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources.Theme;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -41,7 +42,7 @@ import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 public class CityBrowserActivity extends AppCompatActivity {
 
 
-    public static City inCity;
+    private static City inCity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +55,9 @@ public class CityBrowserActivity extends AppCompatActivity {
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_cities);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.browse_cities_title);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setTitle(R.string.browse_cities_title);
+        }
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
         toolbar.setOverflowIcon(searchIcon);
 
@@ -122,7 +125,7 @@ public class CityBrowserActivity extends AppCompatActivity {
         }
 
         @Override
-        public View getDropDownView(int position, View convertView, ViewGroup parent) {
+        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
             View view;
 
             if (convertView == null) {
@@ -188,23 +191,27 @@ public class CityBrowserActivity extends AppCompatActivity {
             Genre[] genresArray = musicGenresDB.getGenreByCity(cityID);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.cities_scroller);
 
-            //Get the floating action button that we will use to add records to the database.
-            //The appropriate onClickListeners will be set below in each tab.
-            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_cities);
-
+            //Check if the City object passed via the Intent is null.
+            // If so, show the default dialog window. Else, show the dialog for adding a
+            // genre to the city.
+            FloatingActionButton fab = (FloatingActionButton)
+                    getActivity().findViewById(R.id.fab_cities);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    final Dialog dialog = new Dialog(getContext());
                     if(inCity == null){
-                        final Dialog dialog = new Dialog(getContext());
                         dialog.setContentView(R.layout.add_new_cities_dialog);
+                        //Setting the colour of the dialog title
                         String str = getResources().getString(R.string.add_cities);
                         SpannableString dialogTitle = new SpannableString(str);
                         dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
                                 R.color.browse_buttons_text_color)), 0, str.length(),
                                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         dialog.setTitle(dialogTitle);
-                        dialog.getWindow().setBackgroundDrawableResource(R.color.browse_cities_button_color);
+                        if(dialog.getWindow() != null){
+                            dialog.getWindow().setBackgroundDrawableResource(R.color.browse_cities_button_color);
+                        }
 
                         EditText addGenre = (EditText) dialog.findViewById(R.id.add_city);
 
@@ -212,8 +219,8 @@ public class CityBrowserActivity extends AppCompatActivity {
                             @Override
                             public boolean onEditorAction(TextView v, int actionId,
                                                           KeyEvent event) {
-                                String message = "";
                                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                    String message = "";
                                     String newCity = v.getText().toString();
                                     if(musicGenresDB.getCityByName(newCity) == null){
                                         musicGenresDB.addCity(new City(newCity));
@@ -232,11 +239,8 @@ public class CityBrowserActivity extends AppCompatActivity {
                                 return false;
                             }
                         });
-
-                        dialog.show();
                     }
                     else{
-                        final Dialog dialog = new Dialog(getContext());
                         dialog.setContentView(R.layout.add_items_to_cities_dialog);
                         String str = getResources().getString(R.string.add_genres);
                         SpannableString dialogTitle = new SpannableString(str);
@@ -244,7 +248,9 @@ public class CityBrowserActivity extends AppCompatActivity {
                                 R.color.browse_buttons_text_color)), 0, str.length(),
                                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         dialog.setTitle(dialogTitle);
-                        dialog.getWindow().setBackgroundDrawableResource(R.color.browse_cities_button_color);
+                        if(dialog.getWindow() != null){
+                            dialog.getWindow().setBackgroundDrawableResource(R.color.browse_cities_button_color);
+                        }
                         TextView headerText = (TextView) dialog.findViewById(R.id.add_items_to_cities_dialog_header);
                         headerText.setText(getString(R.string.add_items_dialog_header, inCity.getmCityName()));
 
@@ -267,11 +273,10 @@ public class CityBrowserActivity extends AppCompatActivity {
                                 InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                                 in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
                                 TextKeyListener.clear(addGenreAutoComplete.getText());
-
                             }
                         });
-                        dialog.show();
                     }
+                    dialog.show();
 
                 }
             });

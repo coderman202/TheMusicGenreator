@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Resources.Theme;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
@@ -40,7 +41,7 @@ import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
 public class CountryBrowserActivity extends AppCompatActivity {
 
-    public static Country inCountry;
+    private static Country inCountry;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +53,9 @@ public class CountryBrowserActivity extends AppCompatActivity {
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_countries);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.browse_countries_title);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setTitle(R.string.browse_countries_title);
+        }
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
         toolbar.setOverflowIcon(searchIcon);
 
@@ -120,7 +123,7 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
     }
 
     @Override
-    public View getDropDownView(int position, View convertView, ViewGroup parent) {
+    public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
         View view;
 
         if (convertView == null) {
@@ -186,23 +189,33 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
             Genre[] genresArray = musicGenresDB.getGenreByCountry(countryID);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.countries_scroller);
 
-            //Get the floating action button that we will use to add records to the database.
-            //The appropriate onClickListeners will be set below in each tab.
-            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_countries);
-
+            /*
+             * Get the floating action button that we will use to add records to the database.
+             * Set an onlicklistener to open a dialog for adding new countries, or current
+             * genres to a country
+             */
+            FloatingActionButton fab = (FloatingActionButton)
+                    getActivity().findViewById(R.id.fab_countries);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     final Dialog dialog = new Dialog(getContext());
+                    //Check if the Country object passed via the Intent is null.
+                    // If so, show the default dialog window. Else, show the dialog for adding a
+                    // genre to the country.
                     if(inCountry == null){
                         dialog.setContentView(R.layout.add_new_countries_dialog);
+                        //Setting the colour of the dialog title
                         String str = getResources().getString(R.string.add_country);
                         SpannableString dialogTitle = new SpannableString(str);
                         dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
                                 R.color.browse_buttons_text_color)), 0, str.length(),
                                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         dialog.setTitle(dialogTitle);
-                        dialog.getWindow().setBackgroundDrawableResource(R.color.browse_countries_button_color);
+                        if(dialog.getWindow() != null){
+                            dialog.getWindow().setBackgroundDrawableResource
+                                    (R.color.browse_countries_button_color);
+                        }
 
                         EditText addGenre = (EditText) dialog.findViewById(R.id.add_country);
 
@@ -210,8 +223,8 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
                             @Override
                             public boolean onEditorAction(TextView v, int actionId,
                                                           KeyEvent event) {
-                                String message = "";
                                 if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                    String message = "";
                                     String newCountry = v.getText().toString();
                                     if(musicGenresDB.getCountryByName(newCountry) == null){
                                         musicGenresDB.addCountry(new Country(newCountry));
@@ -220,9 +233,13 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
                                     else{
                                         message = getString(R.string.not_added_country, newCountry);
                                     }
-                                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    in.hideSoftInputFromWindow(v.getRootView().getApplicationWindowToken(), 0);
-                                    Toast msg = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+                                    InputMethodManager in = (InputMethodManager) getContext().
+                                            getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    in.hideSoftInputFromWindow(v.getRootView().
+                                            getApplicationWindowToken(), 0);
+
+                                    Toast msg = Toast.makeText
+                                            (getContext(), message, Toast.LENGTH_LONG);
                                     msg.show();
                                     v.setText("");
                                     return true;
@@ -230,8 +247,6 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
                                 return false;
                             }
                         });
-
-                        dialog.show();
                     }
                     else{
                         dialog.setContentView(R.layout.add_items_to_countries_dialog);
@@ -241,8 +256,13 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
                                 R.color.browse_buttons_text_color)), 0, str.length(),
                                 Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                         dialog.setTitle(dialogTitle);
-                        dialog.getWindow().setBackgroundDrawableResource(R.color.browse_countries_button_color);
-                        TextView headerText = (TextView) dialog.findViewById(R.id.add_items_to_countries_dialog_header);
+                        if(dialog.getWindow() != null){
+                            dialog.getWindow().setBackgroundDrawableResource
+                                    (R.color.browse_countries_button_color);
+                        }
+                        TextView headerText = (TextView) dialog.findViewById
+                                (R.id.add_items_to_countries_dialog_header);
+
                         headerText.setText(getString(R.string.add_items_dialog_header, inCountry.getmCountryName()));
 
                         //Set an adapter for the AutoCompleteTextView, displaying all the cities
@@ -251,26 +271,32 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
                         for (int i = 0; i < allCountries.length; i++) {
                             countryNames[i] = allCountries[i].getmCountryName();
                         }
-                        ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, countryNames);
-                        final AutoCompleteTextView addCountryAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_item_to_country);
+                        ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(),
+                                android.R.layout.select_dialog_singlechoice, countryNames);
+
+                        final AutoCompleteTextView addCountryAutoComplete =
+                                (AutoCompleteTextView) dialog.findViewById(R.id.add_item_to_country);
+
                         addCountryAutoComplete.setThreshold(1);
                         addCountryAutoComplete.setAdapter(genreAdapter);
 
                         addCountryAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                             @Override
                             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Genre addedGenre = musicGenresDB.getGenreByName(addCountryAutoComplete.getText().toString());
+                                Genre addedGenre = musicGenresDB.getGenreByName
+                                        (addCountryAutoComplete.getText().toString());
+
                                 musicGenresDB.addGenreToCountry(addedGenre, inCountry);
-                                InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                InputMethodManager in = (InputMethodManager) getContext().
+                                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
                                 in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
                                 TextKeyListener.clear(addCountryAutoComplete.getText());
 
                             }
                         });
-
-
-                        dialog.show();
                     }
+                    dialog.show();
 
                 }
             });

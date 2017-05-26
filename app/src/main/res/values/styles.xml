@@ -19,6 +19,11 @@
         <item name="android:background">@color/background_color</item>
     </style>
 
+    <style name="DialogLayoutStyle" parent="FragmentLayoutStyle">
+        <item name="android:fitsSystemWindows">true</item>
+        <item name="android:orientation">vertical</item>
+    </style>
+
     <style name="BrowseLayoutStyle">
         <item name="android:orientation">vertical</item>
         <item name="android:layout_width">0dp</item>
@@ -56,19 +61,6 @@
 
     <style name="ListHeaderStyle" parent="WelcomeMessageStyle">
         <item name="android:textSize">@dimen/list_header_text_size</item>
-    </style>
-
-    <style name="AddItemButtonStyle">
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:textSize">@dimen/list_item_text_size</item>
-        <item name="android:textColor">@color/browse_buttons_text_color</item>
-        <item name="android:paddingEnd">@dimen/add_button_side_padding</item>
-        <item name="android:paddingStart">@dimen/add_button_side_padding</item>
-    </style>
-
-    <style name="MenuItemStyle">
-        <item name="android:textColor">@color/browse_genre_button_color</item>
     </style>
 
 </resources>

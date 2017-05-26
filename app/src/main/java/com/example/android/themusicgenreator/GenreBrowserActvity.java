@@ -31,35 +31,41 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import static android.R.id.message;
 import static com.example.android.themusicgenreator.MainActivity.letters;
 import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
 public class GenreBrowserActvity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_browser);
 
+        /*
+         * The {@link android.support.v4.view.PagerAdapter} that will provide
+         * fragments for each of the sections. We use a
+         * {@link FragmentPagerAdapter} derivative, which will keep every
+         * loaded fragment in memory. If this becomes too memory intensive, it
+         * may be best to switch to a
+         * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+         */
+        SectionsPagerAdapter mSectionsPagerAdapter;
+
+        /*
+         * The {@link ViewPager} that will host the section contents.
+         */
+        ViewPager mViewPager;
+
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_genres);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(R.string.browse_genres_title);
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setTitle(R.string.browse_genres_title);
+        }
+
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
         toolbar.setOverflowIcon(searchIcon);
 
@@ -152,13 +158,17 @@ public class GenreBrowserActvity extends AppCompatActivity {
                 public void onClick(View view) {
                     final Dialog dialog = new Dialog(getContext());
                     dialog.setContentView(R.layout.add_new_genres_dialog);
+                    //Setting the colour of the dialog title
                     String str = getResources().getString(R.string.add_items_dialog_title);
                     SpannableString dialogTitle = new SpannableString(str);
                     dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
                             R.color.browse_buttons_text_color)), 0, str.length(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     dialog.setTitle(dialogTitle);
-                    dialog.getWindow().setBackgroundDrawableResource(R.color.browse_genre_button_color);
+                    if(dialog.getWindow() != null){
+                        dialog.getWindow().setBackgroundDrawableResource
+                                (R.color.browse_genre_button_color);
+                    }
 
                     EditText addGenre = (EditText) dialog.findViewById(R.id.add_genre);
 
@@ -166,8 +176,8 @@ public class GenreBrowserActvity extends AppCompatActivity {
                         @Override
                         public boolean onEditorAction(TextView v, int actionId,
                                                       KeyEvent event) {
-                            String message = "";
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                String message = "";
                                 String newGenre = v.getText().toString();
                                 if(musicGenresDB.getGenreByName(newGenre) == null){
                                     musicGenresDB.addGenre(new Genre(newGenre));

@@ -34,35 +34,40 @@ import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
 public class GenreInfoActvity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
 
     //A Genre variable to store the genre object passed via the Intent.
-    public static Genre inGenre;
+    private static Genre inGenre;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_genre_info);
 
+        /*
+         * The {@link android.support.v4.view.PagerAdapter} that will provide
+         * fragments for each of the sections. We use a
+         * {@link FragmentPagerAdapter} derivative, which will keep every
+         * loaded fragment in memory. If this becomes too memory intensive, it
+         * may be best to switch to a
+         * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+         */
+        SectionsPagerAdapter mSectionsPagerAdapter;
+
+        /*
+         * The {@link ViewPager} that will host the section contents.
+         */
+        ViewPager mViewPager;
+
         //Getting the genre object from the Intent. Use it to set the title of the ActionBar.
         inGenre = getIntent().getParcelableExtra("PASSED_GENRE");
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_genre_info);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle(inGenre.getmGenreName());
+        if(getSupportActionBar() != null){
+            getSupportActionBar().setTitle(inGenre.getmGenreName());
+        }
+
         getSupportActionBar().setHomeButtonEnabled(true);
 
         // Create the adapter that will return a fragment for each of the three
@@ -123,13 +128,17 @@ public class GenreInfoActvity extends AppCompatActivity {
                 public void onClick(View view) {
                     final Dialog dialog = new Dialog(getContext());
                     dialog.setContentView(R.layout.add_items_to_genres_dialog);
+                    //Setting the colour of the dialog title
                     String str = getResources().getString(R.string.add_items_dialog_title);
                     SpannableString dialogTitle = new SpannableString(str);
                     dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
                             R.color.browse_buttons_text_color)), 0, str.length(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     dialog.setTitle(dialogTitle);
-                    dialog.getWindow().setBackgroundDrawableResource(R.color.browse_genre_button_color);
+                    if(dialog.getWindow() != null){
+                        dialog.getWindow().setBackgroundDrawableResource(R.color.browse_genre_button_color);
+                    }
+
                     TextView headerText = (TextView) dialog.findViewById(R.id.add_items_to_genres_dialog_header);
                     headerText.setText(getString(R.string.add_items_dialog_header, inGenre.getmGenreName()));
 

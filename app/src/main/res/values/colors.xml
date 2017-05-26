@@ -11,12 +11,6 @@
     <color name="browse_countries_button_color">#076400</color>
     <color name="browse_playlists_button_color">#ea1913</color>
 
-    <color name="textview_border_color">#000000</color>
-    <color name="textview_bordered_background">@android:color/transparent</color>
-
-
-
-
     <color name="welcome_message_text_color">#000000</color>
     <color name="browse_buttons_text_color">#ffffff</color>
 </resources>

@@ -9,13 +9,13 @@ import android.widget.LinearLayout;
 public class MainActivity extends AppCompatActivity {
 
     //Declare the 4 LinearLayouts in the activity_main.xml
-    LinearLayout genreBrowseButton, cityBrowseButton, countryBrowseButton, playlistBrowseButton;
+    private LinearLayout genreBrowseButton, cityBrowseButton, countryBrowseButton, playlistBrowseButton;
 
     //My db of musical genres. Accessing it to print all the genres to the screen
     public static MusicGenresDB musicGenresDB;
 
     //A Char Array of letters to be used for the titles of each tab
-    public static char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
+    public final static char[] letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".toCharArray();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
