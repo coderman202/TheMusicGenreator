@@ -103,10 +103,13 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " +
                         GENRE_GENRE_ID + " = " + genreID + ";";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        String genreName = c.getString(c.getColumnIndex(GENRE_GENRE_NAME));
-        c.close();
-        return new Genre(genreID, genreName);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            String genreName = c.getString(c.getColumnIndex(GENRE_GENRE_NAME));
+            c.close();
+            return new Genre(genreID, genreName);
+        }
+        return null;
     }
 
     /**
@@ -120,10 +123,13 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " +
                         GENRE_GENRE_NAME + " = '" + genreName + "';";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        int genreID  = c.getInt(c.getColumnIndex(GENRE_GENRE_ID));
-        c.close();
-        return new Genre(genreID, genreName);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            int genreID  = c.getInt(c.getColumnIndex(GENRE_GENRE_ID));
+            c.close();
+            return new Genre(genreID, genreName);
+        }
+        return null;
     }
 
     /**
@@ -135,7 +141,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
         String query =
                 "SELECT * FROM " + GENRE_TABLE_NAME + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Genre[] genres = new Genre[c.getCount()];
             for (int i = 0; i < genres.length; i++) {
@@ -161,7 +167,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " +
                         GENRE_GENRE_NAME + " LIKE '" + letter + "%';";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Genre[] genres = new Genre[c.getCount()];
             for (int i = 0; i < genres.length; i++) {
@@ -187,10 +193,13 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " +
                         CITY_CITY_ID + " = " + cityID + ";";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        String cityName = c.getString(c.getColumnIndex(CITY_CITY_NAME));
-        c.close();
-        return new City(cityID, cityName);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            String cityName = c.getString(c.getColumnIndex(CITY_CITY_NAME));
+            c.close();
+            return new City(cityID, cityName);
+        }
+        return null;
     }
 
     /**
@@ -204,10 +213,14 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " +
                         CITY_CITY_NAME + " = '" + cityName + "';";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        int cityID = c.getInt(c.getColumnIndex(CITY_CITY_ID));
-        c.close();
-        return new City(cityID, cityName);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            cityName = c.getString(c.getColumnIndex(CITY_CITY_NAME));
+            int cityID = c.getInt(c.getColumnIndex(CITY_CITY_ID));
+            c.close();
+            return new City(cityID, cityName);
+        }
+        return null;
     }
 
     /**
@@ -221,7 +234,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " +
                         CITY_CITY_NAME + " LIKE '" + letter + "%';";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             City[] cities = new City[c.getCount()];
             for (int i = 0; i < cities.length; i++) {
@@ -245,7 +258,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
         String query =
                 "SELECT * FROM " + CITY_TABLE_NAME + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             City[] cities = new City[c.getCount()];
             for (int i = 0; i < cities.length; i++) {
@@ -272,10 +285,13 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + GENRE_CITY_TABLE_NAME + " WHERE " +
                         GENRE_CITY_CITY_ID + " = " + cityID + ";";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        int numGenres = c.getCount();
-        c.close();
-        return numGenres;
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            int numGenres = c.getCount();
+            c.close();
+            return numGenres;
+        }
+        return 0;
     }
 
     /**
@@ -290,10 +306,13 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + GENRE_COUNTRY_TABLE_NAME + " WHERE " +
                         GENRE_COUNTRY_COUNTRY_ID + " = " + countryID + ";";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        int numGenres = c.getCount();
-        c.close();
-        return numGenres;
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            int numGenres = c.getCount();
+            c.close();
+            return numGenres;
+        }
+        return 0;
     }
 
     int getNumPlaylistsByStreamingService(int serviceID){
@@ -302,10 +321,13 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + PLAYLIST_TABLE_NAME + " WHERE " +
                         PLAYLIST_STREAMING_SERVICE_ID + " = " + serviceID + ";";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        int numPlaylists = c.getCount();
-        c.close();
-        return numPlaylists;
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            int numPlaylists = c.getCount();
+            c.close();
+            return numPlaylists;
+        }
+        return 0;
     }
 
     /**
@@ -319,10 +341,13 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
                         COUNTRY_COUNTRY_ID + " = " + countryID + ";";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        String countryName = c.getString(c.getColumnIndex(COUNTRY_COUNTRY_NAME));
-        c.close();
-        return new Country(countryID, countryName);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            String countryName = c.getString(c.getColumnIndex(COUNTRY_COUNTRY_NAME));
+            c.close();
+            return new Country(countryID, countryName);
+        }
+        return null;
     }
 
     /**
@@ -336,10 +361,14 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
                         COUNTRY_COUNTRY_NAME + " = '" + countryName + "';";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        int countryID = c.getInt(c.getColumnIndex(COUNTRY_COUNTRY_ID));
-        c.close();
-        return new Country(countryID, countryName);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            countryName = c.getString(c.getColumnIndex(COUNTRY_COUNTRY_NAME));
+            int countryID = c.getInt(c.getColumnIndex(COUNTRY_COUNTRY_ID));
+            c.close();
+            return new Country(countryID, countryName);
+        }
+        return null;
     }
 
     /**
@@ -353,7 +382,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " +
                         COUNTRY_COUNTRY_NAME + " LIKE '" + letter + "%';";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Country[] countries = new Country[c.getCount()];
             for (int i = 0; i < countries.length; i++) {
@@ -377,7 +406,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
         String query =
                 "SELECT * FROM " + COUNTRY_TABLE_NAME + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Country[] countries = new Country[c.getCount()];
             for (int i = 0; i < countries.length; i++) {
@@ -403,12 +432,15 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + PLAYLIST_TABLE_NAME + " WHERE " +
                         PLAYLIST_PLAYLIST_ID + " = " + playlistID + ";";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        String playlistName = c.getString(c.getColumnIndex(PLAYLIST_PLAYLIST_NAME));
-        String link = c.getString(c.getColumnIndex(PLAYLIST_LINK));
-        int streamingServiceID = c.getInt(c.getColumnIndex(PLAYLIST_STREAMING_SERVICE_ID));
-        c.close();
-        return new Playlist(playlistID, playlistName, link, streamingServiceID);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            String playlistName = c.getString(c.getColumnIndex(PLAYLIST_PLAYLIST_NAME));
+            String link = c.getString(c.getColumnIndex(PLAYLIST_LINK));
+            int streamingServiceID = c.getInt(c.getColumnIndex(PLAYLIST_STREAMING_SERVICE_ID));
+            c.close();
+            return new Playlist(playlistID, playlistName, link, streamingServiceID);
+        }
+        return null;
     }
 
     /**
@@ -422,10 +454,13 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + STREAMING_SERVICE_TABLE_NAME + " WHERE " +
                         STREAMING_SERVICE_STREAMING_SERVICE_ID + " = " + streamingServiceID + ";";
         Cursor c = db.rawQuery(query, null);
-        c.moveToFirst();
-        String serviceName = c.getString(c.getColumnIndex(STREAMING_SERVICE_SERVICE_NAME));
-        c.close();
-        return new StreamingService(streamingServiceID, serviceName);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            String serviceName = c.getString(c.getColumnIndex(STREAMING_SERVICE_SERVICE_NAME));
+            c.close();
+            return new StreamingService(streamingServiceID, serviceName);
+        }
+        return null;
     }
 
     /**
@@ -437,7 +472,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
         String query =
                 "SELECT * FROM " + STREAMING_SERVICE_TABLE_NAME  + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             StreamingService[] services = new StreamingService[c.getCount()];
             for (int i = 0; i < services.length; i++) {
@@ -463,7 +498,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT " + GENRE_PLAYLIST_PLAYLIST_ID + " FROM " + GENRE_PLAYLIST_TABLE_NAME +
                         " WHERE " + GENRE_PLAYLIST_GENRE_ID + " = " + genreID + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Playlist[] playlists = new Playlist[c.getCount()];
             for (int i = 0; i < playlists.length; i++) {
@@ -489,7 +524,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + PLAYLIST_TABLE_NAME +
                         " WHERE " + PLAYLIST_STREAMING_SERVICE_ID + " = " + serviceID + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Playlist[] playlists = new Playlist[c.getCount()];
             for (int i = 0; i < playlists.length; i++) {
@@ -516,7 +551,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT " + GENRE_PLAYLIST_GENRE_ID + " FROM " + GENRE_PLAYLIST_TABLE_NAME +
                         " WHERE " + GENRE_PLAYLIST_PLAYLIST_ID + " = " + playlistID + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Genre[] genres = new Genre[c.getCount()];
             for (int i = 0; i < genres.length; i++) {
@@ -542,7 +577,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT " + GENRE_CITY_GENRE_ID + " FROM " + GENRE_CITY_TABLE_NAME +
                         " WHERE " + GENRE_CITY_CITY_ID + " = " + cityID + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Genre[] genres = new Genre[c.getCount()];
             for (int i = 0; i < genres.length; i++) {
@@ -568,7 +603,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT " + GENRE_COUNTRY_GENRE_ID + " FROM " + GENRE_COUNTRY_TABLE_NAME +
                         " WHERE " + GENRE_COUNTRY_COUNTRY_ID + " = " + countryID + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Genre[] genres = new Genre[c.getCount()];
             for (int i = 0; i < genres.length; i++) {
@@ -594,7 +629,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT " + GENRE_CITY_CITY_ID + " FROM " + GENRE_CITY_TABLE_NAME +
                         " WHERE " + GENRE_CITY_GENRE_ID + " = " + genreID + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             City[] cities = new City[c.getCount()];
             for (int i = 0; i < cities.length; i++) {
@@ -620,7 +655,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT " + GENRE_COUNTRY_COUNTRY_ID + " FROM " + GENRE_COUNTRY_TABLE_NAME +
                         " WHERE " + GENRE_COUNTRY_GENRE_ID + " = " + genreID + ";";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Country[] countries = new Country[c.getCount()];
             for (int i = 0; i < countries.length; i++) {
@@ -645,7 +680,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " + GENRE_GENRE_NAME +
                         " LIKE %" + searchTerm + "%;";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Genre[] genres = new Genre[c.getCount()];
             for (int i = 0; i < genres.length; i++) {
@@ -671,7 +706,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
                 "SELECT * FROM " + PLAYLIST_TABLE_NAME + " WHERE " + PLAYLIST_PLAYLIST_NAME +
                         " LIKE %" + searchTerm + "%;";
         Cursor c = db.rawQuery(query, null);
-        if(c != null){
+        if(c != null && c.moveToFirst()){
             c.moveToFirst();
             Playlist[] playlists = new Playlist[c.getCount()];
             for (int i = 0; i < playlists.length; i++) {

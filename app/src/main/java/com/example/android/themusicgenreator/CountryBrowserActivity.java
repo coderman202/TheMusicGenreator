@@ -189,115 +189,78 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
             Genre[] genresArray = musicGenresDB.getGenreByCountry(countryID);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.countries_scroller);
 
-            /*
-             * Get the floating action button that we will use to add records to the database.
-             * Set an onlicklistener to open a dialog for adding new countries, or current
-             * genres to a country
-             */
+            //Open a dialog when FAB is pressed to allow addition of new
+            // countries or a genre to the selected country.
             FloatingActionButton fab = (FloatingActionButton)
                     getActivity().findViewById(R.id.fab_countries);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     final Dialog dialog = new Dialog(getContext());
-                    //Check if the Country object passed via the Intent is null.
-                    // If so, show the default dialog window. Else, show the dialog for adding a
-                    // genre to the country.
-                    if(inCountry == null){
-                        dialog.setContentView(R.layout.add_new_countries_dialog);
-                        //Setting the colour of the dialog title
-                        String str = getResources().getString(R.string.add_country);
-                        SpannableString dialogTitle = new SpannableString(str);
-                        dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
-                                R.color.browse_buttons_text_color)), 0, str.length(),
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        dialog.setTitle(dialogTitle);
-                        if(dialog.getWindow() != null){
-                            dialog.getWindow().setBackgroundDrawableResource
-                                    (R.color.browse_countries_button_color);
+                    dialog.setContentView(R.layout.add_countries_dialog);
+                    //Setting the colour of the dialog title
+                    String str = getResources().getString(R.string.add_countries_dialog_title);
+                    SpannableString dialogTitle = new SpannableString(str);
+                    dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
+                            R.color.browse_buttons_text_color)), 0, str.length(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    dialog.setTitle(dialogTitle);
+                    if(dialog.getWindow() != null){
+                        dialog.getWindow().setBackgroundDrawableResource(R.color.browse_countries_button_color);
+                    }
+
+                    //First deal with adding a genre to the selected country.
+                    // Use an AutocompleteTextView to take the chosen genre and add it to the country.
+                    //Set an adapter for the AutoCompleteTextView, displaying all the countries
+                    final Country[] allCountries = musicGenresDB.getAllCountries();
+                    String[] countryNames = new String[allCountries.length];
+                    for (int i = 0; i < allCountries.length; i++) {
+                        countryNames[i] = allCountries[i].getmCountryName();
+                    }
+                    ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, countryNames);
+                    final AutoCompleteTextView addGenreAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_genre_to_country);
+                    addGenreAutoComplete.setThreshold(1);
+                    addGenreAutoComplete.setAdapter(genreAdapter);
+                    addGenreAutoComplete.setHint(getString(R.string.add_genre_to, inCountry.getmCountryName()));
+
+                    addGenreAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Genre addedGenre = musicGenresDB.getGenreByName(addGenreAutoComplete.getText().toString());
+                            musicGenresDB.addGenreToCountry(addedGenre, inCountry);
+                            InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+                            TextKeyListener.clear(addGenreAutoComplete.getText());
                         }
+                    });
 
-                        EditText addGenre = (EditText) dialog.findViewById(R.id.add_country);
-
-                        addGenre.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                            @Override
-                            public boolean onEditorAction(TextView v, int actionId,
-                                                          KeyEvent event) {
-                                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                    String message = "";
-                                    String newCountry = v.getText().toString();
-                                    if(musicGenresDB.getCountryByName(newCountry) == null){
-                                        musicGenresDB.addCountry(new Country(newCountry));
-                                        message = getString(R.string.added_country, newCountry);
-                                    }
-                                    else{
-                                        message = getString(R.string.not_added_country, newCountry);
-                                    }
-                                    InputMethodManager in = (InputMethodManager) getContext().
-                                            getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    in.hideSoftInputFromWindow(v.getRootView().
-                                            getApplicationWindowToken(), 0);
-
-                                    Toast msg = Toast.makeText
-                                            (getContext(), message, Toast.LENGTH_LONG);
-                                    msg.show();
-                                    v.setText("");
-                                    return true;
+                    //Second use an EditText to allow the user to add a new country to the DB
+                    EditText addCity = (EditText) dialog.findViewById(R.id.add_new_country);
+                    addCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                        @Override
+                        public boolean onEditorAction(TextView v, int actionId,
+                                                      KeyEvent event) {
+                            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                String message = "";
+                                String newCountry = v.getText().toString();
+                                if(musicGenresDB.getCountryByName(newCountry) == null){
+                                    musicGenresDB.addCountry(new Country(newCountry));
+                                    message = getString(R.string.added_country, newCountry);
                                 }
-                                return false;
+                                else{
+                                    message = getString(R.string.not_added_country, newCountry);
+                                }
+                                InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                in.hideSoftInputFromWindow(v.getRootView().getApplicationWindowToken(), 0);
+                                Toast msg = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+                                msg.show();
+                                v.setText("");
+                                return true;
                             }
-                        });
-                    }
-                    else{
-                        dialog.setContentView(R.layout.add_items_to_countries_dialog);
-                        String str = getResources().getString(R.string.add_genres);
-                        SpannableString dialogTitle = new SpannableString(str);
-                        dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
-                                R.color.browse_buttons_text_color)), 0, str.length(),
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        dialog.setTitle(dialogTitle);
-                        if(dialog.getWindow() != null){
-                            dialog.getWindow().setBackgroundDrawableResource
-                                    (R.color.browse_countries_button_color);
+                            return false;
                         }
-                        TextView headerText = (TextView) dialog.findViewById
-                                (R.id.add_items_to_countries_dialog_header);
-
-                        headerText.setText(getString(R.string.add_items_dialog_header, inCountry.getmCountryName()));
-
-                        //Set an adapter for the AutoCompleteTextView, displaying all the cities
-                        final Country[] allCountries = musicGenresDB.getAllCountries();
-                        String[] countryNames = new String[allCountries.length];
-                        for (int i = 0; i < allCountries.length; i++) {
-                            countryNames[i] = allCountries[i].getmCountryName();
-                        }
-                        ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(),
-                                android.R.layout.select_dialog_singlechoice, countryNames);
-
-                        final AutoCompleteTextView addCountryAutoComplete =
-                                (AutoCompleteTextView) dialog.findViewById(R.id.add_item_to_country);
-
-                        addCountryAutoComplete.setThreshold(1);
-                        addCountryAutoComplete.setAdapter(genreAdapter);
-
-                        addCountryAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Genre addedGenre = musicGenresDB.getGenreByName
-                                        (addCountryAutoComplete.getText().toString());
-
-                                musicGenresDB.addGenreToCountry(addedGenre, inCountry);
-                                InputMethodManager in = (InputMethodManager) getContext().
-                                        getSystemService(Context.INPUT_METHOD_SERVICE);
-
-                                in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
-                                TextKeyListener.clear(addCountryAutoComplete.getText());
-
-                            }
-                        });
-                    }
+                    });
                     dialog.show();
-
                 }
             });
 
@@ -305,26 +268,27 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
             ContextThemeWrapper listItemStyle =
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
 
-            for (final Genre genre:genresArray) {
+            if(genresArray == null){
                 TextView tv = new TextView(listItemStyle);
-                tv.setText(genre.getmGenreName());
-                tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.countries_more, 0);
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
-                        Log.d("name", genre.getmGenreName());
-                        Log.d("id", genre.getmGenreID() + "");
-                        i.putExtra("PASSED_GENRE", genre);
-                        startActivity(i);
-                    }
-                });
                 scroller.addView(tv);
             }
-
-            if(genresArray.length == 0){
-                TextView tv = new TextView(listItemStyle);
-                scroller.addView(tv);
+            else{
+                for (final Genre genre:genresArray) {
+                    TextView tv = new TextView(listItemStyle);
+                    tv.setText(genre.getmGenreName());
+                    tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.countries_more, 0);
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
+                            Log.d("name", genre.getmGenreName());
+                            Log.d("id", genre.getmGenreID() + "");
+                            i.putExtra("PASSED_GENRE", genre);
+                            startActivity(i);
+                        }
+                    });
+                    scroller.addView(tv);
+                }
             }
 
 

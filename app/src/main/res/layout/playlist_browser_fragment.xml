@@ -3,9 +3,17 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.themusicgenreator.PlaylistBrowserActivity$PlaceholderFragment">
 
+    <AutoCompleteTextView style="@style/WelcomeMessageStyle"
+        android:id="@+id/playlists_searcher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableStart="@drawable/search_coloured"
+        android:hint="@string/search_playlists_by_service" />
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/playlists_searcher">
 
         <LinearLayout
             android:id="@+id/playlists_scroller"

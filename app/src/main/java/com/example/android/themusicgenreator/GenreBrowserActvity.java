@@ -31,7 +31,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import static android.R.id.message;
 import static com.example.android.themusicgenreator.MainActivity.letters;
 import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
@@ -159,7 +158,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
                     final Dialog dialog = new Dialog(getContext());
                     dialog.setContentView(R.layout.add_new_genres_dialog);
                     //Setting the colour of the dialog title
-                    String str = getResources().getString(R.string.add_items_dialog_title);
+                    String str = getResources().getString(R.string.add_genres);
                     SpannableString dialogTitle = new SpannableString(str);
                     dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
                             R.color.browse_buttons_text_color)), 0, str.length(),

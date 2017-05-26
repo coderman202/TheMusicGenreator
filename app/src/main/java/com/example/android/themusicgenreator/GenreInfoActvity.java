@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -29,6 +28,7 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
@@ -129,7 +129,7 @@ public class GenreInfoActvity extends AppCompatActivity {
                     final Dialog dialog = new Dialog(getContext());
                     dialog.setContentView(R.layout.add_items_to_genres_dialog);
                     //Setting the colour of the dialog title
-                    String str = getResources().getString(R.string.add_items_dialog_title);
+                    String str = getResources().getString(R.string.add_items_dialog_title, inGenre.getmGenreName());
                     SpannableString dialogTitle = new SpannableString(str);
                     dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
                             R.color.browse_buttons_text_color)), 0, str.length(),
@@ -140,7 +140,7 @@ public class GenreInfoActvity extends AppCompatActivity {
                     }
 
                     TextView headerText = (TextView) dialog.findViewById(R.id.add_items_to_genres_dialog_header);
-                    headerText.setText(getString(R.string.add_items_dialog_header, inGenre.getmGenreName()));
+                    headerText.setText(getString(R.string.add_items_to_genre_dialog_header));
 
                     //Set an adapter for the AutoCompleteTextView, displaying all the cities
                     final City[] allCities = musicGenresDB.getAllCities();
@@ -161,9 +161,7 @@ public class GenreInfoActvity extends AppCompatActivity {
                             InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                             in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
                             TextKeyListener.clear(addCityAutoComplete.getText());
-                            Snackbar.make(rootView, getString(R.string.added_items, addedCity.getmCityName(), inGenre.getmGenreName()), Snackbar.LENGTH_LONG).show();
-
-
+                            Toast.makeText(getContext(), getString(R.string.added_items, addedCity.getmCityName(), inGenre.getmGenreName()), Toast.LENGTH_LONG).show();
                         }
                     });
 
@@ -186,12 +184,10 @@ public class GenreInfoActvity extends AppCompatActivity {
                             InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                             in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
                             TextKeyListener.clear(addCountryAutoComplete.getText());
-                            Snackbar.make(rootView, getString(R.string.added_items, addedCountry.getmCountryName(), inGenre.getmGenreName()), Snackbar.LENGTH_LONG).show();
+                            Toast.makeText(getContext(), getString(R.string.added_items, addedCountry.getmCountryName(), inGenre.getmGenreName()), Toast.LENGTH_LONG).show();
 
                         }
                     });
-
-
                     dialog.show();
                 }
             });
@@ -206,32 +202,29 @@ public class GenreInfoActvity extends AppCompatActivity {
             //Using the appropriate array to generate the lists for each tab.
             switch(getArguments().getInt(ARG_SECTION_NUMBER)-1){
                 case 0:
-                    for (final Playlist playlist:playlistsArray) {
-                        TextView tv = new TextView(listItemStyle);
-                        tv.setText(playlist.getmPlaylistName());
-                        tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.spotify_icon, 0);
-                        //OnClickListener for opening the streaming service with
-                        // the correct playlist link.
-                        tv.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(playlist.getmLink()));
-                                startActivity(i);
-                            }
-                        });
-                        scroller.addView(tv);
-                    }
-
-                    if(playlistsArray.length == 0) {
+                    if(playlistsArray == null) {
                         TextView tv = new TextView(listItemStyle);
                         tv.setText(getString(R.string.browse_playlists_none));
                         scroller.addView(tv);
                     }
-
-                    //A blank text view to ensure no views are cut off the end of the screen
-                    TextView tv = new TextView(listItemStyle);
-                    scroller.addView(tv);
+                    else{
+                        for (final Playlist playlist:playlistsArray) {
+                            TextView tv = new TextView(listItemStyle);
+                            tv.setText(playlist.getmPlaylistName());
+                            tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.spotify_icon, 0);
+                            //OnClickListener for opening the streaming service with
+                            // the correct playlist link.
+                            tv.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent i = new Intent(Intent.ACTION_VIEW,
+                                            Uri.parse(playlist.getmLink()));
+                                    startActivity(i);
+                                }
+                            });
+                            scroller.addView(tv);
+                        }
+                    }
                     break;
                 case 1:
                     //Set a header for the cities list
@@ -239,30 +232,27 @@ public class GenreInfoActvity extends AppCompatActivity {
                     cityHeader.setText(R.string.country_city_header);
                     scroller.addView(cityHeader);
 
-                    for (final City city:citiesArray) {
-                        TextView tv1 = new TextView(listItemStyle);
-                        tv1.setText(city.getmCityName());
-                        tv1.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
-                        tv1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i  = new Intent(getActivity(), CityBrowserActivity.class);
-                                i.putExtra("PASSED_CITY", city);
-                                startActivity(i);
-                            }
-                        });
-                        scroller.addView(tv1);
-                    }
-
-                    if(citiesArray.length == 0){
+                    if(citiesArray == null){
                         TextView tv1 = new TextView(listItemStyle);
                         tv1.setText(getString(R.string.genre_info_none));
                         scroller.addView(tv1);
                     }
-
-                    //A blank text view to ensure no views are cut off the end of the screen
-                    TextView tv1 = new TextView(listItemStyle);
-                    scroller.addView(tv1);
+                    else{
+                        for (final City city:citiesArray) {
+                            TextView tv1 = new TextView(listItemStyle);
+                            tv1.setText(city.getmCityName());
+                            tv1.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
+                            tv1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent i  = new Intent(getActivity(), CityBrowserActivity.class);
+                                    i.putExtra("PASSED_CITY", city);
+                                    startActivity(i);
+                                }
+                            });
+                            scroller.addView(tv1);
+                        }
+                    }
                     break;
                 case 2:
                     //Set a header for the countries list
@@ -270,32 +260,31 @@ public class GenreInfoActvity extends AppCompatActivity {
                     countryHeader.setText(R.string.country_city_header);
                     scroller.addView(countryHeader);
 
-                    for (final Country country:countriesArray) {
-                        TextView tv2 = new TextView(listItemStyle);
-                        tv2.setText(country.getmCountryName());
-                        tv2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
-                        tv2.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent i  = new Intent(getActivity(), CountryBrowserActivity.class);
-                                i.putExtra("PASSED_COUNTRY", country);
-                                startActivity(i);
-                            }
-                        });
-                        scroller.addView(tv2);
-                    }
-
-                    if(countriesArray.length == 0){
+                    if(countriesArray == null){
                         TextView tv2 = new TextView(listItemStyle);
                         tv2.setText(getString(R.string.genre_info_none));
                         scroller.addView(tv2);
                     }
-
-                    //A blank text view to ensure no views are cut off the end of the screen
-                    TextView tv2 = new TextView(listItemStyle);
-                    scroller.addView(tv2);
-                    break;
+                    else{
+                        for (final Country country:countriesArray) {
+                            TextView tv2 = new TextView(listItemStyle);
+                            tv2.setText(country.getmCountryName());
+                            tv2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
+                            tv2.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Intent i  = new Intent(getActivity(), CountryBrowserActivity.class);
+                                    i.putExtra("PASSED_COUNTRY", country);
+                                    startActivity(i);
+                                }
+                            });
+                            scroller.addView(tv2);
+                        }
+                    }
             }
+            //A blank text view to ensure no views are cut off the end of the screen
+            TextView tv = new TextView(listItemStyle);
+            scroller.addView(tv);
             return rootView;
         }
     }

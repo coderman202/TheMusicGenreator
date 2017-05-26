@@ -1,0 +1,31 @@
+<LinearLayout style="@style/DialogLayoutStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/add_cities_dialog">
+
+    <AutoCompleteTextView style="@style/WelcomeMessageStyle"
+        android:id="@+id/add_genre_to_city"
+        android:hint="@string/add_genres"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:drawableStart="@drawable/music_coloured"
+        android:drawableEnd="@drawable/guitar_electric_coloured"
+        android:layout_gravity="top|center"/>
+
+    <TextView style="@style/WelcomeMessageStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/or"
+        android:textStyle="bold"/>
+
+    <EditText style="@style/WelcomeMessageStyle"
+        android:id="@+id/add_new_city"
+        android:hint="@string/add_cities"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:imeOptions="actionDone"
+        android:drawableStart="@drawable/city_coloured"
+        android:drawableEnd="@drawable/city_coloured"/>
+
+</LinearLayout>

@@ -141,25 +141,26 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
             ContextThemeWrapper listItemStyle =
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
 
-            for (final Playlist playlist:playlistsArray) {
-                TextView tv = new TextView(listItemStyle);
-                tv.setText(playlist.getmPlaylistName());
-                tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.spotify_icon, 0);
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i = new Intent(Intent.ACTION_VIEW,
-                                Uri.parse(playlist.getmLink()));
-                        startActivity(i);
-                    }
-                });
-                scroller.addView(tv);
-            }
-
-            if(playlistsArray.length == 0){
+            if(playlistsArray == null){
                 TextView tv = new TextView(listItemStyle);
                 tv.setText(getString(R.string.no_playlists_by_service));
                 scroller.addView(tv);
+            }
+            else{
+                for (final Playlist playlist:playlistsArray) {
+                    TextView tv = new TextView(listItemStyle);
+                    tv.setText(playlist.getmPlaylistName());
+                    tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.spotify_icon, 0);
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i = new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse(playlist.getmLink()));
+                            startActivity(i);
+                        }
+                    });
+                    scroller.addView(tv);
+                }
             }
 
             //A blank text view to ensure no views are cut off the end of the screen

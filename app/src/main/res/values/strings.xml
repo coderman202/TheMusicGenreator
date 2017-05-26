@@ -6,7 +6,6 @@
     <string name="search_countries">Search Countries</string>
     <string name="search_playlists">Search Playlists</string>
 
-
     <string name="welcome_message">
         Welcome to the music genre generator, the Music Genreator!
         Browse through over 1500 genres, explore them via playlists.
@@ -17,9 +16,8 @@
     <string name="browse_genres_subtext">An A to Z list of every genre throughout the world.</string>
     <string name="browse_genres_title">Genres A-Z</string>
     <string name="browse_genres_none">No genres beginning with %1$c</string>
-    <string name="add_genres">Add a new genre</string>
+    <string name="add_genres">Add A New Genre</string>
     <string name="genre_info_none">None</string>
-
 
     <string name="genres_header">Genres</string>
     <string name="playlists_header">Playlists</string>
@@ -32,13 +30,13 @@
     <string name="browse_cities_subtext">See the origin and influence of each genre by city.</string>
     <string name="browse_cities_title">Cities A-Z</string>
     <string name="browse_cities_none">No cities beginning with %1$c</string>
-    <string name="add_cities">Add a new city</string>
+    <string name="add_cities">Add A New City</string>
 
     <string name="browse_countries">Explore By Country</string>
     <string name="browse_countries_subtext">See the origin and influence of genres by country.</string>
     <string name="browse_countries_title">Countries A-Z</string>
     <string name="browse_countries_none">No countries beginning with %1$c</string>
-    <string name="add_country">Add a new country</string>
+    <string name="add_country">Add A New Country</string>
 
 
     <string name="browse_playlists">Browse Playlists</string>
@@ -47,11 +45,19 @@
     <string name="browse_playlists_none">No playlists of this genre yet.</string>
     <string name="add_playlist">Add a new playlist</string>
     <string name="no_playlists_by_service">No playlists here yet.</string>
+    <string name="search_playlists_by_service">Search playlists here.</string>
 
 
-    <string name="add_items_dialog_title">Add Items</string>
-    <string name="add_items_dialog_header">
-        Add Items To <xliff:g id="city_country_playlist" example="Los Angeles">%1$s</xliff:g>
+    <string name="add_items_dialog_title">
+        Add Items to <xliff:g id="genre" example="Blues">%1$s</xliff:g>
+    </string>
+    <string name="add_items_to_genre_dialog_header">Add Areas of Origin and Influence</string>
+
+    <string name="add_cities_dialog_title">Add New City or Genre to City</string>
+    <string name="add_countries_dialog_title">Add New Country or Genre to Country</string>
+
+    <string name="add_genre_to">
+        Add Genre To <xliff:g id="city_country_playlist" example="Los Angeles">%1$s</xliff:g>
     </string>
 
     <string name="added_items">
@@ -78,4 +84,6 @@
     <string name="not_added_country">
         <xliff:g id="country" example="Kenya">%1$s</xliff:g> is already in this database
     </string>
+
+    <string name="or">OR</string>
 </resources>

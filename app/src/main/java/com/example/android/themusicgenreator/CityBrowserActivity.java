@@ -50,6 +50,10 @@ public class CityBrowserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_city_browser);
 
         inCity = getIntent().getParcelableExtra("PASSED_CITY");
+        if(inCity == null){
+            inCity = musicGenresDB.getCity(1);
+            Log.d("cityname", inCity.getmCityName());
+        }
 
 
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
@@ -70,7 +74,7 @@ public class CityBrowserActivity extends AppCompatActivity {
         }
 
         // Setup spinner
-        Spinner spinner = (Spinner) findViewById(R.id.spinner_cities);
+        final Spinner spinner = (Spinner) findViewById(R.id.spinner_cities);
         spinner.setAdapter(new MyAdapter(toolbar.getContext(),cityNames));
 
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -81,10 +85,13 @@ public class CityBrowserActivity extends AppCompatActivity {
                 getSupportFragmentManager().beginTransaction()
                         .replace(R.id.container_cities, PlaceholderFragment.newInstance(position + 1))
                         .commit();
+
+                inCity = musicGenresDB.getCity(position + 1);
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                inCity = musicGenresDB.getCity(1);
             }
         });
 
@@ -191,93 +198,78 @@ public class CityBrowserActivity extends AppCompatActivity {
             Genre[] genresArray = musicGenresDB.getGenreByCity(cityID);
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.cities_scroller);
 
-            //Check if the City object passed via the Intent is null.
-            // If so, show the default dialog window. Else, show the dialog for adding a
-            // genre to the city.
+            //Open a dialog when FAB is pressed to allow addition of new
+            // cities or a genre to the selected city.
             FloatingActionButton fab = (FloatingActionButton)
                     getActivity().findViewById(R.id.fab_cities);
             fab.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     final Dialog dialog = new Dialog(getContext());
-                    if(inCity == null){
-                        dialog.setContentView(R.layout.add_new_cities_dialog);
-                        //Setting the colour of the dialog title
-                        String str = getResources().getString(R.string.add_cities);
-                        SpannableString dialogTitle = new SpannableString(str);
-                        dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
-                                R.color.browse_buttons_text_color)), 0, str.length(),
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        dialog.setTitle(dialogTitle);
-                        if(dialog.getWindow() != null){
-                            dialog.getWindow().setBackgroundDrawableResource(R.color.browse_cities_button_color);
+                    dialog.setContentView(R.layout.add_cities_dialog);
+                    //Setting the colour of the dialog title
+                    String str = getResources().getString(R.string.add_cities_dialog_title);
+                    SpannableString dialogTitle = new SpannableString(str);
+                    dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
+                            R.color.browse_buttons_text_color)), 0, str.length(),
+                            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    dialog.setTitle(dialogTitle);
+                    if(dialog.getWindow() != null){
+                        dialog.getWindow().setBackgroundDrawableResource(R.color.browse_cities_button_color);
+                    }
+
+                    //First deal with adding a genre to the selected city.
+                    // Use an AutocompleteTextView to take the chosen genre and add it to the city.
+                    //Set an adapter for the AutoCompleteTextView, displaying all the cities
+                    final City[] allCities = musicGenresDB.getAllCities();
+                    String[] cityNames = new String[allCities.length];
+                    for (int i = 0; i < allCities.length; i++) {
+                        cityNames[i] = allCities[i].getmCityName();
+                    }
+                    ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, cityNames);
+                    final AutoCompleteTextView addGenreAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_genre_to_city);
+                    addGenreAutoComplete.setThreshold(1);
+                    addGenreAutoComplete.setAdapter(genreAdapter);
+                    addGenreAutoComplete.setHint(getString(R.string.add_genre_to, inCity.getmCityName()));
+
+                    addGenreAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                        @Override
+                        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            Genre addedGenre = musicGenresDB.getGenreByName(addGenreAutoComplete.getText().toString());
+                            musicGenresDB.addGenreToCity(addedGenre, inCity);
+                            InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
+                            TextKeyListener.clear(addGenreAutoComplete.getText());
                         }
+                    });
 
-                        EditText addGenre = (EditText) dialog.findViewById(R.id.add_city);
-
-                        addGenre.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-                            @Override
-                            public boolean onEditorAction(TextView v, int actionId,
-                                                          KeyEvent event) {
-                                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                    String message = "";
-                                    String newCity = v.getText().toString();
-                                    if(musicGenresDB.getCityByName(newCity) == null){
-                                        musicGenresDB.addCity(new City(newCity));
-                                        message = getString(R.string.added_city, newCity);
-                                    }
-                                    else{
-                                        message = getString(R.string.not_added_city, newCity);
-                                    }
-                                    InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                    in.hideSoftInputFromWindow(v.getRootView().getApplicationWindowToken(), 0);
-                                    Toast msg = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
-                                    msg.show();
-                                    v.setText("");
-                                    return true;
+                    //Second use an EditText to allow the user to add a new city to the DB
+                    EditText addCity = (EditText) dialog.findViewById(R.id.add_new_city);
+                    addCity.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+                        @Override
+                        public boolean onEditorAction(TextView v, int actionId,
+                                                      KeyEvent event) {
+                            if (actionId == EditorInfo.IME_ACTION_DONE) {
+                                String message = "";
+                                String newCity = v.getText().toString();
+                                if(musicGenresDB.getCityByName(newCity) == null){
+                                    musicGenresDB.addCity(new City(newCity));
+                                    message = getString(R.string.added_city, newCity);
                                 }
-                                return false;
-                            }
-                        });
-                    }
-                    else{
-                        dialog.setContentView(R.layout.add_items_to_cities_dialog);
-                        String str = getResources().getString(R.string.add_genres);
-                        SpannableString dialogTitle = new SpannableString(str);
-                        dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getContext(),
-                                R.color.browse_buttons_text_color)), 0, str.length(),
-                                Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                        dialog.setTitle(dialogTitle);
-                        if(dialog.getWindow() != null){
-                            dialog.getWindow().setBackgroundDrawableResource(R.color.browse_cities_button_color);
-                        }
-                        TextView headerText = (TextView) dialog.findViewById(R.id.add_items_to_cities_dialog_header);
-                        headerText.setText(getString(R.string.add_items_dialog_header, inCity.getmCityName()));
-
-                        //Set an adapter for the AutoCompleteTextView, displaying all the cities
-                        final City[] allCities = musicGenresDB.getAllCities();
-                        String[] cityNames = new String[allCities.length];
-                        for (int i = 0; i < allCities.length; i++) {
-                            cityNames[i] = allCities[i].getmCityName();
-                        }
-                        ArrayAdapter<String> genreAdapter = new ArrayAdapter<>(getContext(), android.R.layout.select_dialog_singlechoice, cityNames);
-                        final AutoCompleteTextView addGenreAutoComplete = (AutoCompleteTextView) dialog.findViewById(R.id.add_item_to_city);
-                        addGenreAutoComplete.setThreshold(1);
-                        addGenreAutoComplete.setAdapter(genreAdapter);
-
-                        addGenreAutoComplete.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                                Genre addedGenre = musicGenresDB.getGenreByName(addGenreAutoComplete.getText().toString());
-                                musicGenresDB.addGenreToCity(addedGenre, inCity);
+                                else{
+                                    message = getString(R.string.not_added_city, newCity);
+                                }
                                 InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                                in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
-                                TextKeyListener.clear(addGenreAutoComplete.getText());
+                                in.hideSoftInputFromWindow(v.getRootView().getApplicationWindowToken(), 0);
+                                Toast msg = Toast.makeText(getContext(), message, Toast.LENGTH_LONG);
+                                msg.show();
+                                v.setText("");
+                                return true;
                             }
-                        });
-                    }
+                            return false;
+                        }
+                    });
                     dialog.show();
-
                 }
             });
 
@@ -285,28 +277,28 @@ public class CityBrowserActivity extends AppCompatActivity {
             ContextThemeWrapper listItemStyle =
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
 
-            for (final Genre genre:genresArray) {
-                TextView tv = new TextView(listItemStyle);
-                tv.setText(genre.getmGenreName());
-                tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cities_more, 0);
-                tv.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
-                        Log.d("name", genre.getmGenreName());
-                        Log.d("id", genre.getmGenreID() + "");
-                        i.putExtra("PASSED_GENRE", genre);
-                        startActivity(i);
-                    }
-                });
-                scroller.addView(tv);
-            }
-
-            if(genresArray.length == 0){
+            if(genresArray == null){
                 TextView tv = new TextView(listItemStyle);
                 scroller.addView(tv);
             }
-
+            else{
+                for (final Genre genre:genresArray) {
+                    TextView tv = new TextView(listItemStyle);
+                    tv.setText(genre.getmGenreName());
+                    tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cities_more, 0);
+                    tv.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
+                            Log.d("name", genre.getmGenreName());
+                            Log.d("id", genre.getmGenreID() + "");
+                            i.putExtra("PASSED_GENRE", genre);
+                            startActivity(i);
+                        }
+                    });
+                    scroller.addView(tv);
+                }
+            }
 
             //A blank text view to ensure no views are cut off the end of the screen
             TextView tv = new TextView(listItemStyle);
