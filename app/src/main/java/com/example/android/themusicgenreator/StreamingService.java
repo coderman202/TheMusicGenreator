@@ -10,9 +10,11 @@ public class StreamingService {
     private String mServiceName;
     private String mPlayStoreLink;
     private Integer mIcon;
-    private Integer[] mIconList = {R.drawable.amazon_prime_music_icon, R.drawable.apple_music_icon,
+    private final Integer[] mIconList = {
+            R.drawable.amazon_prime_music_icon, R.drawable.apple_music_icon,
             R.drawable.deezer_icon, R.drawable.google_play_music_icon, R.drawable.pandora_icon,
-            R.drawable.soundcloud_icon, R.drawable.spotify_icon};
+            R.drawable.soundcloud_icon, R.drawable.spotify_icon
+    };
 
     /**
      * Principle constructor of the StreamingService

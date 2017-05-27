@@ -63,7 +63,7 @@ public class City implements Parcelable {
     }
 
     //Parcelable methods below....
-    public City(Parcel in){
+    private City(Parcel in){
         this.mCityID = in.readInt();
         this.mCityName = in.readString();
     }

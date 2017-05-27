@@ -63,7 +63,7 @@ public class Genre implements Parcelable {
     }
 
     //Parcelable methods below....
-    public Genre(Parcel in){
+    private Genre(Parcel in){
         this.mGenreID = in.readInt();
         this.mGenreName = in.readString();
     }

@@ -1,11 +1,6 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <string name="app_name">The Music Genreator</string>
 
-    <string name="search_genres">Search Genres</string>
-    <string name="search_cities">Search Cities</string>
-    <string name="search_countries">Search Countries</string>
-    <string name="search_playlists">Search Playlists</string>
-
     <string name="search_db">Search Database</string>
 
     <string name="welcome_message">
@@ -21,7 +16,6 @@
     <string name="add_genres">Add A New Genre</string>
     <string name="genre_info_none">None</string>
 
-    <string name="genres_header">Genres</string>
     <string name="playlists_header">Playlists</string>
     <string name="countries_header">Countries&#8230;</string>
     <string name="cities_header">Cities&#8230;</string>
@@ -31,13 +25,11 @@
     <string name="browse_cities">Explore By City</string>
     <string name="browse_cities_subtext">See the origin and influence of each genre by city.</string>
     <string name="browse_cities_title">Cities A-Z</string>
-    <string name="browse_cities_none">No cities beginning with %1$c</string>
     <string name="add_cities">Add A New City</string>
 
     <string name="browse_countries">Explore By Country</string>
     <string name="browse_countries_subtext">See the origin and influence of genres by country.</string>
     <string name="browse_countries_title">Countries A-Z</string>
-    <string name="browse_countries_none">No countries beginning with %1$c</string>
     <string name="add_country">Add A New Country</string>
 
 
@@ -45,7 +37,7 @@
     <string name="browse_playlists_subtext">Check out all the playlists, or even add your own!</string>
     <string name="browse_playlists_title">Playlists Browser</string>
     <string name="browse_playlists_none">No playlists of this genre yet.</string>
-    <string name="add_playlist">Add a new playlist</string>
+    <string name="add_playlist">Add A New Playlist</string>
     <string name="no_playlists_by_service">No playlists here yet.</string>
     <string name="search_playlists_by_service">Search playlists here.</string>
 

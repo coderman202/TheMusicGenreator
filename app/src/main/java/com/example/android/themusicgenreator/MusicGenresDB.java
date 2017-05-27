@@ -81,12 +81,6 @@ class MusicGenresDB extends SQLiteAssetHelper {
         }
     }
 
-    @Override
-    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        super.onUpgrade(db, oldVersion, newVersion);
-
-    }
-
     /**
      * Creates an instance of the DB
      * @param context passing context as the param

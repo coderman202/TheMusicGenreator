@@ -9,7 +9,6 @@
     <dimen name="browse_button_text_size">22sp</dimen>
     <dimen name="browse_button_subtext_size">14sp</dimen>
     <dimen name="browse_button_padding">2dp</dimen>
-    <dimen name="browse_button_subtext_padding">5dp</dimen>
 
     <dimen name="list_item_text_size">22sp</dimen>
     <dimen name="list_item_padding">10dp</dimen>
@@ -17,13 +16,7 @@
 
     <dimen name="list_header_text_size">24sp</dimen>
 
-    <dimen name="add_button_side_padding">10dp</dimen>
-
-    <dimen name="textview_border_width">2dip</dimen>
-
     <dimen name="fragment_activity_padding">16dp</dimen>
-
-    <dimen name="text_margin">16dp</dimen>
     <dimen name="appbar_padding_top">8dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>

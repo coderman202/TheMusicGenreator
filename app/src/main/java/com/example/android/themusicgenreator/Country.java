@@ -63,7 +63,7 @@ public class Country implements Parcelable {
     }
 
     //Parcelable methods below....
-    public Country(Parcel in){
+    private Country(Parcel in){
         this.mCountryID = in.readInt();
         this.mCountryName = in.readString();
     }

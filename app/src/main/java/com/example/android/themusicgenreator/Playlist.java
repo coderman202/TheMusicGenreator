@@ -106,7 +106,7 @@ public class Playlist implements Parcelable{
     }
 
     //Parcelable methods below....
-    public Playlist(Parcel in){
+    private Playlist(Parcel in){
         this.mPlaylistID = in.readInt();
         this.mPlaylistName = in.readString();
         this.mLink = in.readString();
