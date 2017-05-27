@@ -52,13 +52,12 @@ public class CityBrowserActivity extends AppCompatActivity {
         inCity = getIntent().getParcelableExtra("PASSED_CITY");
         if(inCity == null){
             inCity = musicGenresDB.getCity(1);
-            Log.d("cityname", inCity.getmCityName());
         }
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_cities);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null){
-            getSupportActionBar().setTitle(R.string.browse_genres_title);
+            getSupportActionBar().setTitle(R.string.browse_cities_title);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);

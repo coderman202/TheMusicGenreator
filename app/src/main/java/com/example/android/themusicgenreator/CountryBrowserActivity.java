@@ -49,12 +49,15 @@ public class CountryBrowserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_country_browser);
 
         inCountry = getIntent().getParcelableExtra("PASSED_COUNTRY");
+        if(inCountry == null){
+            inCountry = musicGenresDB.getCountry(1);
+        }
 
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_countries);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null){
-            getSupportActionBar().setTitle(R.string.browse_genres_title);
+            getSupportActionBar().setTitle(R.string.browse_countries_title);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
