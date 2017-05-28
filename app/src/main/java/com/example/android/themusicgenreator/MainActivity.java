@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 public class MainActivity extends AppCompatActivity {
 
     //Declare the 4 LinearLayouts in the activity_main.xml
-    LinearLayout genreBrowseButton, cityBrowseButton, countryBrowseButton, playlistBrowseButton;
+    private LinearLayout genreBrowseButton, cityBrowseButton, countryBrowseButton, playlistBrowseButton;
 
     //My db of musical genres. Accessing it to print all the genres to the screen
     public static MusicGenresDB musicGenresDB;
@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         //Initialise a single instance of the MusicGenres Database to be used across all activities
         musicGenresDB = MusicGenresDB.getInstance(this);
 
-        //Initialise all 4 LinearLayouts and set OnClickListeners on each one with explicit
+        // Initialise all 4 LinearLayouts and set OnClickListeners on each one with explicit
         // Intents to take to the relevant Activity.
         genreBrowseButton = (LinearLayout) findViewById(R.id.browse_genres);
         cityBrowseButton = (LinearLayout) findViewById(R.id.browse_cities);

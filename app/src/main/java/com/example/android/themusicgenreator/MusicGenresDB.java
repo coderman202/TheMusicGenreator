@@ -699,7 +699,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + GENRE_TABLE_NAME + " WHERE " + GENRE_GENRE_NAME +
-                        " LIKE %" + searchTerm + "%;";
+                        " LIKE '%" + searchTerm + "%';";
         Cursor c = db.rawQuery(query, null);
         if(c != null && c.moveToFirst()){
             c.moveToFirst();
@@ -717,6 +717,58 @@ class MusicGenresDB extends SQLiteAssetHelper {
     }
 
     /**
+     * A method for getting an array of Cities based on the search term the user entered
+     * @param searchTerm the search term the user entered
+     * @return returns an array of Cities
+     */
+    City[] getCityBySearchTerm(String searchTerm){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + CITY_TABLE_NAME + " WHERE " + CITY_CITY_NAME +
+                        " LIKE '%" + searchTerm + "%';";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            City[] cities = new City[c.getCount()];
+            for (int i = 0; i < cities.length; i++) {
+                int cityID = c.getInt(c.getColumnIndex(CITY_CITY_ID));
+                String cityName = c.getString(c.getColumnIndex(CITY_CITY_NAME));
+                cities[i] = new City(cityID, cityName);
+                c.moveToNext();
+            }
+            c.close();
+            return cities;
+        }
+        return null;
+    }
+
+    /**
+     * A method for getting an array of Countries based on the search term the user entered
+     * @param searchTerm the search term the user entered
+     * @return returns an array of Countries
+     */
+    Country[] getCountryBySearchTerm(String searchTerm){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query =
+                "SELECT * FROM " + COUNTRY_TABLE_NAME + " WHERE " + COUNTRY_COUNTRY_NAME +
+                        " LIKE '%" + searchTerm + "%';";
+        Cursor c = db.rawQuery(query, null);
+        if(c != null && c.moveToFirst()){
+            c.moveToFirst();
+            Country[] countries = new Country[c.getCount()];
+            for (int i = 0; i < countries.length; i++) {
+                int countryID = c.getInt(c.getColumnIndex(COUNTRY_COUNTRY_ID));
+                String countryName = c.getString(c.getColumnIndex(COUNTRY_COUNTRY_NAME));
+                countries[i] = new Country(countryID, countryName);
+                c.moveToNext();
+            }
+            c.close();
+            return countries;
+        }
+        return null;
+    }
+
+    /**
      * A method for getting an array of Playlist based on the search term the user entered
      * @param searchTerm the search term the user entered
      * @return returns an array of Playlist
@@ -725,7 +777,7 @@ class MusicGenresDB extends SQLiteAssetHelper {
         SQLiteDatabase db = this.getReadableDatabase();
         String query =
                 "SELECT * FROM " + PLAYLIST_TABLE_NAME + " WHERE " + PLAYLIST_PLAYLIST_NAME +
-                        " LIKE %" + searchTerm + "%;";
+                        " LIKE '%" + searchTerm + "%';";
         Cursor c = db.rawQuery(query, null);
         if(c != null && c.moveToFirst()){
             c.moveToFirst();

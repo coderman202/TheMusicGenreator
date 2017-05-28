@@ -43,7 +43,7 @@
 
 
     <string name="add_items_dialog_title">
-        Add Items to <xliff:g id="genre" example="Blues">%1$s</xliff:g>
+        Add Items to <xliff:g example="Blues" id="genre">%1$s</xliff:g>
     </string>
     <string name="add_items_to_genre_dialog_header">Add Areas of Origin and Influence</string>
 
@@ -51,33 +51,69 @@
     <string name="add_countries_dialog_title">Add New Country or Genre to Country</string>
 
     <string name="add_genre_to">
-        Add Genre To <xliff:g id="city_country_playlist" example="Los Angeles">%1$s</xliff:g>
+        Add Genre To <xliff:g example="Los Angeles" id="city_country_playlist">%1$s</xliff:g>
     </string>
 
     <string name="added_items">
-        <xliff:g id="city_country_or_ playlist" example="Los Angeles">%1$s</xliff:g>
-        added as area of influence to: <xliff:g id="genre" example="Alternative Rock">%2$s</xliff:g>
+        <xliff:g example="Los Angeles" id="city_country_or_ playlist">%1$s</xliff:g>
+        added as area of influence to: <xliff:g example="Alternative Rock" id="genre">%2$s</xliff:g>
     </string>
     <string name="added_genre">
-        <xliff:g id="genre" example="Alternative Rock">%1$s</xliff:g> has been added as a new genre
+        <xliff:g example="Alternative Rock" id="genre">%1$s</xliff:g> has been added as a new genre
     </string>
     <string name="not_added_genre">
-        <xliff:g id="genre" example="Alternative Rock">%1$s</xliff:g> is already in this database
+        <xliff:g example="Alternative Rock" id="genre">%1$s</xliff:g> is already in this database
     </string>
 
     <string name="added_city">
-        <xliff:g id="city" example="Paris">%1$s</xliff:g> has been added as a new city
+        <xliff:g example="Paris" id="city">%1$s</xliff:g> has been added as a new city
     </string>
     <string name="not_added_city">
-        <xliff:g id="city" example="London">%1$s</xliff:g> is already in this database
+        <xliff:g example="London" id="city">%1$s</xliff:g> is already in this database
     </string>
 
     <string name="added_country">
-        <xliff:g id="country" example="Russia">%1$s</xliff:g> has been added as a new country
+        <xliff:g example="Russia" id="country">%1$s</xliff:g> has been added as a new country
     </string>
     <string name="not_added_country">
-        <xliff:g id="country" example="Kenya">%1$s</xliff:g> is already in this database
+        <xliff:g example="Kenya" id="country">%1$s</xliff:g> is already in this database
+    </string>
+
+    <string name="search_results_title">Search Results</string>
+
+    <string name="search_results_genres_none">
+        No genres matching this search term. Search again?
+    </string>
+    <string name="search_results_cities_none">
+        No cities matching this search term. Search again?
+    </string>
+    <string name="search_results_coutnries_none">
+        No countries matching this search term. Search again?
+    </string>
+    <string name="search_results_playlists_none">
+        No playlists matching this search term. Search again?
+    </string>
+
+    <string name="genres">
+        Genres (<xliff:g example="25" id="num_genre_results">%1$s</xliff:g>)
+    </string>
+    <string name="countries">
+        Countries (<xliff:g example="25" id="num_country_results">%1$s</xliff:g>)
+    </string>
+    <string name="cities">
+        Cities (<xliff:g example="25" id="num_city_results">%1$s</xliff:g>)
+    </string>
+    <string name="playlists">
+        Playlists (<xliff:g example="25" id="num_playlist_results">%1$s</xliff:g>)
+    </string>
+
+    <string name="not_available">
+        This feature is currently unavailable, sorry. \n
+        Please enjoy the other features in this fine app!
     </string>
 
     <string name="or">OR</string>
+    <string name="title_activity_search_results">SearchResultsActivity</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
 </resources>

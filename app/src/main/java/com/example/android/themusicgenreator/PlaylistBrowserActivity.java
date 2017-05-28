@@ -8,6 +8,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,10 +18,8 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
-import android.text.Spannable;
-import android.text.SpannableString;
 import android.text.method.TextKeyListener;
-import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -64,7 +63,7 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         ViewPager mViewPager;
 
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null){
             getSupportActionBar().setTitle(R.string.browse_playlists_title);
@@ -72,6 +71,26 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
         }
+
+        toolbar.inflateMenu(R.menu.browser_menu);
+
+        // Setting an OnClickListener to allow user to open a search dialog upon clicking
+        // the search menu button
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                Log.i(getClass().getSimpleName(), " " + id);
+                switch(id) {
+                    case R.id.search_db:
+                        final Dialog dialog = SearchDialogCreator.createSearchDialog
+                                (toolbar.getContext(), R.color.browse_playlists_button_color);
+                        dialog.show();
+                        return true;
+                }
+                return false;
+            }
+        });
 
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
         toolbar.setOverflowIcon(searchIcon);
@@ -107,22 +126,6 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
 
         int id = item.getItemId();
         switch(id) {
-            case R.id.search_db:
-                final Dialog dialog = new Dialog(getApplicationContext());
-                dialog.setContentView(R.layout.search_db_dialog);
-                //Setting the colour of the dialog title
-                String str = getResources().getString(R.string.search_db);
-                SpannableString dialogTitle = new SpannableString(str);
-                dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(),
-                        R.color.browse_buttons_text_color)), 0, str.length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                dialog.setTitle(dialogTitle);
-                if (dialog.getWindow() != null) {
-                    dialog.getWindow().setBackgroundDrawableResource
-                            (R.color.browse_genre_button_color);
-                }
-                dialog.show();
-                return true;
             case android.R.id.home:
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
@@ -167,8 +170,15 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.playlists_scroller);
 
             //Get the floating action button that we will use to add records to the database.
-            //The appropriate onClickListeners will be set below in each tab.
-            FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab_playlists);
+            //This feature for adding playlists is currently unavailable
+            FloatingActionButton fab = (FloatingActionButton) getActivity().findViewById(R.id.fab_playlists);
+
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Snackbar.make(rootView, R.string.not_available, Snackbar.LENGTH_LONG).show();
+                }
+            });
 
             //Get the style for styling the textviews that will be added like lists.
             ContextThemeWrapper listItemStyle =

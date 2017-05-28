@@ -54,7 +54,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
         }
 
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_countries);
+        final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_countries);
         setSupportActionBar(toolbar);
         if(getSupportActionBar() != null){
             getSupportActionBar().setTitle(R.string.browse_countries_title);
@@ -65,6 +65,26 @@ public class CountryBrowserActivity extends AppCompatActivity {
 
         Drawable searchIcon = ContextCompat.getDrawable(getApplicationContext(), R.drawable.search);
         toolbar.setOverflowIcon(searchIcon);
+
+        toolbar.inflateMenu(R.menu.browser_menu);
+
+        // Setting an OnClickListener to allow user to open a search dialog upon clicking
+        // the search menu button
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                Log.i(getClass().getSimpleName(), " " + id);
+                switch(id) {
+                    case R.id.search_db:
+                        final Dialog dialog = SearchDialogCreator.createSearchDialog
+                                (toolbar.getContext(), R.color.browse_countries_button_color);
+                        dialog.show();
+                        return true;
+                }
+                return false;
+            }
+        });
 
         Country[] countriesArray = musicGenresDB.getAllCountries();
         String [] countryNames = new String[countriesArray.length];
@@ -114,22 +134,6 @@ public class CountryBrowserActivity extends AppCompatActivity {
 
         int id = item.getItemId();
         switch(id) {
-            case R.id.search_db:
-                final Dialog dialog = new Dialog(getApplicationContext());
-                dialog.setContentView(R.layout.search_db_dialog);
-                //Setting the colour of the dialog title
-                String str = getResources().getString(R.string.search_db);
-                SpannableString dialogTitle = new SpannableString(str);
-                dialogTitle.setSpan(new ForegroundColorSpan(ContextCompat.getColor(getApplicationContext(),
-                        R.color.browse_buttons_text_color)), 0, str.length(),
-                        Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-                dialog.setTitle(dialogTitle);
-                if (dialog.getWindow() != null) {
-                    dialog.getWindow().setBackgroundDrawableResource
-                            (R.color.browse_genre_button_color);
-                }
-                dialog.show();
-                return true;
             case android.R.id.home:
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
