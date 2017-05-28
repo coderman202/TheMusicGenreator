@@ -271,7 +271,7 @@ public class CityBrowserActivity extends AppCompatActivity {
                         public boolean onEditorAction(TextView v, int actionId,
                                                       KeyEvent event) {
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                String message = "";
+                                String message;
                                 String newCity = v.getText().toString();
                                 if(musicGenresDB.getCityByName(newCity) == null){
                                     musicGenresDB.addCity(new City(newCity));

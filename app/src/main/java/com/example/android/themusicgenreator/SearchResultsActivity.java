@@ -27,12 +27,12 @@ import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 
 public class SearchResultsActivity extends AppCompatActivity {
 
-    private static String searchTerm;
+    static String searchTerm;
 
-    public static Genre[] genreResults;
-    public static City[] cityResults;
-    public static Country[] countryResults;
-    public static Playlist[] playlistResults;
+    static Genre[] genreResults;
+    static City[] cityResults;
+    static Country[] countryResults;
+    static Playlist[] playlistResults;
 
 
     @Override
@@ -40,8 +40,11 @@ public class SearchResultsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search_results);
 
+        //Get the text entered via the EditText in the search Dialog
         searchTerm = getIntent().getStringExtra("SEARCH_TERM");
 
+        // Search the DB and store arrays of each object to generate textviews to
+        // populate the scrollview with later.
         genreResults = musicGenresDB.getGenreBySearchTerm(searchTerm);
         cityResults = musicGenresDB.getCityBySearchTerm(searchTerm);
         countryResults = musicGenresDB.getCountryBySearchTerm(searchTerm);
@@ -168,8 +171,6 @@ public class SearchResultsActivity extends AppCompatActivity {
             //Get the two styles for styling the textviews that will be added like lists.
             ContextThemeWrapper listItemStyle =
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
-            ContextThemeWrapper listHeaderStyle =
-                    new ContextThemeWrapper(getActivity(), R.style.ListHeaderStyle);
 
             //For checking which tab we are in and getting the right list for each one.
             //Using the appropriate array to generate the lists for each tab.
@@ -338,6 +339,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             return 4;
         }
 
+        //Set the page title, and include the number of results for each page, in brackets.
         @Override
         public CharSequence getPageTitle(int position) {
             int numResults;

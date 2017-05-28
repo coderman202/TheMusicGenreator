@@ -194,7 +194,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
                         public boolean onEditorAction(TextView v, int actionId,
                                                       KeyEvent event) {
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                String message = "";
+                                String message;
                                 String newGenre = v.getText().toString();
                                 if(musicGenresDB.getGenreByName(newGenre) == null){
                                     musicGenresDB.addGenre(new Genre(newGenre));

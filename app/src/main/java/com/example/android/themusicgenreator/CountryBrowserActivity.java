@@ -269,7 +269,7 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
                         public boolean onEditorAction(TextView v, int actionId,
                                                       KeyEvent event) {
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
-                                String message = "";
+                                String message;
                                 String newCountry = v.getText().toString();
                                 if(musicGenresDB.getCountryByName(newCountry) == null){
                                     musicGenresDB.addCountry(new Country(newCountry));

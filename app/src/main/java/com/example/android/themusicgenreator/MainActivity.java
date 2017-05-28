@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 public class MainActivity extends AppCompatActivity {
 
     //Declare the 4 LinearLayouts in the activity_main.xml
-    private LinearLayout genreBrowseButton, cityBrowseButton, countryBrowseButton, playlistBrowseButton;
+    LinearLayout genreBrowseButton, cityBrowseButton, countryBrowseButton, playlistBrowseButton;
 
     //My db of musical genres. Accessing it to print all the genres to the screen
     public static MusicGenresDB musicGenresDB;

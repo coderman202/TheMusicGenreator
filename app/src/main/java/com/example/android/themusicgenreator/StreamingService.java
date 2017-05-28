@@ -4,7 +4,7 @@ package com.example.android.themusicgenreator;
  * A class for Streaming Services such as Spotify
  */
 
-public class StreamingService {
+class StreamingService {
 
     private int mStreamingServiceID;
     private String mServiceName;
@@ -23,7 +23,7 @@ public class StreamingService {
      * @param mPlayStoreLink String link to the app on the Google Play store, in case the
      *                       user does not have the app already installed
      */
-    public StreamingService(int mStreamingServiceID, String mServiceName, String mPlayStoreLink){
+    StreamingService(int mStreamingServiceID, String mServiceName, String mPlayStoreLink){
         this.mStreamingServiceID = mStreamingServiceID;
         this.mServiceName = mServiceName;
         this.mPlayStoreLink = mPlayStoreLink;
