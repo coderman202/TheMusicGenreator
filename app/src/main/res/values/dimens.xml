@@ -4,6 +4,9 @@
     <dimen name="welcome_message_text_size">18sp</dimen>
     <dimen name="welcome_message_padding">16dp</dimen>
 
+    <dimen name="textview_description_text_size">16sp</dimen>
+    <dimen name="textview_description_padding">4dp</dimen>
+
     <dimen name="drop_down_item_text_size">15sp</dimen>
 
     <dimen name="browse_button_text_size">22sp</dimen>

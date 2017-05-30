@@ -2,7 +2,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/add_cities_dialog">
 
-    <AutoCompleteTextView style="@style/WelcomeMessageStyle"
+    <AutoCompleteTextView style="@style/EditTextStyle"
         android:id="@+id/add_genre_to_city"
         android:hint="@string/add_genres"
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
         android:text="@string/or"
         android:textStyle="bold"/>
 
-    <EditText style="@style/WelcomeMessageStyle"
+    <EditText style="@style/EditTextStyle"
         android:id="@+id/add_new_city"
         android:hint="@string/add_cities"
         android:layout_width="match_parent"

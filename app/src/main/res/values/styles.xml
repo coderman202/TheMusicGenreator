@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
@@ -61,6 +61,22 @@
 
     <style name="ListHeaderStyle" parent="WelcomeMessageStyle">
         <item name="android:textSize">@dimen/list_header_text_size</item>
+    </style>
+
+    <style name="EditTextStyle" parent="WelcomeMessageStyle">
+        <item name="android:colorControlNormal" tools:targetApi="21">@color/edittext_color_normal</item>
+        <item name="android:colorControlActivated" tools:targetApi="21">@color/edittext_color_highlight</item>
+        <item name="android:colorControlHighlight" tools:targetApi="21">@color/edittext_color_highlight</item>
+    </style>
+
+    <style name="DescriptionTextViewStyle">
+        <item name="android:textSize">@dimen/textview_description_text_size</item>
+        <item name="android:padding">@dimen/textview_description_padding</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/textview_description_textcolor</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textAlignment">center</item>
     </style>
 
 </resources>

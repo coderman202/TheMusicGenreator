@@ -210,6 +210,10 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.country_browser_fragment, container, false);
 
+            //Setting a TextView with a description of the screen on display
+            ExpandableTextView expandableTextView = (ExpandableTextView) rootView.findViewById(R.id.country_description);
+            expandableTextView.setText(getString(R.string.country_browser_activity));
+
             //Get the countryID by taking the section number minus one, as it should be
             // equivalent to the countryID
             int countryID = getArguments().getInt(ARG_SECTION_NUMBER);

@@ -212,6 +212,10 @@ public class CityBrowserActivity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.city_browser_fragment, container, false);
 
+            //Setting a TextView with a description of the screen on display
+            ExpandableTextView expandableTextView = (ExpandableTextView) rootView.findViewById(R.id.city_description);
+            expandableTextView.setText(getString(R.string.city_browser_activity));
+
             //Get the cityID by taking the section number minus one, as it should be
             // equivalent to the cityID
             int cityID = getArguments().getInt(ARG_SECTION_NUMBER);

@@ -112,8 +112,106 @@
         Please enjoy the other features in this fine app!
     </string>
 
+    <string name="disabled">This feature has been disable for the purposes of this submission</string>
+
+    <string name="play_store_msg">
+        You don\'t have Spotify, it seems, so you will be unable to check this playlist out there.
+        You could download it though, if you fancy. ;)
+    </string>
+
     <string name="or">OR</string>
     <string name="title_activity_search_results">SearchResultsActivity</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+
+    <!--Descrption Strings for each activity screen-->
+    <string name="main_activity">
+        MAIN ACTIVTY \n This is the screen for the MainActivity.java. It consists of a ConstraintLayout,
+        which contains a TextView with the intro message, and then 4 nested LinearLayouts, with
+        nested TextViews. Each of the nested LinearLayouts has an OnClickListener which takes the
+        user to one of the following 4 activities: GenreBrowserActivity, CityBrowserActivity,
+        CountryBrowserActivity or PlaylistBrowserActivity. This is achieved using explicit Intents.
+        I have used a custom ExpandableTextView for all my descriptions throughout. I trust that is
+        okay. Thank you.
+    </string>
+    <string name="genre_browser_activity">
+        GENRE BROWSER ACTIVITY \n This is the screen for the GenreBrowserActivity.java. It is a
+        tabbed activity and consists of an ActionBar (itself consisting of a custom title,
+        background color, and a TabLayout). Each tab contains a list for each letter of the alphabet
+        for all the genres. The lists consist of a ScrollView with a nested
+        LinearLayout which then contains a number of TextViews created programmatically. Each
+        TextView has an OnClickListener with an explicit Intent taking the user to the
+        GenreInfoActivity.java, to display more details regarding the chosen genre. The
+        FloatingActionButton has an OnClickListener which opens a Dialog allowing the user to enter
+        new records into the DB.
+    </string>
+    <string name="city_browser_activity">
+        CITY BROWSER ACTIVITY \n This is the screen for the CityBrowserActivity.java. It is a
+        tabbed activity and consists of an ActionBar (itself consisting of a custom title,
+        background color, and a Spinner). The Spinner is populated with a list of all the cities in
+        the DB. The user can select a city to see a list of the associated Genres. The lists consist
+        of a ScrollView with a nested LinearLayout which then contains a number of TextViews created
+        programmatically. Each TextView has an OnClickListener with an explicit Intent taking the
+        user to the GenreInfoActivity.java, to display more details regarding the chosen genre. The
+        FloatingActionButton has an OnClickListener which opens a Dialog allowing the user to enter
+        new records into the DB.
+    </string>
+    <string name="country_browser_activity">
+        COUNTRY BROWSER ACTIVITY \n This is the screen for the CountryBrowserActivity.java. It is a
+        tabbed activity and consists of an ActionBar (itself consisting of a custom title,
+        background color, and a Spinner). The Spinner is populated with a list of all the countries
+        in the DB. The user can select a city to see a list of the associated Genres. The lists
+        consist of a ScrollView with a nested LinearLayout which then contains a number of TextViews
+        created programmatically. Each TextView has an OnClickListener with an explicit Intent
+        taking the user to the GenreInfoActivity.java, to display more details regarding the chosen
+        genre. The FloatingActionButton has an OnClickListener which opens a Dialog allowing the
+        user to enter new records into the DB.
+    </string>
+    <string name="playlist_browser_activity">
+        PLAYLIST BROWSER ACTIVITY \n This is the screen for the PlaylistBrowserActivity.java. It is a
+        tabbed activity and consists of an ActionBar (itself consisting of a custom title,
+        background color, and a TabLayout). Each tab contains a list of all the playlists for each
+        Streaming Service, such as Spotify. The lists consist of a ScrollView with a nested
+        LinearLayout which then contains a number of TextViews created programmatically. Each
+        TextView has an OnClickListener with an explicit Intent taking the user to the
+        GenreInfoActivity.java, to display more details regarding the chosen genre. The
+        FloatingActionButton has an OnClickListener which shows a SnackBar notifying the user that
+        the option to add playlists is not currently available.
+    </string>
+    <string name="genre_info_activity">
+        GENRE INFO ACTIVITY \n This is the screen for the GenreInfoActivity.java. It is a
+        tabbed activity and consists of an ActionBar (itself consisting of a custom title,
+        background color, and a TabLayout). There are three tabs. One for the associated playlists,
+        one for the cities of origin and influence and one for the countries. The lists consist of a
+        ScrollView with a nested LinearLayout which then contains a number of TextViews created
+        programmatically. Each TextView in the playlist tab has an OnClickListener with an implicit
+        Intent taking the user to either the Spotify app if they have it, in order to listen to the
+        playlist, or the Google Play Store, if the user has that, to potentially download the app.
+        If the user has neither, then a simple snackbar message will display. Each TextView in the
+        cities and countries tabs has an OnClickListener with an explicit Intent taking the user to
+        either the CityBrowserActivity.java or the CountryBrowserActivity.java to display more
+        details regarding the chosen city/country. The FloatingActionButton has an OnClickListener
+        which opens a Dialog allowing the user to enter new records into the DB.
+    </string>
+    <string name="search_results_activity">
+        SEARCH RESULTS ACTIVITY \n This is the screen for the SearchResultsActivity.java. It is a
+        tabbed activity and consists of an ActionBar (itself consisting of a custom title,
+        background color, and a TabLayout). Each tab contains the search results for the playlists,
+        genres, cities and countries respectively. The lists consist of a ScrollView with a nested
+        LinearLayout which then contains a number of TextViews created programmatically. Each
+        TextView in the playlist tab has an OnClickListener with an implicit Intent taking the user
+        to either the Spotify app if they have it, in order to listen to the playlist, or the Google
+        Play Store, if the user has that, to potentially download the app. If the user has neither,
+        then a simple snackbar message will display. Each TextView in the cities and countries tabs
+        has an OnClickListener with an explicit Intent taking the user to either the
+        CityBrowserActivity.java or the CountryBrowserActivity.java to display more details
+        regarding the chosen city/country. Each TextView in the genre tab has an OnClickListener
+        with an explicit Intent taking the user to the GenreInfoActivity.java, to display more
+        details regarding the chosen genre.
+    </string>
+
+    <string name="removed_description">
+        Description text removed. It will reappear if you exit this screen and come back again
+    </string>
+
 </resources>

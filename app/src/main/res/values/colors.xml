@@ -13,4 +13,9 @@
 
     <color name="welcome_message_text_color">#000000</color>
     <color name="browse_buttons_text_color">#ffffff</color>
+
+    <color name="edittext_color_normal">#000000</color>
+    <color name="edittext_color_highlight">#8e28cb</color>
+
+    <color name="textview_description_textcolor">#ef0202</color>
 </resources>

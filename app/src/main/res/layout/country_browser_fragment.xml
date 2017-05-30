@@ -3,9 +3,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.android.themusicgenreator.CountryBrowserActivity$PlaceholderFragment">
 
+    <com.example.android.themusicgenreator.ExpandableTextView style="@style/DescriptionTextViewStyle"
+        android:id="@+id/country_description"/>
+
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_below="@id/country_description">
 
         <LinearLayout
             android:id="@+id/countries_scroller"

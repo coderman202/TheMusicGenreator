@@ -10,7 +10,7 @@
         android:drawableEnd="@drawable/guitar_acoustic_coloured"
         android:drawableStart="@drawable/earth_coloured"/>
 
-    <EditText style="@style/WelcomeMessageStyle"
+    <EditText style="@style/EditTextStyle"
         android:id="@+id/search_db"
         android:hint="@string/search_db"
         android:layout_width="match_parent"

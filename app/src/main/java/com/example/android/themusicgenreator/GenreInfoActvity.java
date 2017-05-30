@@ -3,10 +3,12 @@ package com.example.android.themusicgenreator;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -39,7 +41,6 @@ import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 public class GenreInfoActvity extends AppCompatActivity {
 
 
-
     //A Genre variable to store the genre object passed via the Intent.
     private static Genre inGenre;
 
@@ -68,7 +69,7 @@ public class GenreInfoActvity extends AppCompatActivity {
 
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_genre_info);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(inGenre.getmGenreName());
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -86,7 +87,7 @@ public class GenreInfoActvity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 Log.i(getClass().getSimpleName(), " " + id);
-                switch(id) {
+                switch (id) {
                     case R.id.search_db:
                         final Dialog dialog = SearchDialogCreator.createSearchDialog
                                 (toolbar.getContext(), R.color.browse_genre_button_color);
@@ -123,7 +124,7 @@ public class GenreInfoActvity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
-        switch(id) {
+        switch (id) {
             case android.R.id.home:
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
@@ -162,6 +163,10 @@ public class GenreInfoActvity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.genre_info_fragment, container, false);
 
+            //Setting a TextView with a description of the screen on display
+            ExpandableTextView expandableTextView = (ExpandableTextView) rootView.findViewById(R.id.genre_info_description);
+            expandableTextView.setText(getString(R.string.genre_info_activity));
+
             //Create array lists of each related playlist, city and country to the genre.
             final Playlist[] playlistsArray = musicGenresDB.getPlaylistByGenre(inGenre.getmGenreID());
             City[] citiesArray = musicGenresDB.getCitiesOfInfluence(inGenre.getmGenreID());
@@ -185,7 +190,7 @@ public class GenreInfoActvity extends AppCompatActivity {
                             R.color.browse_buttons_text_color)), 0, str.length(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     dialog.setTitle(dialogTitle);
-                    if(dialog.getWindow() != null){
+                    if (dialog.getWindow() != null) {
                         dialog.getWindow().setBackgroundDrawableResource(R.color.browse_genre_button_color);
                     }
 
@@ -250,15 +255,14 @@ public class GenreInfoActvity extends AppCompatActivity {
 
             //For checking which tab we are in and getting the right list for each one.
             //Using the appropriate array to generate the lists for each tab.
-            switch(getArguments().getInt(ARG_SECTION_NUMBER)-1){
+            switch (getArguments().getInt(ARG_SECTION_NUMBER) - 1) {
                 case 0:
-                    if(playlistsArray == null) {
+                    if (playlistsArray == null) {
                         TextView tv = new TextView(listItemStyle);
                         tv.setText(getString(R.string.browse_playlists_none));
                         scroller.addView(tv);
-                    }
-                    else{
-                        for (final Playlist playlist:playlistsArray) {
+                    } else {
+                        for (final Playlist playlist : playlistsArray) {
                             TextView tv = new TextView(listItemStyle);
                             tv.setText(playlist.getmPlaylistName());
                             StreamingService service = musicGenresDB.getStreamingService(playlist.getmStreamingServiceID());
@@ -268,9 +272,19 @@ public class GenreInfoActvity extends AppCompatActivity {
                             tv.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent i = new Intent(Intent.ACTION_VIEW,
+                                    Intent startPlayer = new Intent(Intent.ACTION_VIEW,
                                             Uri.parse(playlist.getmLink()));
-                                    startActivity(i);
+                                    Intent goToPlayStore = new Intent(Intent.ACTION_VIEW,
+                                            Uri.parse(musicGenresDB.getStreamingService(playlist.getmStreamingServiceID()).getmPlayStoreLink()));
+
+                                    PackageManager pm = getContext().getPackageManager();
+                                    if (startPlayer.resolveActivity(pm) != null) {
+                                        startActivity(startPlayer);
+                                    } else if (goToPlayStore.resolveActivity(pm) != null) {
+                                        startActivity(goToPlayStore);
+                                    } else {
+                                        Snackbar.make(rootView, R.string.play_store_msg, Snackbar.LENGTH_LONG).show();
+                                    }
                                 }
                             });
                             scroller.addView(tv);
@@ -283,20 +297,19 @@ public class GenreInfoActvity extends AppCompatActivity {
                     cityHeader.setText(R.string.country_city_header);
                     scroller.addView(cityHeader);
 
-                    if(citiesArray == null){
+                    if (citiesArray == null) {
                         TextView tv1 = new TextView(listItemStyle);
                         tv1.setText(getString(R.string.genre_info_none));
                         scroller.addView(tv1);
-                    }
-                    else{
-                        for (final City city:citiesArray) {
+                    } else {
+                        for (final City city : citiesArray) {
                             TextView tv1 = new TextView(listItemStyle);
                             tv1.setText(city.getmCityName());
                             tv1.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
                             tv1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent i  = new Intent(getActivity(), CityBrowserActivity.class);
+                                    Intent i = new Intent(getActivity(), CityBrowserActivity.class);
                                     i.putExtra("PASSED_CITY", city);
                                     startActivity(i);
                                 }
@@ -311,20 +324,19 @@ public class GenreInfoActvity extends AppCompatActivity {
                     countryHeader.setText(R.string.country_city_header);
                     scroller.addView(countryHeader);
 
-                    if(countriesArray == null){
+                    if (countriesArray == null) {
                         TextView tv2 = new TextView(listItemStyle);
                         tv2.setText(getString(R.string.genre_info_none));
                         scroller.addView(tv2);
-                    }
-                    else{
-                        for (final Country country:countriesArray) {
+                    } else {
+                        for (final Country country : countriesArray) {
                             TextView tv2 = new TextView(listItemStyle);
                             tv2.setText(country.getmCountryName());
                             tv2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
                             tv2.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent i  = new Intent(getActivity(), CountryBrowserActivity.class);
+                                    Intent i = new Intent(getActivity(), CountryBrowserActivity.class);
                                     i.putExtra("PASSED_COUNTRY", country);
                                     startActivity(i);
                                 }

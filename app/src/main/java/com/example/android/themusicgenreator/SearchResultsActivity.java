@@ -2,9 +2,11 @@ package com.example.android.themusicgenreator;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -163,7 +165,11 @@ public class SearchResultsActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_search_results, container, false);
+            final View rootView = inflater.inflate(R.layout.fragment_search_results, container, false);
+
+            //Setting a TextView with a description of the screen on display
+            ExpandableTextView expandableTextView = (ExpandableTextView) rootView.findViewById(R.id.playlist_description);
+            expandableTextView.setText(getString(R.string.playlist_browser_activity));
 
             //Get the LinearLayout inside the scrollview for adding all the lists.
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.results_scroller);
@@ -299,9 +305,21 @@ public class SearchResultsActivity extends AppCompatActivity {
                             tv.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent i = new Intent(Intent.ACTION_VIEW,
+                                    Intent startPlayer = new Intent(Intent.ACTION_VIEW,
                                             Uri.parse(playlist.getmLink()));
-                                    startActivity(i);
+                                    Intent goToPlayStore = new Intent(Intent.ACTION_VIEW,
+                                            Uri.parse(musicGenresDB.getStreamingService(playlist.getmStreamingServiceID()).getmPlayStoreLink()));
+
+                                    PackageManager pm = getContext().getPackageManager();
+                                    if(startPlayer.resolveActivity(pm) != null){
+                                        startActivity(startPlayer);
+                                    }
+                                    else if(goToPlayStore.resolveActivity(pm) != null){
+                                        startActivity(goToPlayStore);
+                                    }
+                                    else{
+                                        Snackbar.make(rootView, R.string.play_store_msg, Snackbar.LENGTH_LONG).show();
+                                    }
                                 }
                             });
                             scroller.addView(tv);

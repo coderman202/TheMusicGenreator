@@ -22,6 +22,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //Setting a TextView with a description of the screen on display
+        ExpandableTextView expandableTextView = (ExpandableTextView) findViewById(R.id.main_description);
+        expandableTextView.setText(getString(R.string.main_activity));
+
         //Initialise a single instance of the MusicGenres Database to be used across all activities
         musicGenresDB = MusicGenresDB.getInstance(this);
 

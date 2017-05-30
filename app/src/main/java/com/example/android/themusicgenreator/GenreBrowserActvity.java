@@ -160,6 +160,10 @@ public class GenreBrowserActvity extends AppCompatActivity {
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.genre_browser_fragment, container, false);
 
+            //Setting a TextView with a description of the screen on display
+            ExpandableTextView expandableTextView = (ExpandableTextView) rootView.findViewById(R.id.genre_description);
+            expandableTextView.setText(getString(R.string.genre_browser_activity));
+
             //Get the letter from the charArray to search by to match the letter heading of the tab
             char searchLetter = letters[getArguments().getInt(ARG_SECTION_NUMBER) - 1];
 

@@ -164,6 +164,10 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
                                  final Bundle savedInstanceState) {
             final View rootView = inflater.inflate(R.layout.playlist_browser_fragment, container, false);
 
+            //Setting a TextView with a description of the screen on display
+            ExpandableTextView expandableTextView = (ExpandableTextView) rootView.findViewById(R.id.playlist_description);
+            expandableTextView.setText(getString(R.string.playlist_browser_activity));
+
             int serviceID = getArguments().getInt(ARG_SECTION_NUMBER);
 
             Playlist[] playlistsArray = musicGenresDB.getPlaylistByStreamingService(serviceID);
@@ -206,7 +210,6 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
                         InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                         in.hideSoftInputFromWindow(parent.getApplicationWindowToken(), 0);
                         TextKeyListener.clear(searcher.getText());
-                        //onCreateView(inflater, container, savedInstanceState);
                     }
                 });
                 for (final Playlist playlist:playlistsArray) {
@@ -216,16 +219,20 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i = new Intent(Intent.ACTION_VIEW,
+                            Intent startPlayer = new Intent(Intent.ACTION_VIEW,
                                     Uri.parse(playlist.getmLink()));
+                            Intent goToPlayStore = new Intent(Intent.ACTION_VIEW,
+                                    Uri.parse(musicGenresDB.getStreamingService(playlist.getmStreamingServiceID()).getmPlayStoreLink()));
+
                             PackageManager pm = getContext().getPackageManager();
-                            if(i.resolveActivity(pm) != null){
-                                startActivity(i);
+                            if(startPlayer.resolveActivity(pm) != null){
+                                startActivity(startPlayer);
+                            }
+                            else if(goToPlayStore.resolveActivity(pm) != null){
+                                startActivity(goToPlayStore);
                             }
                             else{
-                                i = new Intent(Intent.ACTION_VIEW,
-                                        Uri.parse(musicGenresDB.getStreamingService(playlist.getmStreamingServiceID()).getmPlayStoreLink()));
-                                startActivity(i);
+                                Snackbar.make(rootView, R.string.play_store_msg, Snackbar.LENGTH_LONG).show();
                             }
                         }
                     });
