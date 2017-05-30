@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
-    <android.support.constraint.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
+
+    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
@@ -12,16 +11,18 @@
         android:background="@color/background_color"
         tools:context="com.example.android.themusicgenreator.MainActivity">
 
-        <com.example.android.themusicgenreator.ExpandableTextView style="@style/DescriptionTextViewStyle"
+        <com.example.android.themusicgenreator.ExpandableTextView
+            style="@style/DescriptionTextViewStyle"
             android:id="@+id/main_description"
             android:layout_width="0dp"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toTopOf="@+id/welcome_message"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside"/>
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
-        <TextView style="@style/WelcomeMessageStyle"
+        <TextView
+            style="@style/WelcomeMessageStyle"
             android:id="@+id/welcome_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -30,9 +31,10 @@
             app:layout_constraintBottom_toTopOf="@+id/browse_genres"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintVertical_chainStyle="spread_inside"/>
+            app:layout_constraintVertical_chainStyle="spread_inside" />
 
-        <LinearLayout style="@style/BrowseLayoutStyle"
+        <LinearLayout
+            style="@style/BrowseLayoutStyle"
             android:id="@+id/browse_genres"
             android:background="@color/browse_genre_button_color"
             app:layout_constraintTop_toBottomOf="@id/welcome_message"
@@ -40,16 +42,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView style="@style/BrowseButtonsStyle"
+            <TextView
+                style="@style/BrowseButtonsStyle"
                 android:text="@string/browse_genres"
                 android:drawableEnd="@drawable/guitar_acoustic"
-                android:drawableStart="@drawable/guitar_electric"/>
+                android:drawableStart="@drawable/guitar_electric" />
 
-            <TextView style="@style/BrowseButtonsSubtextStyle"
-                android:text="@string/browse_genres_subtext"/>
+            <TextView
+                style="@style/BrowseButtonsSubtextStyle"
+                android:text="@string/browse_genres_subtext" />
         </LinearLayout>
 
-        <LinearLayout style="@style/BrowseLayoutStyle"
+        <LinearLayout
+            style="@style/BrowseLayoutStyle"
             android:id="@+id/browse_cities"
             android:background="@color/browse_cities_button_color"
             app:layout_constraintTop_toBottomOf="@id/browse_genres"
@@ -57,16 +62,19 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView style="@style/BrowseButtonsStyle"
+            <TextView
+                style="@style/BrowseButtonsStyle"
                 android:text="@string/browse_cities"
                 android:drawableStart="@drawable/city"
-                android:drawableEnd="@drawable/city"/>
+                android:drawableEnd="@drawable/city" />
 
-            <TextView style="@style/BrowseButtonsSubtextStyle"
-                android:text="@string/browse_cities_subtext"/>
+            <TextView
+                style="@style/BrowseButtonsSubtextStyle"
+                android:text="@string/browse_cities_subtext" />
         </LinearLayout>
 
-        <LinearLayout style="@style/BrowseLayoutStyle"
+        <LinearLayout
+            style="@style/BrowseLayoutStyle"
             android:id="@+id/browse_countries"
             android:background="@color/browse_countries_button_color"
             app:layout_constraintTop_toBottomOf="@id/browse_cities"
@@ -74,30 +82,102 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView style="@style/BrowseButtonsStyle"
+            <TextView
+                style="@style/BrowseButtonsStyle"
                 android:text="@string/browse_countries"
                 android:drawableStart="@drawable/earth"
-                android:drawableEnd="@drawable/earth"/>
+                android:drawableEnd="@drawable/earth" />
 
-            <TextView style="@style/BrowseButtonsSubtextStyle"
-                android:text="@string/browse_countries_subtext"/>
+            <TextView
+                style="@style/BrowseButtonsSubtextStyle"
+                android:text="@string/browse_countries_subtext" />
         </LinearLayout>
 
-        <LinearLayout style="@style/BrowseLayoutStyle"
+        <LinearLayout
+            style="@style/BrowseLayoutStyle"
             android:id="@+id/browse_playlists"
             android:background="@color/browse_playlists_button_color"
             app:layout_constraintTop_toBottomOf="@id/browse_countries"
+            app:layout_constraintBottom_toTopOf="@+id/media_player"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <TextView
+                style="@style/BrowseButtonsStyle"
+                android:text="@string/browse_playlists"
+                android:drawableStart="@drawable/music"
+                android:drawableEnd="@drawable/playlist_play" />
+
+            <TextView
+                style="@style/BrowseButtonsSubtextStyle"
+                android:text="@string/browse_playlists_subtext" />
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            style="@style/BrowseLayoutStyle"
+            android:id="@+id/media_player"
+            android:orientation="horizontal"
+            android:background="@color/colorPrimary"
+            app:layout_constraintTop_toBottomOf="@id/browse_playlists"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent">
 
-            <TextView style="@style/BrowseButtonsStyle"
-                android:text="@string/browse_playlists"
-                android:drawableStart="@drawable/music"
-                android:drawableEnd="@drawable/playlist_play"/>
+            <ImageView
+                style="@style/MediaPlayerIconStyle"
+                android:id="@+id/skip_backward"
+                app:srcCompat="@drawable/skip_backward"
+                android:contentDescription="@string/skip_backward"
+                app:layout_constraintHorizontal_chainStyle="spread"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/stop_circle"
+                app:layout_constraintHorizontal_weight="1" />
 
-            <TextView style="@style/BrowseButtonsSubtextStyle"
-                android:text="@string/browse_playlists_subtext"/>
-        </LinearLayout>
+            <ImageView
+                style="@style/MediaPlayerIconStyle"
+                android:id="@+id/stop_circle"
+                app:srcCompat="@drawable/stop_circle"
+                android:contentDescription="@string/stop"
+                app:layout_constraintStart_toEndOf="@id/skip_backward"
+                app:layout_constraintEnd_toStartOf="@+id/play_pause"
+                app:layout_constraintHorizontal_weight="1" />
+
+            <ImageView
+                style="@style/MediaPlayerIconStyle"
+                android:id="@+id/play_pause"
+                app:srcCompat="@drawable/play_pause"
+                android:contentDescription="@string/play_pause"
+                app:layout_constraintStart_toEndOf="@id/stop_circle"
+                app:layout_constraintEnd_toStartOf="@+id/skip_forward"
+                app:layout_constraintHorizontal_weight="1" />
+
+            <ImageView
+                style="@style/MediaPlayerIconStyle"
+                android:id="@+id/skip_forward"
+                app:srcCompat="@drawable/skip_forward"
+                android:contentDescription="@string/skip_forward"
+                app:layout_constraintStart_toEndOf="@id/play_pause"
+                app:layout_constraintEnd_toStartOf="@+id/repeat"
+                app:layout_constraintHorizontal_weight="1" />
+
+            <ImageView
+                style="@style/MediaPlayerIconStyle"
+                android:id="@+id/repeat"
+                app:srcCompat="@drawable/repeat"
+                android:contentDescription="@string/repeat"
+                app:layout_constraintStart_toEndOf="@id/skip_forward"
+                app:layout_constraintEnd_toStartOf="@+id/shuffle"
+                app:layout_constraintHorizontal_weight="1" />
+
+            <ImageView
+                style="@style/MediaPlayerIconStyle"
+                android:id="@+id/shuffle"
+                app:srcCompat="@drawable/shuffle_variant"
+                android:contentDescription="@string/shuffle"
+                app:layout_constraintStart_toEndOf="@id/repeat"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_weight="1" />
+
+        </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

@@ -38,7 +38,6 @@ import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 public class GenreBrowserActvity extends AppCompatActivity {
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,7 +61,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_genres);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.browse_genres_title);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -80,7 +79,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 Log.i(getClass().getSimpleName(), " " + id);
-                switch(id) {
+                switch (id) {
                     case R.id.search_db:
                         final Dialog dialog = SearchDialogCreator.createSearchDialog
                                 (toolbar.getContext(), R.color.browse_genre_button_color);
@@ -121,7 +120,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
-        switch(id) {
+        switch (id) {
             case android.R.id.home:
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
@@ -186,7 +185,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
                             R.color.browse_buttons_text_color)), 0, str.length(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     dialog.setTitle(dialogTitle);
-                    if(dialog.getWindow() != null){
+                    if (dialog.getWindow() != null) {
                         dialog.getWindow().setBackgroundDrawableResource
                                 (R.color.browse_genre_button_color);
                     }
@@ -200,11 +199,10 @@ public class GenreBrowserActvity extends AppCompatActivity {
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
                                 String message;
                                 String newGenre = v.getText().toString();
-                                if(musicGenresDB.getGenreByName(newGenre) == null){
+                                if (musicGenresDB.getGenreByName(newGenre) == null) {
                                     musicGenresDB.addGenre(new Genre(newGenre));
                                     message = getString(R.string.added_genre, newGenre);
-                                }
-                                else{
+                                } else {
                                     message = getString(R.string.not_added_genre, newGenre);
                                 }
                                 InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -227,14 +225,14 @@ public class GenreBrowserActvity extends AppCompatActivity {
             ContextThemeWrapper listItemStyle =
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
 
-            for (final Genre genre:genresArray) {
+            for (final Genre genre : genresArray) {
                 TextView tv = new TextView(listItemStyle);
                 tv.setText(genre.getmGenreName());
                 tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
                 tv.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
+                        Intent i = new Intent(getActivity(), GenreInfoActvity.class);
                         i.putExtra("PASSED_GENRE", genre);
                         startActivity(i);
                     }
@@ -242,7 +240,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
                 scroller.addView(tv);
             }
 
-            if(genresArray.length == 0){
+            if (genresArray.length == 0) {
                 TextView tv = new TextView(listItemStyle);
                 tv.setText(getString(R.string.browse_genres_none, Character.toLowerCase(searchLetter)));
                 scroller.addView(tv);
@@ -281,7 +279,7 @@ public class GenreBrowserActvity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position < letters.length){
+            if (position < letters.length) {
                 return String.valueOf(letters[position]);
             }
             return null;

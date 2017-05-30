@@ -116,13 +116,10 @@
 
     <string name="play_store_msg">
         You don\'t have Spotify, it seems, so you will be unable to check this playlist out there.
-        You could download it though, if you fancy. ;)
     </string>
 
     <string name="or">OR</string>
     <string name="title_activity_search_results">SearchResultsActivity</string>
-    <string name="action_settings">Settings</string>
-    <string name="section_format">Hello World from section: %1$d</string>
 
     <!--Descrption Strings for each activity screen-->
     <string name="main_activity">
@@ -131,8 +128,12 @@
         nested TextViews. Each of the nested LinearLayouts has an OnClickListener which takes the
         user to one of the following 4 activities: GenreBrowserActivity, CityBrowserActivity,
         CountryBrowserActivity or PlaylistBrowserActivity. This is achieved using explicit Intents.
-        I have used a custom ExpandableTextView for all my descriptions throughout. I trust that is
-        okay. Thank you.
+        I have used a custom ExpandableTextView for all my descriptions throughout. I found the
+        source for this code at: https://codexplo.wordpress.com/2013/09/07/android-expandable-textview/
+        and since made some tweaks to it. I trust that is okay. All the data regarding the genres,
+        cities, countries and playlists were taken from: http://everynoise.com, with permission from
+        the site creator. All icons in this app are originally sourced from:
+        https://materialdesignicons.com/. I hope this explains things well enough. Thank you.
     </string>
     <string name="genre_browser_activity">
         GENRE BROWSER ACTIVITY \n This is the screen for the GenreBrowserActivity.java. It is a
@@ -213,5 +214,13 @@
     <string name="removed_description">
         Description text removed. It will reappear if you exit this screen and come back again
     </string>
+
+    <!--Content descriptions for all the media player icons-->
+    <string name="play_pause">A play/pause button icon.</string>
+    <string name="skip_forward">A skip forward button icon.</string>
+    <string name="stop">A stop button icon.</string>
+    <string name="skip_backward">A skip backward button icon.</string>
+    <string name="repeat">A repeat button icon.</string>
+    <string name="shuffle">A shuffle button icon.</string>
 
 </resources>

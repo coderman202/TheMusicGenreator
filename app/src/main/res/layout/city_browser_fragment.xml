@@ -1,22 +1,30 @@
-<RelativeLayout style="@style/FragmentLayoutStyle"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.android.themusicgenreator.CityBrowserActivity$PlaceholderFragment">
+    tools:context="com.example.android.themusicgenreator.GenreInfoActvity$PlaceholderFragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <com.example.android.themusicgenreator.ExpandableTextView style="@style/DescriptionTextViewStyle"
-        android:id="@+id/city_description"/>
+    <RelativeLayout style="@style/FragmentLayoutStyle"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.example.android.themusicgenreator.CityBrowserActivity$PlaceholderFragment">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/city_description">
+        <com.example.android.themusicgenreator.ExpandableTextView
+            style="@style/DescriptionTextViewStyle"
+            android:id="@+id/city_description" />
 
-        <LinearLayout
-            android:id="@+id/cities_scroller"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_below="@id/city_description">
 
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+            <LinearLayout
+                android:id="@+id/cities_scroller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+            </LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</ScrollView>

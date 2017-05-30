@@ -49,14 +49,14 @@ public class CountryBrowserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_country_browser);
 
         inCountry = getIntent().getParcelableExtra("PASSED_COUNTRY");
-        if(inCountry == null){
+        if (inCountry == null) {
             inCountry = musicGenresDB.getCountry(1);
         }
 
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_countries);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.browse_countries_title);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -75,7 +75,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 Log.i(getClass().getSimpleName(), " " + id);
-                switch(id) {
+                switch (id) {
                     case R.id.search_db:
                         final Dialog dialog = SearchDialogCreator.createSearchDialog
                                 (toolbar.getContext(), R.color.browse_countries_button_color);
@@ -87,7 +87,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
         });
 
         Country[] countriesArray = musicGenresDB.getAllCountries();
-        String [] countryNames = new String[countriesArray.length];
+        String[] countryNames = new String[countriesArray.length];
 
         for (int i = 0; i < countriesArray.length; i++) {
             countryNames[i] = countriesArray[i].getmCountryName();
@@ -96,7 +96,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
 
         // Setup spinner
         Spinner spinner = (Spinner) findViewById(R.id.spinner_countries);
-        spinner.setAdapter(new MyAdapter(toolbar.getContext(),countryNames));
+        spinner.setAdapter(new MyAdapter(toolbar.getContext(), countryNames));
 
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -113,7 +113,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
             }
         });
 
-        if(inCountry != null){
+        if (inCountry != null) {
             spinner.setSelection(inCountry.getmCountryID() - 1);
         }
     }
@@ -133,7 +133,7 @@ public class CountryBrowserActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
-        switch(id) {
+        switch (id) {
             case android.R.id.home:
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
@@ -142,43 +142,43 @@ public class CountryBrowserActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
-    private final ThemedSpinnerAdapter.Helper mDropDownHelper;
+    private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpinnerAdapter {
+        private final ThemedSpinnerAdapter.Helper mDropDownHelper;
 
-    MyAdapter(Context context, String[] objects) {
-        super(context, android.R.layout.simple_list_item_1, objects);
-        mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
-    }
-
-    @Override
-    public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
-        View view;
-
-        if (convertView == null) {
-            // Inflate the drop down using the helper's LayoutInflater
-            LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
-            view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
-        } else {
-            view = convertView;
+        MyAdapter(Context context, String[] objects) {
+            super(context, android.R.layout.simple_list_item_1, objects);
+            mDropDownHelper = new ThemedSpinnerAdapter.Helper(context);
         }
 
-        TextView textView = (TextView) view.findViewById(android.R.id.text1);
-        textView.setMaxLines(1);
-        textView.setText(getItem(position));
+        @Override
+        public View getDropDownView(int position, View convertView, @NonNull ViewGroup parent) {
+            View view;
 
-        return view;
-    }
+            if (convertView == null) {
+                // Inflate the drop down using the helper's LayoutInflater
+                LayoutInflater inflater = mDropDownHelper.getDropDownViewInflater();
+                view = inflater.inflate(android.R.layout.simple_list_item_1, parent, false);
+            } else {
+                view = convertView;
+            }
 
-    @Override
-    public Theme getDropDownViewTheme() {
-        return mDropDownHelper.getDropDownViewTheme();
-    }
+            TextView textView = (TextView) view.findViewById(android.R.id.text1);
+            textView.setMaxLines(1);
+            textView.setText(getItem(position));
 
-    @Override
-    public void setDropDownViewTheme(Theme theme) {
-        mDropDownHelper.setDropDownViewTheme(theme);
+            return view;
+        }
+
+        @Override
+        public Theme getDropDownViewTheme() {
+            return mDropDownHelper.getDropDownViewTheme();
+        }
+
+        @Override
+        public void setDropDownViewTheme(Theme theme) {
+            mDropDownHelper.setDropDownViewTheme(theme);
+        }
     }
-}
 
     /**
      * A placeholder fragment containing a simple view.
@@ -237,7 +237,7 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
                             R.color.browse_buttons_text_color)), 0, str.length(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     dialog.setTitle(dialogTitle);
-                    if(dialog.getWindow() != null){
+                    if (dialog.getWindow() != null) {
                         dialog.getWindow().setBackgroundDrawableResource(R.color.browse_countries_button_color);
                     }
 
@@ -275,11 +275,10 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
                                 String message;
                                 String newCountry = v.getText().toString();
-                                if(musicGenresDB.getCountryByName(newCountry) == null){
+                                if (musicGenresDB.getCountryByName(newCountry) == null) {
                                     musicGenresDB.addCountry(new Country(newCountry));
                                     message = getString(R.string.added_country, newCountry);
-                                }
-                                else{
+                                } else {
                                     message = getString(R.string.not_added_country, newCountry);
                                 }
                                 InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -300,19 +299,18 @@ private static class MyAdapter extends ArrayAdapter<String> implements ThemedSpi
             ContextThemeWrapper listItemStyle =
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
 
-            if(genresArray == null){
+            if (genresArray == null) {
                 TextView tv = new TextView(listItemStyle);
                 scroller.addView(tv);
-            }
-            else{
-                for (final Genre genre:genresArray) {
+            } else {
+                for (final Genre genre : genresArray) {
                     TextView tv = new TextView(listItemStyle);
                     tv.setText(genre.getmGenreName());
                     tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.countries_more, 0);
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
+                            Intent i = new Intent(getActivity(), GenreInfoActvity.class);
                             Log.d("name", genre.getmGenreName());
                             Log.d("id", genre.getmGenreID() + "");
                             i.putExtra("PASSED_GENRE", genre);

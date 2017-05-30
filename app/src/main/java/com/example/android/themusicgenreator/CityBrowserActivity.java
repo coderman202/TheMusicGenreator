@@ -50,13 +50,13 @@ public class CityBrowserActivity extends AppCompatActivity {
         setContentView(R.layout.activity_city_browser);
 
         inCity = getIntent().getParcelableExtra("PASSED_CITY");
-        if(inCity == null){
+        if (inCity == null) {
             inCity = musicGenresDB.getCity(1);
         }
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_cities);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.browse_cities_title);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -74,7 +74,7 @@ public class CityBrowserActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 Log.i(getClass().getSimpleName(), " " + id);
-                switch(id) {
+                switch (id) {
                     case R.id.search_db:
                         final Dialog dialog = SearchDialogCreator.createSearchDialog
                                 (toolbar.getContext(), R.color.browse_cities_button_color);
@@ -86,7 +86,7 @@ public class CityBrowserActivity extends AppCompatActivity {
         });
 
         City[] citiesArray = musicGenresDB.getAllCities();
-        String [] cityNames = new String[citiesArray.length];
+        String[] cityNames = new String[citiesArray.length];
 
         for (int i = 0; i < citiesArray.length; i++) {
             cityNames[i] = citiesArray[i].getmCityName();
@@ -95,7 +95,7 @@ public class CityBrowserActivity extends AppCompatActivity {
 
         // Setup spinner
         final Spinner spinner = (Spinner) findViewById(R.id.spinner_cities);
-        spinner.setAdapter(new MyAdapter(toolbar.getContext(),cityNames));
+        spinner.setAdapter(new MyAdapter(toolbar.getContext(), cityNames));
 
         spinner.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
@@ -115,7 +115,7 @@ public class CityBrowserActivity extends AppCompatActivity {
             }
         });
 
-        if(inCity != null){
+        if (inCity != null) {
             spinner.setSelection(inCity.getmCityID() - 1);
         }
     }
@@ -135,7 +135,7 @@ public class CityBrowserActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
-        switch(id) {
+        switch (id) {
             case android.R.id.home:
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
@@ -239,7 +239,7 @@ public class CityBrowserActivity extends AppCompatActivity {
                             R.color.browse_buttons_text_color)), 0, str.length(),
                             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
                     dialog.setTitle(dialogTitle);
-                    if(dialog.getWindow() != null){
+                    if (dialog.getWindow() != null) {
                         dialog.getWindow().setBackgroundDrawableResource(R.color.browse_cities_button_color);
                     }
 
@@ -277,11 +277,10 @@ public class CityBrowserActivity extends AppCompatActivity {
                             if (actionId == EditorInfo.IME_ACTION_DONE) {
                                 String message;
                                 String newCity = v.getText().toString();
-                                if(musicGenresDB.getCityByName(newCity) == null){
+                                if (musicGenresDB.getCityByName(newCity) == null) {
                                     musicGenresDB.addCity(new City(newCity));
                                     message = getString(R.string.added_city, newCity);
-                                }
-                                else{
+                                } else {
                                     message = getString(R.string.not_added_city, newCity);
                                 }
                                 InputMethodManager in = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -302,19 +301,18 @@ public class CityBrowserActivity extends AppCompatActivity {
             ContextThemeWrapper listItemStyle =
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
 
-            if(genresArray == null){
+            if (genresArray == null) {
                 TextView tv = new TextView(listItemStyle);
                 scroller.addView(tv);
-            }
-            else{
-                for (final Genre genre:genresArray) {
+            } else {
+                for (final Genre genre : genresArray) {
                     TextView tv = new TextView(listItemStyle);
                     tv.setText(genre.getmGenreName());
                     tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cities_more, 0);
                     tv.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
+                            Intent i = new Intent(getActivity(), GenreInfoActvity.class);
                             Log.d("name", genre.getmGenreName());
                             Log.d("id", genre.getmGenreID() + "");
                             i.putExtra("PASSED_GENRE", genre);

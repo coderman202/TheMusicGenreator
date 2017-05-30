@@ -70,7 +70,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_search_results);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.search_results_title);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -86,7 +86,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 Log.i(getClass().getSimpleName(), " " + id);
-                switch(id) {
+                switch (id) {
                     case R.id.search_db:
                         final Dialog dialog = SearchDialogCreator.createSearchDialog
                                 (toolbar.getContext(), R.color.colorPrimary);
@@ -128,7 +128,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
-        switch(id) {
+        switch (id) {
             case android.R.id.home:
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
@@ -168,8 +168,8 @@ public class SearchResultsActivity extends AppCompatActivity {
             final View rootView = inflater.inflate(R.layout.fragment_search_results, container, false);
 
             //Setting a TextView with a description of the screen on display
-            ExpandableTextView expandableTextView = (ExpandableTextView) rootView.findViewById(R.id.playlist_description);
-            expandableTextView.setText(getString(R.string.playlist_browser_activity));
+            ExpandableTextView expandableTextView = (ExpandableTextView) rootView.findViewById(R.id.search_description);
+            expandableTextView.setText(getString(R.string.search_results_activity));
 
             //Get the LinearLayout inside the scrollview for adding all the lists.
             LinearLayout scroller = (LinearLayout) rootView.findViewById(R.id.results_scroller);
@@ -180,9 +180,9 @@ public class SearchResultsActivity extends AppCompatActivity {
 
             //For checking which tab we are in and getting the right list for each one.
             //Using the appropriate array to generate the lists for each tab.
-            switch(getArguments().getInt(ARG_SECTION_NUMBER)-1){
+            switch (getArguments().getInt(ARG_SECTION_NUMBER) - 1) {
                 case 0:
-                    if(genreResults == null) {
+                    if (genreResults == null) {
                         TextView tv = new TextView(listItemStyle);
                         tv.setText(getString(R.string.search_results_genres_none));
                         tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search_coloured, 0);
@@ -195,9 +195,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                             }
                         });
                         scroller.addView(tv);
-                    }
-                    else{
-                        for (final Genre genre:genreResults) {
+                    } else {
+                        for (final Genre genre : genreResults) {
                             TextView tv = new TextView(listItemStyle);
                             tv.setText(genre.getmGenreName());
                             tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.genres_more, 0);
@@ -206,7 +205,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                             tv.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent i  = new Intent(getActivity(), GenreInfoActvity.class);
+                                    Intent i = new Intent(getActivity(), GenreInfoActvity.class);
                                     i.putExtra("PASSED_GENRE", genre);
                                     startActivity(i);
                                 }
@@ -216,7 +215,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     }
                     break;
                 case 1:
-                    if(cityResults == null){
+                    if (cityResults == null) {
                         TextView tv1 = new TextView(listItemStyle);
                         tv1.setText(getString(R.string.search_results_cities_none));
                         tv1.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search_coloured, 0);
@@ -229,16 +228,15 @@ public class SearchResultsActivity extends AppCompatActivity {
                             }
                         });
                         scroller.addView(tv1);
-                    }
-                    else{
-                        for (final City city:cityResults) {
+                    } else {
+                        for (final City city : cityResults) {
                             TextView tv1 = new TextView(listItemStyle);
                             tv1.setText(city.getmCityName());
                             tv1.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.cities_more, 0);
                             tv1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent i  = new Intent(getActivity(), CityBrowserActivity.class);
+                                    Intent i = new Intent(getActivity(), CityBrowserActivity.class);
                                     i.putExtra("PASSED_CITY", city);
                                     startActivity(i);
                                 }
@@ -248,7 +246,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     }
                     break;
                 case 2:
-                    if(countryResults == null){
+                    if (countryResults == null) {
                         TextView tv2 = new TextView(listItemStyle);
                         tv2.setText(getString(R.string.search_results_coutnries_none));
                         tv2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search_coloured, 0);
@@ -261,16 +259,15 @@ public class SearchResultsActivity extends AppCompatActivity {
                             }
                         });
                         scroller.addView(tv2);
-                    }
-                    else{
-                        for (final Country country:countryResults) {
+                    } else {
+                        for (final Country country : countryResults) {
                             TextView tv2 = new TextView(listItemStyle);
                             tv2.setText(country.getmCountryName());
                             tv2.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.countries_more, 0);
                             tv2.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent i  = new Intent(getActivity(), CountryBrowserActivity.class);
+                                    Intent i = new Intent(getActivity(), CountryBrowserActivity.class);
                                     i.putExtra("PASSED_COUNTRY", country);
                                     startActivity(i);
                                 }
@@ -280,7 +277,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                     }
                     break;
                 case 3:
-                    if(playlistResults == null) {
+                    if (playlistResults == null) {
                         TextView tv3 = new TextView(listItemStyle);
                         tv3.setText(getString(R.string.search_results_playlists_none));
                         tv3.setCompoundDrawablesWithIntrinsicBounds(0, 0, R.drawable.search_coloured, 0);
@@ -293,9 +290,8 @@ public class SearchResultsActivity extends AppCompatActivity {
                             }
                         });
                         scroller.addView(tv3);
-                    }
-                    else{
-                        for (final Playlist playlist:playlistResults) {
+                    } else {
+                        for (final Playlist playlist : playlistResults) {
                             TextView tv = new TextView(listItemStyle);
                             tv.setText(playlist.getmPlaylistName());
                             StreamingService service = musicGenresDB.getStreamingService(playlist.getmStreamingServiceID());
@@ -311,13 +307,11 @@ public class SearchResultsActivity extends AppCompatActivity {
                                             Uri.parse(musicGenresDB.getStreamingService(playlist.getmStreamingServiceID()).getmPlayStoreLink()));
 
                                     PackageManager pm = getContext().getPackageManager();
-                                    if(startPlayer.resolveActivity(pm) != null){
+                                    if (startPlayer.resolveActivity(pm) != null) {
                                         startActivity(startPlayer);
-                                    }
-                                    else if(goToPlayStore.resolveActivity(pm) != null){
+                                    } else if (goToPlayStore.resolveActivity(pm) != null) {
                                         startActivity(goToPlayStore);
-                                    }
-                                    else{
+                                    } else {
                                         Snackbar.make(rootView, R.string.play_store_msg, Snackbar.LENGTH_LONG).show();
                                     }
                                 }
@@ -363,34 +357,30 @@ public class SearchResultsActivity extends AppCompatActivity {
             int numResults;
             switch (position) {
                 case 0:
-                    if(genreResults == null){
+                    if (genreResults == null) {
                         numResults = 0;
-                    }
-                    else{
+                    } else {
                         numResults = genreResults.length;
                     }
                     return getString(R.string.genres, numResults + "");
                 case 1:
-                    if(cityResults == null){
+                    if (cityResults == null) {
                         numResults = 0;
-                    }
-                    else{
+                    } else {
                         numResults = cityResults.length;
                     }
                     return getString(R.string.cities, numResults + "");
                 case 2:
-                    if(countryResults == null){
+                    if (countryResults == null) {
                         numResults = 0;
-                    }
-                    else{
+                    } else {
                         numResults = countryResults.length;
                     }
                     return getString(R.string.countries, numResults + "");
                 case 3:
-                    if(playlistResults == null){
+                    if (playlistResults == null) {
                         numResults = 0;
-                    }
-                    else{
+                    } else {
                         numResults = playlistResults.length;
                     }
                     return getString(R.string.playlists, numResults + "");

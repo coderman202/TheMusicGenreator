@@ -2,32 +2,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/add_items_dialog">
 
-    <TextView style="@style/WelcomeMessageStyle"
+    <TextView
+        style="@style/WelcomeMessageStyle"
         android:id="@+id/add_items_to_genres_dialog_header"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="top|center"/>
+        android:layout_gravity="top|center" />
 
-    <AutoCompleteTextView style="@style/EditTextStyle"
+    <AutoCompleteTextView
+        style="@style/EditTextStyle"
         android:id="@+id/add_city"
         android:hint="@string/add_cities"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/city_coloured"
-        android:drawableEnd="@drawable/city_coloured"/>
+        android:drawableEnd="@drawable/city_coloured" />
 
-    <TextView style="@style/WelcomeMessageStyle"
+    <TextView
+        style="@style/WelcomeMessageStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/or"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <AutoCompleteTextView style="@style/EditTextStyle"
+    <AutoCompleteTextView
+        style="@style/EditTextStyle"
         android:id="@+id/add_country"
         android:hint="@string/add_country"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableStart="@drawable/earth_coloured"
-        android:drawableEnd="@drawable/earth_coloured"/>
+        android:drawableEnd="@drawable/earth_coloured" />
 
 </LinearLayout>

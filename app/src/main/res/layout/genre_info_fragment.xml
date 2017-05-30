@@ -1,25 +1,32 @@
-<RelativeLayout style="@style/FragmentLayoutStyle"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.android.themusicgenreator.GenreInfoActvity$PlaceholderFragment">
+    tools:context="com.example.android.themusicgenreator.GenreInfoActvity$PlaceholderFragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <com.example.android.themusicgenreator.ExpandableTextView style="@style/DescriptionTextViewStyle"
-        android:id="@+id/genre_info_description"/>
+    <RelativeLayout style="@style/FragmentLayoutStyle">
 
-    <TextView
-        android:id="@+id/genre_info_header"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/genre_info_description"/>
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        <com.example.android.themusicgenreator.ExpandableTextView
+            style="@style/DescriptionTextViewStyle"
+            android:id="@+id/genre_info_description" />
 
-        <LinearLayout
-            android:id="@+id/genre_info_scroller"
+        <TextView
+            android:id="@+id/genre_info_header"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+            android:layout_below="@id/genre_info_description" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/genre_info_header">
+
+            <LinearLayout
+                android:id="@+id/genre_info_scroller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</ScrollView>
+

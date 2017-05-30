@@ -14,24 +14,27 @@ public class Genre implements Parcelable {
 
     /**
      * Principle Genre constructor
-     * @param mGenreID int ID of the genre
+     *
+     * @param mGenreID   int ID of the genre
      * @param mGenreName String name of the genre
      */
-    public Genre(int mGenreID, String mGenreName){
+    public Genre(int mGenreID, String mGenreName) {
         this.mGenreID = mGenreID;
         this.mGenreName = mGenreName;
     }
 
     /**
      * Secondary constructor of Genre class. Only taking in a name String
+     *
      * @param mGenreName String name of the genre
      */
-    public Genre(String mGenreName){
+    public Genre(String mGenreName) {
         this.mGenreName = mGenreName;
     }
 
     /**
      * get() method for the genre ID
+     *
      * @return returns the Genre ID
      */
     public int getmGenreID() {
@@ -40,6 +43,7 @@ public class Genre implements Parcelable {
 
     /**
      * get() method for the genre name
+     *
      * @return returns the Genre name
      */
     public String getmGenreName() {
@@ -48,6 +52,7 @@ public class Genre implements Parcelable {
 
     /**
      * set() method for genre ID
+     *
      * @param mGenreID the int ID of the genre
      */
     public void setmGenreID(int mGenreID) {
@@ -56,6 +61,7 @@ public class Genre implements Parcelable {
 
     /**
      * set() method for genre name
+     *
      * @param mGenreName the String name of the genre
      */
     public void setmGenreName(String mGenreName) {
@@ -63,18 +69,18 @@ public class Genre implements Parcelable {
     }
 
     //Parcelable methods below....
-    private Genre(Parcel in){
+    private Genre(Parcel in) {
         this.mGenreID = in.readInt();
         this.mGenreName = in.readString();
     }
 
     @Override
-    public int describeContents(){
+    public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags){
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mGenreID);
         dest.writeString(mGenreName);
     }

@@ -14,24 +14,27 @@ public class City implements Parcelable {
 
     /**
      * Principle constructor for the City class
-     * @param mCityID an int ID of the City
+     *
+     * @param mCityID   an int ID of the City
      * @param mCityName a String name of the City
      */
-    public City(int mCityID, String mCityName){
+    public City(int mCityID, String mCityName) {
         this.mCityID = mCityID;
         this.mCityName = mCityName;
     }
 
     /**
      * Secondary constructor using onle the String name
+     *
      * @param mCityName a String name of the City
      */
-    public City(String mCityName){
+    public City(String mCityName) {
         this.mCityName = mCityName;
     }
 
     /**
      * get() method for city ID
+     *
      * @return returns int ID of the city
      */
     public int getmCityID() {
@@ -40,6 +43,7 @@ public class City implements Parcelable {
 
     /**
      * get() method for city name
+     *
      * @return returns a String name of the city
      */
     public String getmCityName() {
@@ -48,6 +52,7 @@ public class City implements Parcelable {
 
     /**
      * set() method for city ID
+     *
      * @param mCityID int ID of the city
      */
     public void setmCityID(int mCityID) {
@@ -56,6 +61,7 @@ public class City implements Parcelable {
 
     /**
      * set() method for city name
+     *
      * @param mCityName String name of the city
      */
     public void setmCityName(String mCityName) {
@@ -63,18 +69,18 @@ public class City implements Parcelable {
     }
 
     //Parcelable methods below....
-    private City(Parcel in){
+    private City(Parcel in) {
         this.mCityID = in.readInt();
         this.mCityName = in.readString();
     }
 
     @Override
-    public int describeContents(){
+    public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags){
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mCityID);
         dest.writeString(mCityName);
     }

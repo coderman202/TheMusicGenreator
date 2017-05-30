@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         genreBrowseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i  = new Intent(MainActivity.this, GenreBrowserActvity.class);
+                Intent i = new Intent(MainActivity.this, GenreBrowserActvity.class);
                 startActivity(i);
             }
         });
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
         cityBrowseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i  = new Intent(MainActivity.this, CityBrowserActivity.class);
+                Intent i = new Intent(MainActivity.this, CityBrowserActivity.class);
                 startActivity(i);
             }
         });
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
         countryBrowseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i  = new Intent(MainActivity.this, CountryBrowserActivity.class);
+                Intent i = new Intent(MainActivity.this, CountryBrowserActivity.class);
                 startActivity(i);
             }
         });
@@ -63,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         playlistBrowseButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i  = new Intent(MainActivity.this, PlaylistBrowserActivity.class);
+                Intent i = new Intent(MainActivity.this, PlaylistBrowserActivity.class);
                 startActivity(i);
             }
         });

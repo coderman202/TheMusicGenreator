@@ -18,12 +18,13 @@ class StreamingService {
 
     /**
      * Principle constructor of the StreamingService
+     *
      * @param mStreamingServiceID int ID of the Streaming Service
-     * @param mServiceName String name of the Streaming Service, such as Spotify
-     * @param mPlayStoreLink String link to the app on the Google Play store, in case the
-     *                       user does not have the app already installed
+     * @param mServiceName        String name of the Streaming Service, such as Spotify
+     * @param mPlayStoreLink      String link to the app on the Google Play store, in case the
+     *                            user does not have the app already installed
      */
-    StreamingService(int mStreamingServiceID, String mServiceName, String mPlayStoreLink){
+    StreamingService(int mStreamingServiceID, String mServiceName, String mPlayStoreLink) {
         this.mStreamingServiceID = mStreamingServiceID;
         this.mServiceName = mServiceName;
         this.mPlayStoreLink = mPlayStoreLink;
@@ -32,10 +33,11 @@ class StreamingService {
 
     /**
      * Secondary constructor of the StreamingService
+     *
      * @param mStreamingServiceID int ID of the Streaming Service
-     * @param mServiceName String name of the Streaming Service
+     * @param mServiceName        String name of the Streaming Service
      */
-    public StreamingService(int mStreamingServiceID, String mServiceName){
+    public StreamingService(int mStreamingServiceID, String mServiceName) {
         this.mStreamingServiceID = mStreamingServiceID;
         this.mServiceName = mServiceName;
         this.mIcon = mIconList[mStreamingServiceID];
@@ -43,14 +45,16 @@ class StreamingService {
 
     /**
      * Tertiary constructor of StreamingService, only taking String name as the parameter
+     *
      * @param mServiceName the String name of the Streaming Service
      */
-    public StreamingService(String mServiceName){
+    public StreamingService(String mServiceName) {
         this.mServiceName = mServiceName;
     }
 
     /**
      * get() method for the ID
+     *
      * @return returns int ID of the Streaming Service
      */
     public int getmStreamingServiceID() {
@@ -59,6 +63,7 @@ class StreamingService {
 
     /**
      * get() method for the name
+     *
      * @return returns the String name of the Streaming Service
      */
     public String getmServiceName() {
@@ -67,6 +72,7 @@ class StreamingService {
 
     /**
      * get() method for the play store link
+     *
      * @return returns the String link to the Streaming Service on the google play store
      */
     public String getmPlayStoreLink() {
@@ -75,6 +81,7 @@ class StreamingService {
 
     /**
      * get() method for the icon to display the streaming service
+     *
      * @return returns an Integer of the icon
      */
     public Integer getmIcon() {
@@ -83,6 +90,7 @@ class StreamingService {
 
     /**
      * set() method for the ID
+     *
      * @param mStreamingServiceID int ID of the Streaming Service
      */
     public void setmStreamingServiceID(int mStreamingServiceID) {
@@ -91,6 +99,7 @@ class StreamingService {
 
     /**
      * set() method for the name
+     *
      * @param mServiceName String name of the Streaming Service
      */
     public void setmServiceName(String mServiceName) {
@@ -99,6 +108,7 @@ class StreamingService {
 
     /**
      * set() method for the link
+     *
      * @param mPlayStoreLink String link to the Streaming Service
      */
     public void setmPlayStoreLink(String mPlayStoreLink) {
@@ -107,6 +117,7 @@ class StreamingService {
 
     /**
      * set() method for the icon
+     *
      * @param mIcon take a new icon
      */
     public void setmIcon(Integer mIcon) {

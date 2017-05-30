@@ -37,7 +37,6 @@ import static com.example.android.themusicgenreator.MainActivity.musicGenresDB;
 public class PlaylistBrowserActivity extends AppCompatActivity {
 
 
-
     //Set the number of tabs to be equal to the number of streaming services in the DB, to ensure
     // each one has their own tab.
     private final int NUM_TABS = musicGenresDB.getNumStreamingServices();
@@ -65,7 +64,7 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         //Set the title of the toolbar and add a search icon instead of the standard menu icon
         final Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        if(getSupportActionBar() != null){
+        if (getSupportActionBar() != null) {
             getSupportActionBar().setTitle(R.string.browse_playlists_title);
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.home);
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -81,7 +80,7 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
                 Log.i(getClass().getSimpleName(), " " + id);
-                switch(id) {
+                switch (id) {
                     case R.id.search_db:
                         final Dialog dialog = SearchDialogCreator.createSearchDialog
                                 (toolbar.getContext(), R.color.browse_playlists_button_color);
@@ -125,7 +124,7 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
-        switch(id) {
+        switch (id) {
             case android.R.id.home:
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
@@ -189,13 +188,12 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
                     new ContextThemeWrapper(getActivity(), R.style.ListItemStyle);
 
             final AutoCompleteTextView searcher = (AutoCompleteTextView) rootView.findViewById(R.id.playlists_searcher);
-            if(playlistsArray == null){
+            if (playlistsArray == null) {
                 searcher.setVisibility(View.GONE);
                 TextView tv = new TextView(listItemStyle);
                 tv.setText(getString(R.string.no_playlists_by_service));
                 scroller.addView(tv);
-            }
-            else{
+            } else {
                 String[] playlistNames = new String[playlistsArray.length];
                 for (int i = 0; i < playlistsArray.length; i++) {
                     playlistNames[i] = playlistsArray[i].getmPlaylistName();
@@ -212,7 +210,7 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
                         TextKeyListener.clear(searcher.getText());
                     }
                 });
-                for (final Playlist playlist:playlistsArray) {
+                for (final Playlist playlist : playlistsArray) {
                     TextView tv = new TextView(listItemStyle);
                     tv.setText(playlist.getmPlaylistName());
                     tv.setCompoundDrawablesWithIntrinsicBounds(0, 0, musicGenresDB.getStreamingService(playlist.getmStreamingServiceID()).getmIcon(), 0);
@@ -225,13 +223,11 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
                                     Uri.parse(musicGenresDB.getStreamingService(playlist.getmStreamingServiceID()).getmPlayStoreLink()));
 
                             PackageManager pm = getContext().getPackageManager();
-                            if(startPlayer.resolveActivity(pm) != null){
+                            if (startPlayer.resolveActivity(pm) != null) {
                                 startActivity(startPlayer);
-                            }
-                            else if(goToPlayStore.resolveActivity(pm) != null){
+                            } else if (goToPlayStore.resolveActivity(pm) != null) {
                                 startActivity(goToPlayStore);
-                            }
-                            else{
+                            } else {
                                 Snackbar.make(rootView, R.string.play_store_msg, Snackbar.LENGTH_LONG).show();
                             }
                         }
@@ -273,7 +269,7 @@ public class PlaylistBrowserActivity extends AppCompatActivity {
 
         @Override
         public CharSequence getPageTitle(int position) {
-            if(position < NUM_TABS){
+            if (position < NUM_TABS) {
                 String pageTitle = musicGenresDB.getStreamingService(position + 1).getmServiceName();
                 pageTitle += " ( " +
                         musicGenresDB.getNumPlaylistsByStreamingService(position + 1) + ")";

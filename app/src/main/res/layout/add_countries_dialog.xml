@@ -2,7 +2,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/add_countries_dialog">
 
-    <AutoCompleteTextView style="@style/EditTextStyle"
+    <AutoCompleteTextView
+        style="@style/EditTextStyle"
         android:id="@+id/add_genre_to_country"
         android:hint="@string/add_genres"
         android:layout_width="match_parent"
@@ -10,15 +11,17 @@
         android:inputType="text"
         android:drawableStart="@drawable/music_coloured"
         android:drawableEnd="@drawable/guitar_electric_coloured"
-        android:layout_gravity="top|center"/>
+        android:layout_gravity="top|center" />
 
-    <TextView style="@style/WelcomeMessageStyle"
+    <TextView
+        style="@style/WelcomeMessageStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/or"
-        android:textStyle="bold"/>
+        android:textStyle="bold" />
 
-    <EditText style="@style/EditTextStyle"
+    <EditText
+        style="@style/EditTextStyle"
         android:id="@+id/add_new_country"
         android:hint="@string/add_country"
         android:layout_width="match_parent"
@@ -26,5 +29,5 @@
         android:inputType="text"
         android:imeOptions="actionDone"
         android:drawableStart="@drawable/earth_coloured"
-        android:drawableEnd="@drawable/earth_coloured"/>
+        android:drawableEnd="@drawable/earth_coloured" />
 </LinearLayout>

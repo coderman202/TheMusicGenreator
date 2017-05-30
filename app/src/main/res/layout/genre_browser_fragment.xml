@@ -1,21 +1,28 @@
-<RelativeLayout style="@style/FragmentLayoutStyle"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.android.themusicgenreator.GenreBrowserActvity$PlaceholderFragment">
+    tools:context="com.example.android.themusicgenreator.GenreInfoActvity$PlaceholderFragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <com.example.android.themusicgenreator.ExpandableTextView style="@style/DescriptionTextViewStyle"
-        android:id="@+id/genre_description"/>
+    <RelativeLayout style="@style/FragmentLayoutStyle"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.example.android.themusicgenreator.GenreBrowserActvity$PlaceholderFragment">
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/genre_description">
+        <com.example.android.themusicgenreator.ExpandableTextView
+            style="@style/DescriptionTextViewStyle"
+            android:id="@+id/genre_description" />
 
-        <LinearLayout
-            android:id="@+id/genres_scroller"
+        <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+            android:layout_below="@id/genre_description">
+
+            <LinearLayout
+                android:id="@+id/genres_scroller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</ScrollView>

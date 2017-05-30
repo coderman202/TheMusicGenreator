@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 class SearchDialogCreator {
 
-    static Dialog createSearchDialog(Context context1, int titleBarColorResId){
+    static Dialog createSearchDialog(Context context1, int titleBarColorResId) {
         final Context context = context1;
         Dialog dialog = new Dialog(context);
         dialog.setContentView(R.layout.search_db_dialog);

@@ -1,29 +1,37 @@
-<RelativeLayout style="@style/FragmentLayoutStyle"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.android.themusicgenreator.PlaylistBrowserActivity$PlaceholderFragment">
+    tools:context="com.example.android.themusicgenreator.GenreInfoActvity$PlaceholderFragment"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <com.example.android.themusicgenreator.ExpandableTextView style="@style/DescriptionTextViewStyle"
-        android:id="@+id/playlist_description"/>
+    <RelativeLayout style="@style/FragmentLayoutStyle"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
+        tools:context="com.example.android.themusicgenreator.PlaylistBrowserActivity$PlaceholderFragment">
 
-    <AutoCompleteTextView style="@style/EditTextStyle"
-        android:id="@+id/playlists_searcher"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:drawableStart="@drawable/search_coloured"
-        android:hint="@string/search_playlists_by_service"
-        android:layout_below="@id/playlist_description"/>
+        <com.example.android.themusicgenreator.ExpandableTextView
+            style="@style/DescriptionTextViewStyle"
+            android:id="@+id/playlist_description" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/playlists_searcher">
-
-        <LinearLayout
-            android:id="@+id/playlists_scroller"
+        <AutoCompleteTextView
+            style="@style/EditTextStyle"
+            android:id="@+id/playlists_searcher"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-        </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+            android:drawableStart="@drawable/search_coloured"
+            android:hint="@string/search_playlists_by_service"
+            android:layout_below="@id/playlist_description" />
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/playlists_searcher">
+
+            <LinearLayout
+                android:id="@+id/playlists_scroller"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
+        </ScrollView>
+    </RelativeLayout>
+</ScrollView>

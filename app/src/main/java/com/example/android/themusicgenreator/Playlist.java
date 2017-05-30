@@ -7,7 +7,7 @@ import android.os.Parcelable;
  * A class for Playlists
  */
 
-public class Playlist implements Parcelable{
+public class Playlist implements Parcelable {
 
     private int mPlaylistID;
     private String mPlaylistName;
@@ -16,12 +16,13 @@ public class Playlist implements Parcelable{
 
     /**
      * Principle constructor for the Playlist class
-     * @param mPlaylistID int ID of the Playlist
-     * @param mPlaylistName String name of the Playlist
-     * @param mLink A link for the playlist, such as a hyperlink, represented by type String
+     *
+     * @param mPlaylistID         int ID of the Playlist
+     * @param mPlaylistName       String name of the Playlist
+     * @param mLink               A link for the playlist, such as a hyperlink, represented by type String
      * @param mStreamingServiceID int ID of the Streaming Service the playlist is on
      */
-    public Playlist(int mPlaylistID, String mPlaylistName, String mLink, int mStreamingServiceID){
+    public Playlist(int mPlaylistID, String mPlaylistName, String mLink, int mStreamingServiceID) {
         this.mPlaylistID = mPlaylistID;
         this.mPlaylistName = mPlaylistName;
         this.mLink = mLink;
@@ -31,11 +32,12 @@ public class Playlist implements Parcelable{
     /**
      * Secondary constructor of the Playlist class, not setting
      * the int ID of the Playlist via a parameter
-     * @param mPlaylistName String name of the Playlist
-     * @param mLink A link for the playlist, such as a hyperlink, represented by type String
+     *
+     * @param mPlaylistName       String name of the Playlist
+     * @param mLink               A link for the playlist, such as a hyperlink, represented by type String
      * @param mStreamingServiceID int ID of the Streaming Service the playlist is on
      */
-    public Playlist(String mPlaylistName, String mLink, int mStreamingServiceID){
+    public Playlist(String mPlaylistName, String mLink, int mStreamingServiceID) {
         this.mPlaylistName = mPlaylistName;
         this.mLink = mLink;
         this.mStreamingServiceID = mStreamingServiceID;
@@ -43,6 +45,7 @@ public class Playlist implements Parcelable{
 
     /**
      * get() method for the ID
+     *
      * @return int ID of the Playlist
      */
     public int getmPlaylistID() {
@@ -51,6 +54,7 @@ public class Playlist implements Parcelable{
 
     /**
      * get() method for the name of the playlist
+     *
      * @return String name of the Playlist
      */
     public String getmPlaylistName() {
@@ -59,6 +63,7 @@ public class Playlist implements Parcelable{
 
     /**
      * get() method for the link to the playlist
+     *
      * @return String link to the Playlist
      */
     public String getmLink() {
@@ -67,6 +72,7 @@ public class Playlist implements Parcelable{
 
     /**
      * get() method for the ID of the Streaming Service
+     *
      * @return int ID of the Streaming Service
      */
     public int getmStreamingServiceID() {
@@ -75,6 +81,7 @@ public class Playlist implements Parcelable{
 
     /**
      * set() method for the playlist ID
+     *
      * @param mPlaylistID int ID of the playlist
      */
     public void setmPlaylistID(int mPlaylistID) {
@@ -83,6 +90,7 @@ public class Playlist implements Parcelable{
 
     /**
      * set() method for the playlist name
+     *
      * @param mPlaylistName String name of the playlist
      */
     public void setmPlaylistName(String mPlaylistName) {
@@ -91,6 +99,7 @@ public class Playlist implements Parcelable{
 
     /**
      * set() method for the playlist link
+     *
      * @param mLink String link to the playlist
      */
     public void setmLink(String mLink) {
@@ -99,6 +108,7 @@ public class Playlist implements Parcelable{
 
     /**
      * set() method for the Streaming Service ID
+     *
      * @param mStreamingServiceID int ID of the Streaming Service
      */
     public void setmStreamingServiceID(int mStreamingServiceID) {
@@ -106,7 +116,7 @@ public class Playlist implements Parcelable{
     }
 
     //Parcelable methods below....
-    private Playlist(Parcel in){
+    private Playlist(Parcel in) {
         this.mPlaylistID = in.readInt();
         this.mPlaylistName = in.readString();
         this.mLink = in.readString();
@@ -114,12 +124,12 @@ public class Playlist implements Parcelable{
     }
 
     @Override
-    public int describeContents(){
+    public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel dest, int flags){
+    public void writeToParcel(Parcel dest, int flags) {
         dest.writeInt(mPlaylistID);
         dest.writeString(mPlaylistName);
         dest.writeString(mLink);

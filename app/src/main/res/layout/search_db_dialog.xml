@@ -4,13 +4,15 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".GenreBrowserActvity">
 
-    <TextView style="@style/WelcomeMessageStyle"
+    <TextView
+        style="@style/WelcomeMessageStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/guitar_acoustic_coloured"
-        android:drawableStart="@drawable/earth_coloured"/>
+        android:drawableStart="@drawable/earth_coloured" />
 
-    <EditText style="@style/EditTextStyle"
+    <EditText
+        style="@style/EditTextStyle"
         android:id="@+id/search_db"
         android:hint="@string/search_db"
         android:layout_width="match_parent"
@@ -18,12 +20,13 @@
         android:inputType="text"
         android:imeOptions="actionDone"
         android:drawableStart="@drawable/guitar_electric_coloured"
-        android:drawableEnd="@drawable/city_coloured"/>
+        android:drawableEnd="@drawable/city_coloured" />
 
-    <TextView style="@style/WelcomeMessageStyle"
+    <TextView
+        style="@style/WelcomeMessageStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableEnd="@drawable/music_coloured"
-        android:drawableStart="@drawable/playlist_play_coloured"/>
+        android:drawableStart="@drawable/playlist_play_coloured" />
 
 </LinearLayout>
